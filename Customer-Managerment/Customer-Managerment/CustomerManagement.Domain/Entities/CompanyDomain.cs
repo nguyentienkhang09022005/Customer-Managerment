@@ -31,7 +31,7 @@
             }
             Email = email;
         }
-            
+
         public void setPhone(string phone)
         {
             if (string.IsNullOrWhiteSpace(phone) || phone.Length > 12 || phone.Length < 10)

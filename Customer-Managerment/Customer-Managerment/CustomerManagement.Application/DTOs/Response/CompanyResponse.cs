@@ -1,6 +1,6 @@
-﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs
+﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
 {
-    public class CompanyDTO
+    public class CompanyResponse
     {
         public Guid IdCompany { get; set; }
 
@@ -16,6 +16,6 @@
 
         public string? Industry { get; set; }
 
-        public DateOnly? EstablishmentDate { get; set; }
+        public DateTime? EstablishmentDate { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Customer_Managerment.CustomerManagement.Application.DTOs;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 
 namespace Customer_Managerment.CustomerManagement.Api.GraphQL
@@ -12,10 +12,10 @@ namespace Customer_Managerment.CustomerManagement.Api.GraphQL
             _companyHandler = companyHandler;
         }
 
-        [UseProjection]   // Tự động chọn field tương ứng query
+        [UseProjection]   
         [UseFiltering]
         [UseSorting]
-        public async Task<List<CompanyDTO>> GetCompaniesAsync()
+        public async Task<List<CompanyResponse>> GetCompaniesAsync()
         {
             return await _companyHandler.GetListCompanyAsync();
         }

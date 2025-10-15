@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
@@ -6,5 +7,6 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
     {
         Task<List<Company>> GetListCompanyAsync();
 
+        Task<Company> AddCompanyAsync(CompanyDomain companyDomain);
     }
 }

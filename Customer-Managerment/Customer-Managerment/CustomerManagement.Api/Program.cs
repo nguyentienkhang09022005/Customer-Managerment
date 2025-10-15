@@ -44,6 +44,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();
