@@ -1,8 +1,17 @@
+using Customer_Managerment.CustomerManagement.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+DotNetEnv.Env.Load();
+
+builder.Configuration["ConnectionStrings:PostgreSQLConnection"] = Environment.GetEnvironmentVariable("CONNECTIONSTRINGS__PostgreSQLConnection");
+
+// DbContext Registration
+builder.Services.AddDbContext<CustomerManagementDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection")));
 
 // Add services to the container.
 builder.Services.AddControllers();
