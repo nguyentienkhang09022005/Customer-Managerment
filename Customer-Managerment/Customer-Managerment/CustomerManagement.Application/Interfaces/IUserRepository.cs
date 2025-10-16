@@ -8,6 +8,8 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<UserDomain?> GetUserByIdAsync(Guid idUser);
 
+        Task<UserDomain?> GetUserByUsernameAsync(string userName);
+
         Task<UserDomain?> GetUserByEmailAsync(string email);
     }
 }

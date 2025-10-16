@@ -29,8 +29,6 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
 
         public void SetEmail(string email)
         {
-            Console.WriteLine($"[DEBUG] Giá trị email nhận được: '{email}'");
-
             if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
             {
                 throw new DomainException("Email không hợp lệ!", 400);

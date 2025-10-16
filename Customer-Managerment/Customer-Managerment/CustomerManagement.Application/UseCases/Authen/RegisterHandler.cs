@@ -1,5 +1,6 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 using FluentEmail.Core;
 using Microsoft.Extensions.Caching.Memory;
@@ -14,6 +15,8 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         private readonly ILogger<OtpHandler> _logger;
 
 
+        private static string DefaultRole = "User";
+
         public RegisterHandler(IFluentEmail email,
                           IMemoryCache memoryCache,
                           IUserRepository userRepository,
@@ -25,6 +28,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
             _logger = logger;
             _logger = logger;
         }
+
 
         public async Task<string> SendOtpToRegisterAsync(RegisterRequest registerRequest)
         {
@@ -74,6 +78,44 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                 }
 
                 return "OTP đã được gửi thành công! Vui lòng kiểm tra email của bạn.";
+            }
+            catch (DomainException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new DomainException(ex.Message, 500);
+            }
+        }
+
+        public async Task<string> ConfirmOTPForRegisterHandleAsync(ConfirmOTPRequest confirmOTPRequest)
+        {
+            var cacheKey = $"OTP_Register_{confirmOTPRequest.Email}";
+            if (!_memoryCache.TryGetValue<RegisterCacheData>(cacheKey, out var cacheData))
+            {
+                throw new DomainException("OTP không hợp lệ hoặc đã hết hạn!", 400);
+            }
+
+            // Nếu OTP đúng thì tạo user mới
+            if (cacheData.Otp != confirmOTPRequest.OTP)
+            {
+                throw new DomainException("OTP không đúng!", 400);
+            }
+
+            try
+            {
+                // Tạo user mới
+                var newUser = new UserDomain(cacheData.Email, cacheData.Password);
+                newUser.Fullname = cacheData.FullName;
+                newUser.Username = cacheData.UserName;
+                newUser.Role = DefaultRole;
+
+                await _userRepository.AddUserAsync(newUser);
+
+                _memoryCache.Remove(cacheKey);
+
+                return "Đăng ký thành công!";
             }
             catch (DomainException)
             {

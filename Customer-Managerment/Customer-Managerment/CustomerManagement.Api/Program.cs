@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 DotNetEnv.Env.Load();
 
 builder.Configuration["ConnectionStrings:PostgreSQLConnection"] = Environment.GetEnvironmentVariable("CONNECTIONSTRINGS__PostgreSQLConnection");
@@ -45,8 +44,6 @@ builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
-
-
 // Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
@@ -55,12 +52,14 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 // Handlers
 builder.Services.AddScoped<CompanyHandler>();
 builder.Services.AddScoped<RegisterHandler>();
-
-
+builder.Services.AddScoped<AuthenticationHandler>();
 
 
 // Mapper Registration
 builder.Services.AddAutoMapper(typeof(Program));
+
+// HttpContextAccessor Registration
+builder.Services.AddHttpContextAccessor();
 
 // Redis Registration
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -85,10 +84,11 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
-        .AddType<Query>()           
+        .AddTypeExtension<Query>()           
     .AddMutationType(d => d.Name("Mutation"))
-        .AddType<CompanyMutation>()      
-        .AddType<RegisterMutation>()
+        .AddTypeExtension<CompanyMutation>()      
+        .AddTypeExtension<RegisterMutation>()
+        .AddTypeExtension<AuthenticationMutation>()
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()

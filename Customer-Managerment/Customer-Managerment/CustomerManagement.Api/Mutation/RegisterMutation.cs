@@ -18,5 +18,10 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         {
             return await _registerHandler.SendOtpToRegisterAsync(registerRequest);
         }
+
+        public async Task<string> ConfirmOTPRegisterAsync(ConfirmOTPRequest confirmOTPRequest)
+        {
+            return await _registerHandler.ConfirmOTPForRegisterHandleAsync(confirmOTPRequest);
+        }
     }
 }

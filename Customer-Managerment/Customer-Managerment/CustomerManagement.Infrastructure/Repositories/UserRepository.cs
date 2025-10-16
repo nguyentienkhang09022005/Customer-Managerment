@@ -29,6 +29,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             }
             user.IdUser = Guid.NewGuid();
+            user.CreatedAt = DateTime.Now;
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
         }
@@ -41,6 +42,18 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .IgnoreAutoIncludes()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return null;
+            return _mapper.Map<UserDomain>(user);
+        }
+
+        // Get User By Username
+        public async Task<UserDomain?> GetUserByUsernameAsync(string userName)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var user = await context.Users
+                .IgnoreAutoIncludes()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Username == userName);
             if (user == null) return null;
             return _mapper.Map<UserDomain>(user);
         }
