@@ -1,0 +1,88 @@
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
+using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using FluentEmail.Core;
+using Microsoft.Extensions.Caching.Memory;
+
+namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
+{
+    public class RegisterHandler
+    {
+        private readonly IFluentEmail _email;
+        private readonly IMemoryCache _memoryCache;
+        private readonly IUserRepository _userRepository;
+        private readonly ILogger<OtpHandler> _logger;
+
+
+        public RegisterHandler(IFluentEmail email,
+                          IMemoryCache memoryCache,
+                          IUserRepository userRepository,
+                          ILogger<OtpHandler> logger)
+        {
+            _email = email;
+            _memoryCache = memoryCache;
+            _userRepository = userRepository;
+            _logger = logger;
+            _logger = logger;
+        }
+
+        public async Task<string> SendOtpToRegisterAsync(RegisterRequest registerRequest)
+        {
+            // Nếu tồn tại email thì trả về lỗi
+            var checkEmail = await _userRepository.GetUserByEmailAsync(registerRequest.Email);
+            if (checkEmail != null)
+            {
+                throw new DomainException("Email đã tồn tại!", 409);
+            }
+
+            if (registerRequest.Password != registerRequest.ConfirmPassword)
+            {
+                throw new DomainException("Hai mật khẩu không khớp!", 409);
+            }
+
+            try
+            {
+                var otp = new Random().Next(100000, 999999).ToString();
+
+                var cacheKey = $"OTP_Register_{registerRequest.Email}";
+
+                var cacheData = new RegisterCacheData
+                {
+                    Otp = otp,
+                    FullName = registerRequest.FullName,
+                    Email = registerRequest.Email,
+                    UserName = registerRequest.UserName,
+                    Password = registerRequest.Password
+                };
+
+                _memoryCache.Set(cacheKey, cacheData, new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2) // OTP hết hạn sau 2 phút
+                });
+
+                // Gửi OTP đến mail
+                var response = await _email
+                    .To(registerRequest.Email)
+                    .Subject("Mã OTP xác thực đăng ký tài khoản")
+                    .Tag("otp-register")
+                    .Body($"<p>Mã OTP của bạn là: <strong>{otp}</strong> (hiệu lực trong 2 phút).</p>", true)
+                    .SendAsync();
+
+                if (!response.Successful)
+                {
+                    throw new DomainException("Gửi OTP thất bại!", 500);
+                }
+
+                return "OTP đã được gửi thành công! Vui lòng kiểm tra email của bạn.";
+            }
+            catch (DomainException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new DomainException(ex.Message, 500);
+            }
+        }
+    }
+}

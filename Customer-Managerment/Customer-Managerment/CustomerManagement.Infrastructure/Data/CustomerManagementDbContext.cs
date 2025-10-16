@@ -1,10 +1,16 @@
-﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Data;
 
 public partial class CustomerManagementDbContext : DbContext
 {
+    public CustomerManagementDbContext()
+    {
+    }
+
     public CustomerManagementDbContext(DbContextOptions<CustomerManagementDbContext> options)
         : base(options)
     {
@@ -505,6 +511,9 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
+            entity.Property(e => e.Fullname)
+                .HasMaxLength(70)
+                .HasColumnName("fullname");
             entity.Property(e => e.IdCompany).HasColumnName("id_company");
             entity.Property(e => e.Password)
                 .HasMaxLength(200)

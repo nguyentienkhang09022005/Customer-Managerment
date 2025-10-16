@@ -19,6 +19,8 @@ public partial class User
 
     public Guid? IdCompany { get; set; }
 
+    public string? Fullname { get; set; }
+
     public virtual ICollection<Activity> Activities { get; set; } = new List<Activity>();
 
     public virtual ICollection<Case> Cases { get; set; } = new List<Case>();

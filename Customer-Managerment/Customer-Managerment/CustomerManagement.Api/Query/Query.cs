@@ -1,17 +1,19 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 
-namespace Customer_Managerment.CustomerManagement.Api.GraphQL.Query
+namespace Customer_Managerment.CustomerManagement.Api.Query
 {
-    public class CompanyQuery
+    [ExtendObjectType(OperationTypeNames.Query)]
+    public class Query
     {
         private readonly CompanyHandler _companyHandler;
 
-        public CompanyQuery(CompanyHandler companyHandler)
+        public Query(CompanyHandler companyHandler)
         {
             _companyHandler = companyHandler;
         }
 
+        // Company Query
         [UseProjection]   
         [UseFiltering]
         [UseSorting]

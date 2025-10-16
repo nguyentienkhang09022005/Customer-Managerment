@@ -2,8 +2,9 @@
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 
-namespace Customer_Managerment.CustomerManagement.Api.GraphQL.Mutation
+namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
+    [ExtendObjectType(OperationTypeNames.Mutation)]
     public class CompanyMutation
     {
         private readonly CompanyHandler _companyHandler;
@@ -15,6 +16,7 @@ namespace Customer_Managerment.CustomerManagement.Api.GraphQL.Mutation
             _logger = logger;
         }
 
+        // Company Mutation
         public async Task<CompanyResponse> CreateCompanyAsync(CompanyRequest companyRequest)
         {
             return await _companyHandler.CreateCompanyAsync(companyRequest);
