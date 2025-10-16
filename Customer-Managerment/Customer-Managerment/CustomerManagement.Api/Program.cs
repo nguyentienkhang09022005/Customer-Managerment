@@ -53,6 +53,7 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<CompanyHandler>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<AuthenticationHandler>();
+builder.Services.AddScoped<ForgotPasswordHandler>();
 
 
 // Mapper Registration
@@ -89,6 +90,7 @@ builder.Services
         .AddTypeExtension<CompanyMutation>()      
         .AddTypeExtension<RegisterMutation>()
         .AddTypeExtension<AuthenticationMutation>()
+        .AddTypeExtension<ForgotPasswordMutation>()
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()

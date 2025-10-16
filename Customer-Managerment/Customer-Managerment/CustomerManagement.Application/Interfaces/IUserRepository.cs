@@ -11,5 +11,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<UserDomain?> GetUserByUsernameAsync(string userName);
 
         Task<UserDomain?> GetUserByEmailAsync(string email);
+
+        Task<UserDomain?> UpdateUserAsync(UserDomain userDomain);
     }
 }

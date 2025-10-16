@@ -12,7 +12,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         private readonly IFluentEmail _email;
         private readonly IMemoryCache _memoryCache;
         private readonly IUserRepository _userRepository;
-        private readonly ILogger<OtpHandler> _logger;
+        private readonly ILogger<ForgotPasswordHandler> _logger;
 
 
         private static string DefaultRole = "User";
@@ -20,7 +20,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         public RegisterHandler(IFluentEmail email,
                           IMemoryCache memoryCache,
                           IUserRepository userRepository,
-                          ILogger<OtpHandler> logger)
+                          ILogger<ForgotPasswordHandler> logger)
         {
             _email = email;
             _memoryCache = memoryCache;

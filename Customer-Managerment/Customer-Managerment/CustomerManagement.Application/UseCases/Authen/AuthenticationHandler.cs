@@ -17,7 +17,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<OtpHandler> _logger;
+        private readonly ILogger<ForgotPasswordHandler> _logger;
 
 
         public AuthenticationHandler(IUserRepository userRepository,
@@ -26,7 +26,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                             IConfiguration config,
                             IHttpContextAccessor httpContextAccessor,
                             IRefreshTokenService refreshTokenService,
-                            ILogger<OtpHandler> logger)
+                            ILogger<ForgotPasswordHandler> logger)
         {
             _userRepository = userRepository;
             _refreshTokenService = refreshTokenService;

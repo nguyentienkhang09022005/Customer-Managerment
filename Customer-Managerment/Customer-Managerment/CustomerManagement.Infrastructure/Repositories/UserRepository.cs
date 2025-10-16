@@ -5,6 +5,7 @@ using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Errors.Model;
+using SendGrid.Helpers.Mail;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 {
@@ -69,6 +70,19 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 
             if (user == null)
                 throw new NotFoundException("Không tìm thấy thông tin người dùng!");
+            return _mapper.Map<UserDomain>(user);
+        }
+
+        // Update User
+        public async Task<UserDomain?> UpdateUserAsync(UserDomain userDomain)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var user = await context.Users.FindAsync(userDomain.IdUser);
+            if (user == null) return null;
+
+            // Cập nhật các thuộc tính của user
+            _mapper.Map(userDomain, user);
+            await context.SaveChangesAsync();   
             return _mapper.Map<UserDomain>(user);
         }
     }
