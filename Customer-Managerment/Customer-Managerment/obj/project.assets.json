@@ -712,6 +712,22 @@
           }
         }
       },
+      "HotChocolate.Types.Scalars/15.1.11": {
+        "type": "package",
+        "dependencies": {
+          "HotChocolate.Types": "15.1.11"
+        },
+        "compile": {
+          "lib/net9.0/HotChocolate.Types.Scalars.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/HotChocolate.Types.Scalars.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "HotChocolate.Types.Scalars.Upload/15.1.11": {
         "type": "package",
         "dependencies": {
@@ -4171,6 +4187,25 @@
         "lib/net8.0/HotChocolate.Types.Queries.xml",
         "lib/net9.0/HotChocolate.Types.Queries.dll",
         "lib/net9.0/HotChocolate.Types.Queries.xml",
+        "strawberryshake-signet.png"
+      ]
+    },
+    "HotChocolate.Types.Scalars/15.1.11": {
+      "sha512": "c/hhpAoDlZ6QWq/gikC1K9z3v+RLKSGi7G3MFbiCzIhfthuGb14mdqm+cnQdsphQnoAm80l5KcNXsUbNfvxc4g==",
+      "type": "package",
+      "path": "hotchocolate.types.scalars/15.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "greendonut-signet.png",
+        "hotchocolate-signet.png",
+        "hotchocolate.types.scalars.15.1.11.nupkg.sha512",
+        "hotchocolate.types.scalars.nuspec",
+        "lib/net8.0/HotChocolate.Types.Scalars.dll",
+        "lib/net8.0/HotChocolate.Types.Scalars.xml",
+        "lib/net9.0/HotChocolate.Types.Scalars.dll",
+        "lib/net9.0/HotChocolate.Types.Scalars.xml",
         "strawberryshake-signet.png"
       ]
     },
@@ -10142,6 +10177,7 @@
       "HotChocolate.Authorization >= 15.1.11",
       "HotChocolate.Data >= 15.1.11",
       "HotChocolate.Data.EntityFramework >= 15.1.11",
+      "HotChocolate.Types.Scalars >= 15.1.11",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.10",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.4",
@@ -10223,6 +10259,10 @@
             "version": "[15.1.11, )"
           },
           "HotChocolate.Data.EntityFramework": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
+          "HotChocolate.Types.Scalars": {
             "target": "Package",
             "version": "[15.1.11, )"
           },

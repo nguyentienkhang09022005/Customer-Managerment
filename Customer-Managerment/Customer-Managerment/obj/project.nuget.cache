@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "rxkmXuJWw2c=",
+  "dgSpecHash": "1DQIYr1kQ2o=",
   "success": true,
   "projectFilePath": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Customer-Management.csproj",
   "expectedPackageFiles": [
@@ -44,6 +44,7 @@
     "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.types.errors\\15.1.11\\hotchocolate.types.errors.15.1.11.nupkg.sha512",
     "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.types.mutations\\15.1.11\\hotchocolate.types.mutations.15.1.11.nupkg.sha512",
     "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.types.queries\\15.1.11\\hotchocolate.types.queries.15.1.11.nupkg.sha512",
+    "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.types.scalars\\15.1.11\\hotchocolate.types.scalars.15.1.11.nupkg.sha512",
     "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.types.scalars.upload\\15.1.11\\hotchocolate.types.scalars.upload.15.1.11.nupkg.sha512",
     "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.types.shared\\15.1.11\\hotchocolate.types.shared.15.1.11.nupkg.sha512",
     "C:\\Users\\Khoa\\.nuget\\packages\\hotchocolate.utilities\\15.1.11\\hotchocolate.utilities.15.1.11.nupkg.sha512",

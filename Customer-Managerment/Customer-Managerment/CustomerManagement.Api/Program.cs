@@ -1,4 +1,6 @@
-﻿using Customer_Managerment.CustomerManagement.Api.GraphQL;
+﻿using Customer_Managerment.CustomerManagement.Api.GraphQL.Mutation;
+using Customer_Managerment.CustomerManagement.Api.GraphQL.Query;
+using Customer_Managerment.CustomerManagement.Api.MiddleWare;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
@@ -43,12 +45,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>()
-    .AddMutationType<Mutation>()
+    .AddQueryType<CompanyQuery>()
+    .AddMutationType<CompanyMutation>()
+    .AddType<DateType>()
+    .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()
     .AddSorting()
     .AddProjections();
-
 
 var app = builder.Build();
 

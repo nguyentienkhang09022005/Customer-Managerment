@@ -2,15 +2,17 @@
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 
-namespace Customer_Managerment.CustomerManagement.Api.GraphQL
+namespace Customer_Managerment.CustomerManagement.Api.GraphQL.Mutation
 {
-    public class Mutation
+    public class CompanyMutation
     {
         private readonly CompanyHandler _companyHandler;
+        private readonly ILogger<CompanyMutation> _logger;
 
-        public Mutation(CompanyHandler companyHandler)
+        public CompanyMutation(CompanyHandler companyHandler, ILogger<CompanyMutation> logger)
         {
             _companyHandler = companyHandler;
+            _logger = logger;
         }
 
         public async Task<CompanyResponse> CreateCompanyAsync(CompanyRequest companyRequest)

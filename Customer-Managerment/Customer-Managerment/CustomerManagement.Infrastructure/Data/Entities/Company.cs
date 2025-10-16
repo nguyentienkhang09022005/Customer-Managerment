@@ -19,7 +19,7 @@ public partial class Company
 
     public string? Industry { get; set; }
 
-    public DateTime? EstablishmentDate { get; set; }
+    public DateOnly? EstablishmentDate { get; set; }
 
     public virtual ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
 

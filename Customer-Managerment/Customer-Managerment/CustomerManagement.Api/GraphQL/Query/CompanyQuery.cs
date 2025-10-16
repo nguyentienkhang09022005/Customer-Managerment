@@ -1,13 +1,13 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 
-namespace Customer_Managerment.CustomerManagement.Api.GraphQL
+namespace Customer_Managerment.CustomerManagement.Api.GraphQL.Query
 {
-    public class Query
+    public class CompanyQuery
     {
         private readonly CompanyHandler _companyHandler;
 
-        public Query(CompanyHandler companyHandler)
+        public CompanyQuery(CompanyHandler companyHandler)
         {
             _companyHandler = companyHandler;
         }

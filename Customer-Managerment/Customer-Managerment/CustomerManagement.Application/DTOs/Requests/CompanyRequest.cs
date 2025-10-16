@@ -14,6 +14,6 @@
 
         public string? Industry { get; set; }
 
-        public DateTime? EstablishmentDate { get; set; }
+        public DateOnly? EstablishmentDate { get; set; }
     }
 }
