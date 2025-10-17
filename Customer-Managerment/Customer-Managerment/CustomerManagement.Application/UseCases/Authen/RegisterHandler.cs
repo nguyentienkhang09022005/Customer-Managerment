@@ -74,7 +74,8 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
 
                 if (!response.Successful)
                 {
-                    throw new DomainException("Gửi OTP thất bại!", 500);
+                    var error = string.Join(", ", response.ErrorMessages);
+                    throw new DomainException($"Gửi OTP thất bại! {error}", 500);
                 }
 
                 return "OTP đã được gửi thành công! Vui lòng kiểm tra email của bạn.";
