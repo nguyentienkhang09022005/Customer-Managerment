@@ -8,5 +8,11 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<List<Company>> GetListCompanyAsync();
 
         Task<Company> AddCompanyAsync(CompanyDomain companyDomain);
+
+        Task<Company> GetCompanyByIdAsync(Guid idCompany);
+
+        Task<Company> UpdateCompanyAsync(CompanyDomain companyDomain, Guid idCompany);
+
+        Task DeleteCompanyAsync(Guid idCompany);
     }
 }

@@ -21,5 +21,15 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         {
             return await _companyHandler.CreateCompanyAsync(companyRequest);
         }
+
+        public async Task<CompanyResponse> UpdateCompanyAsync(CompanyRequest companyRequest, Guid IdCompany)
+        {
+            return await _companyHandler.UpdateCompanyAsync(companyRequest, IdCompany);
+        }
+
+        public async Task<string> DeleteCompanyAsync(Guid idCompany)
+        {
+            return await _companyHandler.DeleteCompanyAsync(idCompany);
+        }
     }
 }

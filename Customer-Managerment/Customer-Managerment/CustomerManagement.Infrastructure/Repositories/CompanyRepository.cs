@@ -4,6 +4,8 @@ using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Errors.Model;
+using SendGrid.Helpers.Mail;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 {
@@ -28,6 +30,19 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Company> GetCompanyByIdAsync(Guid idCompany)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var company = await context.Companies
+                    .AsNoTracking()
+                    .IgnoreAutoIncludes()
+                    .FirstOrDefaultAsync(u => u.IdCompany == idCompany);
+
+            if (company == null)
+                throw new NotFoundException("Không tìm thấy thông tin công ty!");
+            return company;
+        }
+
         public async Task<Company> AddCompanyAsync(CompanyDomain companyDomain)
         {
             var company = _mapper.Map<Company>(companyDomain);
@@ -37,6 +52,30 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             context.Companies.Add(company);
             await context.SaveChangesAsync();
             return company;
+        }
+
+        public async Task<Company> UpdateCompanyAsync(CompanyDomain companyDomain, Guid idCompany)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var company = await context.Companies.FindAsync(idCompany);
+            if (company == null)
+                throw new NotFoundException("Không tìm thấy công ty!");
+
+            // Cập nhật các thuộc tính của company
+            _mapper.Map(companyDomain, company);
+            await context.SaveChangesAsync();
+            return company;
+        }
+
+        public async Task DeleteCompanyAsync(Guid idCompany)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var company = await context.Companies.FindAsync(idCompany);
+            if (company == null)
+                throw new NotFoundException("Không tìm thấy công ty!");
+
+            context.Companies.Remove(company);
+            await context.SaveChangesAsync();
         }
     }
 }

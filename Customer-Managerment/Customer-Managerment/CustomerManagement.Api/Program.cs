@@ -85,7 +85,7 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
-        .AddTypeExtension<Query>()           
+        .AddTypeExtension<CompanyQuery>()           
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<CompanyMutation>()      
         .AddTypeExtension<RegisterMutation>()
