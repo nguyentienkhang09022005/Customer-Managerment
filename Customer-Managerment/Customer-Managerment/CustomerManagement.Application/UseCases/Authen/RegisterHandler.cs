@@ -64,9 +64,11 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2) // OTP hết hạn sau 2 phút
                 });
 
+                var randomTag = Guid.NewGuid().ToString("N").Substring(0, 5);
                 // Gửi OTP đến mail
                 var response = await _email
                     .To(registerRequest.Email)
+                    .Tag(randomTag)
                     .Subject("Mã OTP xác thực đăng ký tài khoản")
                     .Body($"<p>Mã OTP của bạn là: <strong>{otp}</strong> (hiệu lực trong 2 phút).</p>", true)
                     .SendAsync();

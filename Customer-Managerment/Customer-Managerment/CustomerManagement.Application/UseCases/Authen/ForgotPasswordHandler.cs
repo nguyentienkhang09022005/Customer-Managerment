@@ -45,8 +45,10 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2) // OTP hết hạn sau 2 phút
                 });
 
+                var randomTag = Guid.NewGuid().ToString("N").Substring(0, 5);
                 var response = await _email
                     .To(forgotPasswordRequest.Email)
+                    .Tag(randomTag)
                     .Subject("Mã OTP hỗ trợ quên mật khẩu")
                     .Body($"<p>Mã OTP của bạn là: <strong>{otp}</strong> (hiệu lực trong 2 phút).</p>", true)
                     .SendAsync();
