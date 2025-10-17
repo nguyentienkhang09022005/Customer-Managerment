@@ -8,7 +8,10 @@ using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
 using HotChocolate.AspNetCore.Voyager;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +97,7 @@ builder.Services
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()
+    .AddAuthorization()
     .AddSorting()
     .AddProjections();
 
@@ -107,6 +111,36 @@ builder.Services.AddCors(options =>
               .AllowCredentials(); // Allow send Cookie
     });
 });
+
+// Authentication Config
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization();
+
+
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
@@ -117,6 +151,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Endpoint GraphQL
@@ -127,6 +162,7 @@ app.UseVoyager(
     "/graphql",  // endpoint của GraphQL
     "/voyager"   // đường dẫn để mở giao diện Voyager
 );
+
 
 app.MapControllers();
 

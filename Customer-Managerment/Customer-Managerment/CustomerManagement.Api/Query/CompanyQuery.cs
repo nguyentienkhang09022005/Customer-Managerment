@@ -1,5 +1,6 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
+using HotChocolate.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
@@ -14,6 +15,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         }
 
         // Company Query
+        [Authorize]
         [UseProjection]   
         [UseFiltering]
         [UseSorting]
@@ -22,6 +24,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return await _companyHandler.GetListCompanyAsync();
         }
 
+        [Authorize]
         public async Task<CompanyResponse> GetInfCompanyAsync(Guid idCompany)
         {
             return await _companyHandler.GetInfCompanyAsync(idCompany);
