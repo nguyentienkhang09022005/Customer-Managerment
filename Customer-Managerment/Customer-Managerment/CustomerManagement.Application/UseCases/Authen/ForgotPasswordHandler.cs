@@ -48,7 +48,6 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                 var response = await _email
                     .To(forgotPasswordRequest.Email)
                     .Subject("Mã OTP hỗ trợ quên mật khẩu")
-                    .Tag("otp-forgot-password")
                     .Body($"<p>Mã OTP của bạn là: <strong>{otp}</strong> (hiệu lực trong 2 phút).</p>", true)
                     .SendAsync();
 
