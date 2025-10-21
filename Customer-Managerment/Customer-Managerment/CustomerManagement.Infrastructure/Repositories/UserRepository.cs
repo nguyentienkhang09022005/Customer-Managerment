@@ -85,5 +85,26 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             await context.SaveChangesAsync();   
             return _mapper.Map<UserDomain>(user);
         }
+
+        public async Task<bool> CheckUserExistsAsync(Guid idUser)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Users
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .AnyAsync(u => u.IdUser == idUser);
+        }
+
+        public async Task<UserDomain?> GetExistingUserAsync(Guid idUser)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var user = await context.Users
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .FirstOrDefaultAsync(u => u.IdUser == idUser);
+
+            return user == null ? null : _mapper.Map<UserDomain>(user);
+        }
+
     }
 }

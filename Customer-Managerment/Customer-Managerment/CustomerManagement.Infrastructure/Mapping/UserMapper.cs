@@ -9,11 +9,8 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
     {
         public UserMapper()
         {
-            // User -> UserDomain
-            CreateMap<User, UserDomain>();
-                
-            // UserDomain <-> User
-            CreateMap<UserDomain, User>().ReverseMap();
+            // User <-> UserDomain
+            CreateMap<User, UserDomain>().ReverseMap();
 
             // UserDomain -> UserResponse
             CreateMap<UserDomain, UserResponse>();

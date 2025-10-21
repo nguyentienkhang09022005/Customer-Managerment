@@ -15,7 +15,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         private readonly ILogger<ForgotPasswordHandler> _logger;
 
 
-        private static string DefaultRole = "User";
+        private static string DefaultRole = "Employee";
 
         public RegisterHandler(IFluentEmail email,
                           IMemoryCache memoryCache,
