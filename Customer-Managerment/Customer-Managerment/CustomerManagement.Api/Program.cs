@@ -5,6 +5,7 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Opportunity;
+using Customer_Managerment.CustomerManagement.Application.UseCases.Product;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Tasks;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
@@ -49,6 +50,7 @@ builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 builder.Services.AddScoped<IOpportunityRepository, OpportunityRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 // Services
@@ -63,6 +65,7 @@ builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
 builder.Services.AddScoped<TasksHandler>();
 builder.Services.AddScoped<OpportunityHandler>();
+builder.Services.AddScoped<ProductHandler>();
 
 
 
@@ -98,6 +101,7 @@ builder.Services
         .AddTypeExtension<CompanyQuery>()
         .AddTypeExtension<TasksQuery>()
         .AddTypeExtension<OpportunityQuery>()
+        .AddTypeExtension<ProductQuery>()
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<CompanyMutation>()      
         .AddTypeExtension<RegisterMutation>()
@@ -105,6 +109,7 @@ builder.Services
         .AddTypeExtension<ForgotPasswordMutation>()
         .AddTypeExtension<TasksMutation>()
         .AddTypeExtension<OpportunityMutation>()
+        .AddTypeExtension<ProductMutation>()
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()

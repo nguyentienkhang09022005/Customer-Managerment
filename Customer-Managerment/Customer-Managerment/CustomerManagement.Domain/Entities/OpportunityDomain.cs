@@ -15,5 +15,7 @@
         public DateTime? CreatedAt { get; set; }
 
         public Guid? IdUser { get; set; }
+
+        public OpportunityDomain() { }
     }
 }
