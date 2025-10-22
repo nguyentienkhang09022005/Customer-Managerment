@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
@@ -9,16 +10,18 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
     {
         public UserMapper()
         {
-            // User <-> UserDomain
-            CreateMap<User, UserDomain>().ReverseMap();
+            CreateMap<User, UserDomain>();
 
-            // UserDomain -> UserResponse
+            CreateMap<UserDomain, User>()
+                .ForMember(dest => dest.IdUser, opt => opt.Ignore());
+
             CreateMap<UserDomain, UserResponse>();
 
-            // User -> UserResponse
             CreateMap<User, UserResponse>();
 
-            // UserRequest -> UserDomain
+            CreateMap<UserCreationRequest, UserDomain>();
+
+            CreateMap<UserUpdateRequest, UserDomain>();
         }
     }
 }

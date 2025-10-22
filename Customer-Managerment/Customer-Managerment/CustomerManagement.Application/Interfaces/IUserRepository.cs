@@ -1,10 +1,11 @@
 ﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task AddUserAsync(UserDomain users);
+        Task<User> AddUserAsync(UserDomain users);
 
         Task<UserDomain?> GetUserByIdAsync(Guid idUser);
 
@@ -12,10 +13,14 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<UserDomain?> GetUserByEmailAsync(string email);
 
+        Task<List<User>> GetListUsersAsync();
+
         Task<UserDomain?> UpdateUserAsync(UserDomain userDomain);
 
         Task<bool> CheckUserExistsAsync(Guid idUser);
 
         Task<UserDomain?> GetExistingUserAsync(Guid idUser);
+
+        Task DeleteUserAsync(Guid idUser);
     }
 }

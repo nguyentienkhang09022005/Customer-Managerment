@@ -5,8 +5,10 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Opportunity;
+using Customer_Managerment.CustomerManagement.Application.UseCases.OrderHandler;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Product;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Tasks;
+using Customer_Managerment.CustomerManagement.Application.UseCases.Users;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
@@ -51,6 +53,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 builder.Services.AddScoped<IOpportunityRepository, OpportunityRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 
 // Services
@@ -66,6 +69,8 @@ builder.Services.AddScoped<ForgotPasswordHandler>();
 builder.Services.AddScoped<TasksHandler>();
 builder.Services.AddScoped<OpportunityHandler>();
 builder.Services.AddScoped<ProductHandler>();
+builder.Services.AddScoped<UsersHandler>();
+builder.Services.AddScoped<OrderHandler>();
 
 
 
@@ -102,6 +107,8 @@ builder.Services
         .AddTypeExtension<TasksQuery>()
         .AddTypeExtension<OpportunityQuery>()
         .AddTypeExtension<ProductQuery>()
+        .AddTypeExtension<UserQuery>()
+        .AddTypeExtension<OrderQuery>()
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<CompanyMutation>()      
         .AddTypeExtension<RegisterMutation>()
@@ -110,6 +117,8 @@ builder.Services
         .AddTypeExtension<TasksMutation>()
         .AddTypeExtension<OpportunityMutation>()
         .AddTypeExtension<ProductMutation>()
+        .AddTypeExtension<UserMutation>()
+        .AddTypeExtension<OrderMutation>()
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()

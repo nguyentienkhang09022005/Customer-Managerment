@@ -6,9 +6,15 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
     {
         public Guid IdUser { get; set; }
 
+        public string? Fullname { get; set; }
+
         public string? Username { get; set; }
 
         public string? Email { get; set; }
+
+        public string? Phone { get; set; }
+
+        public string? Address { get; set; }
 
         public string? Password { get; set; }
 
@@ -17,8 +23,6 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
         public DateTime? CreatedAt { get; set; }
 
         public Guid? IdCompany { get; set; }
-
-        public string? Fullname { get; set; }
 
         public UserDomain(string email, string password) 
         {

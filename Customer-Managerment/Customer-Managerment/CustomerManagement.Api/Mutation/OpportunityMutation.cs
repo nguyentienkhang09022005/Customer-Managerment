@@ -15,19 +15,19 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _handler = handler;
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<OpportunityResponse> CreateOpportunityAsync(OpportunityCreationRequest request)
         {
             return await _handler.CreateOpportunityAsync(request);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<OpportunityResponse> UpdateOpportunityAsync(OpportunityUpdateRequest request, Guid idOpportunity)
         {
             return await _handler.UpdateOpportunityAsync(request, idOpportunity);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<string> DeleteOpportunityAsync(Guid idOpportunity)
         {
             return await _handler.DeleteOpportunityAsync(idOpportunity);

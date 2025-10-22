@@ -1,10 +1,8 @@
-﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
+﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Requests
 {
-    public class UserResponse
+    public class UserUpdateRequest
     {
         public string? Fullname { get; set; }
-
-        public Guid IdUser { get; set; }
 
         public string? Email { get; set; }
 
@@ -14,6 +12,6 @@
 
         public string? Role { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public Guid? IdCompany { get; set; }
     }
 }

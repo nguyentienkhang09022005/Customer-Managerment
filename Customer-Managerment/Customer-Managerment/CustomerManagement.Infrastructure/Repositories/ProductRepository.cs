@@ -13,6 +13,8 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         private readonly IDbContextFactory<CustomerManagementDbContext> _contextFactory;
         private readonly IMapper _mapper;
 
+        private static string DefaultStatusProduct = "Available";
+
         public ProductRepository(IDbContextFactory<CustomerManagementDbContext> contextFactory, IMapper mapper)
         {
             _contextFactory = contextFactory;
@@ -34,6 +36,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             var product = _mapper.Map<Product>(productDomain);
             product.IdProduct = Guid.NewGuid();
             product.CreatedAt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
+            product.Status = DefaultStatusProduct;
 
             await context.Products.AddAsync(product);
             await context.SaveChangesAsync();

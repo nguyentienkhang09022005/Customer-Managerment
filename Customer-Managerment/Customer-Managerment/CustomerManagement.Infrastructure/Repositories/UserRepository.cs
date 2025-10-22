@@ -21,7 +21,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         }
 
         // Add User
-        public async Task AddUserAsync(UserDomain users)
+        public async Task<User> AddUserAsync(UserDomain users)
         {
             await using var context = _contextFactory.CreateDbContext();
             var user = _mapper.Map<User>(users);
@@ -33,6 +33,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             user.CreatedAt = DateTime.Now;
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
+            return user;
         }
 
         // Get User By Email
@@ -73,6 +74,15 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<UserDomain>(user);
         }
 
+        public async Task<List<User>> GetListUsersAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Users
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .ToListAsync();
+        }
+
         // Update User
         public async Task<UserDomain?> UpdateUserAsync(UserDomain userDomain)
         {
@@ -106,5 +116,15 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return user == null ? null : _mapper.Map<UserDomain>(user);
         }
 
+        public async Task DeleteUserAsync(Guid idUser)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var user = await context.Users.FindAsync(idUser);
+            if (user == null)
+                throw new NotFoundException("Không tìm thấy người dùng!");
+
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
+        }
     }
 }
