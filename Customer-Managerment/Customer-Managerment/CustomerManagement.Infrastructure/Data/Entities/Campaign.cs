@@ -23,8 +23,6 @@ public partial class Campaign
 
     public Guid? IdCompany { get; set; }
 
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-
     public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual ICollection<Lead> Leads { get; set; } = new List<Lead>();

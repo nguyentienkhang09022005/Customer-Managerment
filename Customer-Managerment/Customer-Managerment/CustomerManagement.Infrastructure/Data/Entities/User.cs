@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 public partial class User
 {
     public Guid IdUser { get; set; }
 
+    public string? Fullname { get; set; }
+
     public string? Username { get; set; }
 
     public string? Email { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Address { get; set; }
 
     public string? Password { get; set; }
 
@@ -18,8 +21,6 @@ public partial class User
     public DateTime? CreatedAt { get; set; }
 
     public Guid? IdCompany { get; set; }
-
-    public string? Fullname { get; set; }
 
     public virtual ICollection<Activity> Activities { get; set; } = new List<Activity>();
 

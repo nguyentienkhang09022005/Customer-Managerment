@@ -23,8 +23,6 @@ public partial class Order
 
     public virtual ICollection<Case> Cases { get; set; } = new List<Case>();
 
-    public virtual Customer? IdCustomerNavigation { get; set; }
-
     public virtual User? IdUserNavigation { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();

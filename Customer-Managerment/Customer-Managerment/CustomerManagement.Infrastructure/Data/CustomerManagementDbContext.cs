@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Data;
 
 public partial class CustomerManagementDbContext : DbContext
 {
-    public CustomerManagementDbContext()
-    {
-    }
-
     public CustomerManagementDbContext(DbContextOptions<CustomerManagementDbContext> options)
         : base(options)
     {
@@ -23,10 +17,6 @@ public partial class CustomerManagementDbContext : DbContext
     public virtual DbSet<Case> Cases { get; set; }
 
     public virtual DbSet<Company> Companies { get; set; }
-
-    public virtual DbSet<Contact> Contacts { get; set; }
-
-    public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Lead> Leads { get; set; }
 
@@ -67,11 +57,6 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(50)
                 .HasColumnName("type");
-
-            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Activities)
-                .HasForeignKey(d => d.IdCustomer)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_activity_customer");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Activities)
                 .HasForeignKey(d => d.IdUser)
@@ -137,11 +122,6 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("title");
 
-            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Cases)
-                .HasForeignKey(d => d.IdCustomer)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_case_customer");
-
             entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Cases)
                 .HasForeignKey(d => d.IdOrder)
                 .OnDelete(DeleteBehavior.Cascade)
@@ -181,79 +161,6 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.TaxCode)
                 .HasMaxLength(50)
                 .HasColumnName("tax_code");
-        });
-
-        modelBuilder.Entity<Contact>(entity =>
-        {
-            entity.HasKey(e => e.IdContact).HasName("contact_pkey");
-
-            entity.ToTable("contact");
-
-            entity.Property(e => e.IdContact)
-                .ValueGeneratedNever()
-                .HasColumnName("id_contact");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(50)
-                .HasColumnName("first_name");
-            entity.Property(e => e.IdCustomer).HasColumnName("id_customer");
-            entity.Property(e => e.LastName)
-                .HasMaxLength(50)
-                .HasColumnName("last_name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.Position)
-                .HasMaxLength(100)
-                .HasColumnName("position");
-
-            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Contacts)
-                .HasForeignKey(d => d.IdCustomer)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_contact_customer");
-        });
-
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(e => e.IdCustomer).HasName("customer_pkey");
-
-            entity.ToTable("customer");
-
-            entity.Property(e => e.IdCustomer)
-                .ValueGeneratedNever()
-                .HasColumnName("id_customer");
-            entity.Property(e => e.AccountType)
-                .HasMaxLength(50)
-                .HasColumnName("account_type");
-            entity.Property(e => e.Address)
-                .HasMaxLength(200)
-                .HasColumnName("address");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.CustomerName)
-                .HasMaxLength(100)
-                .HasColumnName("customer_name");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.IdCampaign).HasColumnName("id_campaign");
-            entity.Property(e => e.Industry)
-                .HasMaxLength(100)
-                .HasColumnName("industry");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-
-            entity.HasOne(d => d.IdCampaignNavigation).WithMany(p => p.Customers)
-                .HasForeignKey(d => d.IdCampaign)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_customer_campaign");
         });
 
         modelBuilder.Entity<Lead>(entity =>
@@ -345,11 +252,6 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.TotalAmount)
                 .HasPrecision(15, 2)
                 .HasColumnName("total_amount");
-
-            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.IdCustomer)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_order_customer");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdUser)
@@ -505,6 +407,9 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.IdUser)
                 .ValueGeneratedNever()
                 .HasColumnName("id_user");
+            entity.Property(e => e.Address)
+                .HasMaxLength(200)
+                .HasColumnName("address");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
@@ -518,6 +423,9 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.Password)
                 .HasMaxLength(200)
                 .HasColumnName("password");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(20)
+                .HasColumnName("phone");
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("role");
