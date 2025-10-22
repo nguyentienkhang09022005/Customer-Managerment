@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
@@ -12,12 +13,17 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
     {
         private readonly IDbContextFactory<CustomerManagementDbContext> _contextFactory;
         private readonly IMapper _mapper;
+        private readonly IOrderDetailRepository _orderDetailRepository;
+
         private static string DefaultOrderStatus = "Pending";
 
-        public OrderRepository(IDbContextFactory<CustomerManagementDbContext> contextFactory, IMapper mapper)
+        public OrderRepository(IDbContextFactory<CustomerManagementDbContext> contextFactory, 
+                               IMapper mapper, 
+                               IOrderDetailRepository orderDetailRepository)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
+            _orderDetailRepository = orderDetailRepository;
         }
 
         public async Task<Order> AddOrderAsync(OrderDomain orderDomain)
@@ -44,16 +50,26 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid idOrder)
+        public async Task<OrderResponse> GetInfOrderAsync(Guid idOrder)
         {
             await using var context = _contextFactory.CreateDbContext();
+
             var order = await context.Orders
-                .IgnoreAutoIncludes()
+                .Include(o => o.IdUserNavigation)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(o => o.IdOrder == idOrder);
 
             if (order == null)
-                throw new NotFoundException("Không tìm thấy đơn hàng!");
-            return order;
+                throw new Exception("Không tìm thấy đơn hàng.");
+
+            var orderDetails = await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(idOrder);
+
+            var orderDomain = _mapper.Map<OrderDomain>(order);
+            orderDomain.OrderDetailsDomain = _mapper.Map<List<OrderDetailDomain>>(orderDetails);
+
+            var orderResponse = _mapper.Map<OrderResponse>(orderDomain);
+
+            return orderResponse;
         }
 
         public async Task<Order> UpdateOrderAsync(OrderDomain orderDomain, Order order)

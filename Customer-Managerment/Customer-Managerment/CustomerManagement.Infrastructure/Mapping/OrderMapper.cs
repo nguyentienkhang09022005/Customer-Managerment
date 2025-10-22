@@ -15,9 +15,9 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
             CreateMap<OrderDomain, Order>()
                 .ForMember(dest => dest.IdOrder, opt => opt.Ignore());
 
-            CreateMap<Order, OrderResponse>();
-
-            CreateMap<OrderDomain, OrderResponse>();
+            CreateMap<OrderDomain, OrderResponse>()
+                .ForMember(dest => dest.Details, 
+                           opt => opt.MapFrom(src => src.OrderDetailsDomain));
 
             CreateMap<OrderCreationRequest, OrderDomain>();
 

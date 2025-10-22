@@ -1,4 +1,5 @@
 ﻿using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Domain.Entities
 {
@@ -6,22 +7,26 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
     {
         public Guid IdOrder { get; set; }
 
-        public DateOnly? OrderDate { get; set; }
-
         public string? Status { get; set; }
 
         public decimal? TotalAmount { get; set; }
 
         public string? PaymentMethod { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
+
         public Guid? IdUser { get; set; }
 
         public Guid? IdCustomer { get; set; }
+
+        public virtual ICollection<OrderDetailDomain> OrderDetailsDomain { get; set; } = new List<OrderDetailDomain>();
+
         public OrderDomain() { }
 
         public OrderDomain(string status)
         {
             CheckStatus(status);
+            Status = status;
         }
 
         private void CheckStatus(string status)

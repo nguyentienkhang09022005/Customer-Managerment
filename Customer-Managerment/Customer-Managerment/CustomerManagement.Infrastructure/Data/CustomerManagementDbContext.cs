@@ -242,7 +242,6 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.IdCustomer).HasColumnName("id_customer");
             entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.OrderDate).HasColumnName("order_date");
             entity.Property(e => e.PaymentMethod)
                 .HasMaxLength(50)
                 .HasColumnName("payment_method");

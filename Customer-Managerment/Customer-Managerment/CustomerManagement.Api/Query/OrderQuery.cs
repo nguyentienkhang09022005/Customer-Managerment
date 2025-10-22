@@ -14,8 +14,8 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             _handler = handler;
         }
 
-        [UseProjection]        //[Authorize]
-
+        //[Authorize]
+        [UseProjection]        
         [UseFiltering]
         [UseSorting]
         public async Task<List<OrderResponse>> GetOrdersAsync(Guid idUser)

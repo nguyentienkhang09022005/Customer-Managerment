@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
@@ -9,7 +10,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<Order> AddOrderAsync(OrderDomain orderDomain);
 
-        Task<Order> GetOrderByIdAsync(Guid idOrder);
+        Task<OrderResponse> GetInfOrderAsync(Guid idOrder);
 
         Task<Order> UpdateOrderAsync(OrderDomain orderDomain, Order order);
 

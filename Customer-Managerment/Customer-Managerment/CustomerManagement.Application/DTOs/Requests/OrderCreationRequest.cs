@@ -2,14 +2,16 @@
 {
     public class OrderCreationRequest
     {
-        public DateOnly? OrderDate { get; set; }
-
-        public decimal? TotalAmount { get; set; }
-
         public string? PaymentMethod { get; set; }
 
-        public Guid IdUser { get; set; }
-
         public Guid IdCustomer { get; set; }
+
+        public List<OrderDetailRequest> orderDetailRequests { get; set; } = new();
+    }
+
+    public class OrderDetailRequest
+    {
+        public Guid IdProduct { get; set; }
+        public int Quantity { get; set; }
     }
 }

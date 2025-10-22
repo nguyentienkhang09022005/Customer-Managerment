@@ -7,8 +7,6 @@ public partial class Order
 {
     public Guid IdOrder { get; set; }
 
-    public DateOnly? OrderDate { get; set; }
-
     public string? Status { get; set; }
 
     public decimal? TotalAmount { get; set; }

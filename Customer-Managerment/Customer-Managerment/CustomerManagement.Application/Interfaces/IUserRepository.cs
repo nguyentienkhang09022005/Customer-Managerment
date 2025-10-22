@@ -15,6 +15,10 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<List<User>> GetListUsersAsync();
 
+        Task<List<User>> GetListEmployeesAsync();
+
+        Task<List<User>> GetListCustomerAsync();
+
         Task<UserDomain?> UpdateUserAsync(UserDomain userDomain);
 
         Task<bool> CheckUserExistsAsync(Guid idUser);

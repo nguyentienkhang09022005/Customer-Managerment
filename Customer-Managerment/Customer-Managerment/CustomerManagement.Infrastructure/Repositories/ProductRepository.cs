@@ -46,8 +46,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<Product> GetProductByIdAsync(Guid idProduct)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var product = await context.Products.AsNoTracking()
-                .FirstOrDefaultAsync(p => p.IdProduct == idProduct);
+            var product = await context.Products.FirstOrDefaultAsync(p => p.IdProduct == idProduct);
 
             if (product == null)
                 throw new NotFoundException("Không tìm thấy sản phẩm!");

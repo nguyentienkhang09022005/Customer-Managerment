@@ -83,6 +83,22 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<User>> GetListEmployeesAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Users
+                .Where(u => u.Role == "Employee")
+                .ToListAsync();
+        }
+
+        public async Task<List<User>> GetListCustomerAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Users
+                .Where(u => u.Role == "Customer")
+                .ToListAsync();
+        }
+
         // Update User
         public async Task<UserDomain?> UpdateUserAsync(UserDomain userDomain)
         {

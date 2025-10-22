@@ -16,16 +16,16 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         }
 
         //[Authorize]
-        public async Task<OrderResponse> CreateOrderAsync(OrderCreationRequest request)
+        public async Task<string> CreateOrderAsync(OrderCreationRequest request)
         {
             return await _handler.CreateOrderAsync(request);
         }
 
         //[Authorize]
-        public async Task<OrderResponse> UpdateOrderAsync(OrderUpdateRequest request, Guid idOrder)
-        {
-            return await _handler.UpdateOrderAsync(request, idOrder);
-        }
+        //public async Task<OrderResponse> UpdateOrderAsync(OrderUpdateRequest request, Guid idOrder)
+        //{
+        //    return await _handler.UpdateOrderAsync(request, idOrder);
+        //}
 
         //[Authorize]
         public async Task<string> DeleteOrderAsync(Guid idOrder)

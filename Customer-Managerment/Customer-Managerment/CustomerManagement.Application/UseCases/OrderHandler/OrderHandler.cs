@@ -11,12 +11,20 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.OrderHand
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IMapper _mapper;
 
-        public OrderHandler(IOrderRepository orderRepository, IUserRepository userRepository, IMapper mapper)
+        public OrderHandler(IOrderRepository orderRepository, 
+                            IUserRepository userRepository, 
+                            IProductRepository productRepository,
+                            IOrderDetailRepository orderDetailRepository,
+                            IMapper mapper)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
+            _productRepository = productRepository;
+            _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
         }
 
@@ -28,37 +36,61 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.OrderHand
 
         public async Task<OrderResponse> GetInfOrderAsync(Guid idOrder)
         {
-            var order = await _orderRepository.GetOrderByIdAsync(idOrder);
-            return _mapper.Map<OrderResponse>(order);
+            return await _orderRepository.GetInfOrderAsync(idOrder);
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderCreationRequest request)
+        public async Task<string> CreateOrderAsync(OrderCreationRequest orderCreationRequest)
         {
-            bool userExists = await _userRepository.CheckUserExistsAsync(request.IdUser);
-            if (!userExists)
-                throw new DomainException("Nhân viên không tồn tại!", 404);
+            // Lấy danh sách nhân viên
+            var employees = await _userRepository.GetListEmployeesAsync();
+            if (employees.Count == 0)
+                throw new DomainException("Không có nhân viên nào trong hệ thống!", 400);
 
-            bool customerExists = await _userRepository.CheckUserExistsAsync(request.IdUser);
-            if (!customerExists)
-                throw new DomainException("Khách hàng không tồn tại!", 404);
+            // Chọn ngẫu nhiên 1 nhân viên
+            var random = new Random();
+            var employee = employees[random.Next(employees.Count)];
 
-            var domain = _mapper.Map<OrderDomain>(request);
-            var newOrder = await _orderRepository.AddOrderAsync(domain);
-            return _mapper.Map<OrderResponse>(newOrder);
+            var orderDomain = _mapper.Map<OrderDomain>(orderCreationRequest);
+            orderDomain.IdUser = employee.IdUser;
+
+            // Tạo chi tiết đơn hàng và tính tổng tiền
+            decimal totalAmount = 0;
+            var orderDetailsDomain = new List<OrderDetailDomain>();
+
+            foreach (var productRequest in orderCreationRequest.orderDetailRequests)
+            {
+                var product = await _productRepository.GetProductByIdAsync(productRequest.IdProduct);
+                if (product == null)
+                    throw new DomainException($"Không tìm thấy sản phẩm có ID {productRequest.IdProduct}");
+
+                var orderDetailDomain = new OrderDetailDomain
+                {
+                    IdOrderDetail = Guid.NewGuid(),
+                    IdProduct = product.IdProduct,
+                    Quantity = productRequest.Quantity,
+                    UnitPrice = product.Price ?? 0,
+                };
+                orderDetailDomain.TotalPrice = (orderDetailDomain.Quantity ?? 0) * (orderDetailDomain.UnitPrice ?? 0);
+
+                // Ràng buộc dữ liệu
+                orderDetailDomain.Validate(); 
+                totalAmount += orderDetailDomain.TotalPrice ?? 0;
+                orderDetailsDomain.Add(orderDetailDomain);
+            }
+
+            orderDomain.TotalAmount = totalAmount;
+
+            var createdOrder = await _orderRepository.AddOrderAsync(orderDomain);
+
+            await _orderDetailRepository.AddOrderDetailsAsync(orderDetailsDomain, createdOrder.IdOrder);
+
+            return "Tạo đơn hàng thành công!";
         }
 
-        public async Task<OrderResponse> UpdateOrderAsync(OrderUpdateRequest request, Guid idOrder)
-        {
-            var orderEntity = await _orderRepository.GetExistingOrderAsync(idOrder);
-            if (orderEntity == null)
-                throw new DomainException("Không tìm thấy đơn hàng cần cập nhật!", 404);
-
-            var domain = _mapper.Map<OrderDomain>(orderEntity);
-            _mapper.Map(request, domain);
-
-            var updated = await _orderRepository.UpdateOrderAsync(domain, orderEntity);
-            return _mapper.Map<OrderResponse>(updated);
-        }
+        //public async Task<OrderResponse> UpdateOrderAsync(OrderUpdateRequest request, Guid idOrder)
+        //{
+            
+        //}
 
         public async Task<string> DeleteOrderAsync(Guid idOrder)
         {
