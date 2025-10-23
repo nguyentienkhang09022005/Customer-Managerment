@@ -34,6 +34,7 @@ builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("S
 builder.Configuration["SendGrid:Email"] = Environment.GetEnvironmentVariable("SENDER_EMAIL");
 builder.Configuration["SendGrid:Name"] = Environment.GetEnvironmentVariable("SENDER_NAME");
 builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
+builder.Configuration["GeminiSettings:ApiKey"] = Environment.GetEnvironmentVariable("APIKEY__GEMINI");
 
 
 // DbContext Registration
@@ -66,6 +67,8 @@ builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>();
+builder.Services.AddHttpClient<IGeminiService, GeminiService>();
+
 
 
 // Handlers
@@ -81,6 +84,7 @@ builder.Services.AddScoped<ActivityHandler>();
 builder.Services.AddScoped<CaseHandler>();
 builder.Services.AddScoped<CampaignHandler>();
 builder.Services.AddScoped<LeadHandler>();
+builder.Services.AddScoped<ChatHandler>();
 
 
 // Mapper Registration
@@ -121,6 +125,7 @@ builder.Services
         .AddTypeExtension<CaseQuery>()
         .AddTypeExtension<CampaignQuery>()
         .AddTypeExtension<LeadQuery>()
+        .AddTypeExtension<ChatQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()
@@ -135,6 +140,7 @@ builder.Services
         .AddTypeExtension<CaseMutation>()
         .AddTypeExtension<CampaignMutation>()
         .AddTypeExtension<LeadMutation>()
+        .AddTypeExtension<ChatMutation>()
 
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()

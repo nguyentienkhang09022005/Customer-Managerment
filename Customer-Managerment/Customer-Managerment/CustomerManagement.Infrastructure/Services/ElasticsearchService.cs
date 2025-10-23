@@ -31,7 +31,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
 
         public async Task IndexUserAsync(UserResponse user)
         {
-            // ES sẽ tự động tạo mới nếu chưa có ID, hoặc cập nhật nếu ID đã tồn tại
+            // ES tự động tạo mới nếu chưa có ID, hoặc cập nhật nếu ID đã tồn tại
             await _client.IndexDocumentAsync(user);
         }
 
@@ -52,6 +52,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
                             .Field(u => u.Fullname)
                             .Field(u => u.Email)
                             .Field(u => u.Phone)
+                            .Field(u => u.Address)
                         )
                         .Fuzziness(Fuzziness.Auto) // Cho phép tìm kiếm "gần đúng"
                     )
