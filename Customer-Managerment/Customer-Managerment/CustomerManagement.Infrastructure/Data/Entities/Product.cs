@@ -20,6 +20,4 @@ public partial class Product
     public DateTime? CreatedAt { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
-    public virtual ICollection<QuoteDetail> QuoteDetails { get; set; } = new List<QuoteDetail>();
 }

@@ -1,4 +1,6 @@
-﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿using System;
+using System.Collections.Generic;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Data;
@@ -16,8 +18,6 @@ public partial class CustomerManagementDbContext : DbContext
 
     public virtual DbSet<Case> Cases { get; set; }
 
-    public virtual DbSet<Company> Companies { get; set; }
-
     public virtual DbSet<Lead> Leads { get; set; }
 
     public virtual DbSet<Opportunity> Opportunities { get; set; }
@@ -27,10 +27,6 @@ public partial class CustomerManagementDbContext : DbContext
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<Quote> Quotes { get; set; }
-
-    public virtual DbSet<QuoteDetail> QuoteDetails { get; set; }
 
     public virtual DbSet<Tasks> Tasks { get; set; }
 
@@ -58,10 +54,15 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("type");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Activities)
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.CreatedActivities)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_activity_user");
+            
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.CustomerActivities)
+                .HasForeignKey(d => d.IdCustomer)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_activity_customer");
         });
 
         modelBuilder.Entity<Campaign>(entity =>
@@ -84,16 +85,16 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.EndDate).HasColumnName("end_date");
-            entity.Property(e => e.IdCompany).HasColumnName("id_company");
+            entity.Property(e => e.IdUser).HasColumnName("id_user");
             entity.Property(e => e.StartDate).HasColumnName("start_date");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
 
-            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Campaigns)
-                .HasForeignKey(d => d.IdCompany)
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Campaigns)
+                .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_campaign_company");
+                .HasConstraintName("fk_campaign_user");
         });
 
         modelBuilder.Entity<Case>(entity =>
@@ -131,36 +132,6 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_case_user");
-        });
-
-        modelBuilder.Entity<Company>(entity =>
-        {
-            entity.HasKey(e => e.IdCompany).HasName("company_pkey");
-
-            entity.ToTable("company");
-
-            entity.Property(e => e.IdCompany)
-                .ValueGeneratedNever()
-                .HasColumnName("id_company");
-            entity.Property(e => e.Address)
-                .HasMaxLength(200)
-                .HasColumnName("address");
-            entity.Property(e => e.CompanyName)
-                .HasMaxLength(100)
-                .HasColumnName("company_name");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.EstablishmentDate).HasColumnName("establishment_date");
-            entity.Property(e => e.Industry)
-                .HasMaxLength(100)
-                .HasColumnName("industry");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.TaxCode)
-                .HasMaxLength(50)
-                .HasColumnName("tax_code");
         });
 
         modelBuilder.Entity<Lead>(entity =>
@@ -315,64 +286,6 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasColumnName("status");
         });
 
-        modelBuilder.Entity<Quote>(entity =>
-        {
-            entity.HasKey(e => e.IdQuote).HasName("quote_pkey");
-
-            entity.ToTable("quote");
-
-            entity.Property(e => e.IdQuote)
-                .ValueGeneratedNever()
-                .HasColumnName("id_quote");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.ExpiryTime).HasColumnName("expiry_time");
-            entity.Property(e => e.IdOpportunity).HasColumnName("id_opportunity");
-            entity.Property(e => e.QuoteDate).HasColumnName("quote_date");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.TotalAmount)
-                .HasPrecision(15, 2)
-                .HasColumnName("total_amount");
-
-            entity.HasOne(d => d.IdOpportunityNavigation).WithMany(p => p.Quotes)
-                .HasForeignKey(d => d.IdOpportunity)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_quote_opportunity");
-        });
-
-        modelBuilder.Entity<QuoteDetail>(entity =>
-        {
-            entity.HasKey(e => e.IdQuoteDetail).HasName("quote_detail_pkey");
-
-            entity.ToTable("quote_detail");
-
-            entity.Property(e => e.IdQuoteDetail)
-                .ValueGeneratedNever()
-                .HasColumnName("id_quote_detail");
-            entity.Property(e => e.IdProduct).HasColumnName("id_product");
-            entity.Property(e => e.IdQuote).HasColumnName("id_quote");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.TotalPrice)
-                .HasPrecision(15, 2)
-                .HasColumnName("total_price");
-            entity.Property(e => e.UnitPrice)
-                .HasPrecision(15, 2)
-                .HasColumnName("unit_price");
-
-            entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.QuoteDetails)
-                .HasForeignKey(d => d.IdProduct)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_quote_detail_product");
-
-            entity.HasOne(d => d.IdQuoteNavigation).WithMany(p => p.QuoteDetails)
-                .HasForeignKey(d => d.IdQuote)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_quote_detail_quote");
-        });
-
         modelBuilder.Entity<Tasks>(entity =>
         {
             entity.HasKey(e => e.IdTask).HasName("task_pkey");
@@ -418,7 +331,6 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.Fullname)
                 .HasMaxLength(70)
                 .HasColumnName("fullname");
-            entity.Property(e => e.IdCompany).HasColumnName("id_company");
             entity.Property(e => e.Password)
                 .HasMaxLength(200)
                 .HasColumnName("password");
@@ -431,11 +343,6 @@ public partial class CustomerManagementDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");
-
-            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.Users)
-                .HasForeignKey(d => d.IdCompany)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_user_company");
         });
 
         OnModelCreatingPartial(modelBuilder);

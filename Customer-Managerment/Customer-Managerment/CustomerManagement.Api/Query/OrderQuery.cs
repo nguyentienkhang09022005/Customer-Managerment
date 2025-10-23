@@ -1,5 +1,5 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-using Customer_Managerment.CustomerManagement.Application.UseCases.OrderHandler;
+using Customer_Managerment.CustomerManagement.Application.UseCases;
 using HotChocolate.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
@@ -14,7 +14,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             _handler = handler;
         }
 
-        //[Authorize]
+        [Authorize]
         [UseProjection]        
         [UseFiltering]
         [UseSorting]
@@ -23,7 +23,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return await _handler.GetListOrdersAsync(idUser);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<OrderResponse> GetInfOrderAsync(Guid idOrder)
         {
             return await _handler.GetInfOrderAsync(idOrder);

@@ -4,8 +4,9 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 
-namespace Customer_Managerment.CustomerManagement.Application.UseCases.Product
+namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
     public class ProductHandler
     {

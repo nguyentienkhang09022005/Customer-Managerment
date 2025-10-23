@@ -2,13 +2,9 @@
 using Customer_Managerment.CustomerManagement.Api.Mutation;
 using Customer_Managerment.CustomerManagement.Api.Query;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Application.UseCases;
+using Customer_Managerment.CustomerManagement.Application.UseCases.Activities;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Company;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Opportunity;
-using Customer_Managerment.CustomerManagement.Application.UseCases.OrderHandler;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Product;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Tasks;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Users;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
@@ -48,13 +44,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Repositories
-builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITasksRepository, TasksRepository>();
 builder.Services.AddScoped<IOpportunityRepository, OpportunityRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+
 
 
 // Services
@@ -63,7 +60,6 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
 // Handlers
-builder.Services.AddScoped<CompanyHandler>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
@@ -72,6 +68,7 @@ builder.Services.AddScoped<OpportunityHandler>();
 builder.Services.AddScoped<ProductHandler>();
 builder.Services.AddScoped<UsersHandler>();
 builder.Services.AddScoped<OrderHandler>();
+builder.Services.AddScoped<ActivityHandler>();
 
 
 
@@ -104,14 +101,14 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
-        .AddTypeExtension<CompanyQuery>()
         .AddTypeExtension<TasksQuery>()
         .AddTypeExtension<OpportunityQuery>()
         .AddTypeExtension<ProductQuery>()
         .AddTypeExtension<UserQuery>()
         .AddTypeExtension<OrderQuery>()
+        .AddTypeExtension<ActivityQuery>()
+
     .AddMutationType(d => d.Name("Mutation"))
-        .AddTypeExtension<CompanyMutation>()      
         .AddTypeExtension<RegisterMutation>()
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
@@ -120,6 +117,8 @@ builder.Services
         .AddTypeExtension<ProductMutation>()
         .AddTypeExtension<UserMutation>()
         .AddTypeExtension<OrderMutation>()
+        .AddTypeExtension<ActivityMutation>()
+
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()

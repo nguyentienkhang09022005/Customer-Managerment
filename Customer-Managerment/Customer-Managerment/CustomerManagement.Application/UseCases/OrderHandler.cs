@@ -5,7 +5,7 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 
-namespace Customer_Managerment.CustomerManagement.Application.UseCases.OrderHandler
+namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
     public class OrderHandler
     {
@@ -86,11 +86,6 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.OrderHand
 
             return "Tạo đơn hàng thành công!";
         }
-
-        //public async Task<OrderResponse> UpdateOrderAsync(OrderUpdateRequest request, Guid idOrder)
-        //{
-            
-        //}
 
         public async Task<string> DeleteOrderAsync(Guid idOrder)
         {

@@ -22,8 +22,6 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
 
         public DateTime? CreatedAt { get; set; }
 
-        public Guid? IdCompany { get; set; }
-
         public UserDomain(string email, string password) 
         {
             SetEmail(email);

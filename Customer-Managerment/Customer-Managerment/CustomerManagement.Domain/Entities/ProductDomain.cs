@@ -1,4 +1,5 @@
 ﻿using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using FluentEmail.Core;
 
 namespace Customer_Managerment.CustomerManagement.Domain.Entities
@@ -19,20 +20,6 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
 
         public DateTime? CreatedAt { get; set; }
 
-        public ProductDomain(string status) 
-        {
-            CheckStatus(status);
-        }
-
-        private void CheckStatus(string status)
-        {
-            if (string.IsNullOrWhiteSpace(status))
-                throw new DomainException("Trạng thái sản phẩm không được để trống!", 400);
-
-            var allowedStatuses = new[] { "Available", "Sold out" };
-
-            if (!allowedStatuses.Contains(status, StringComparer.OrdinalIgnoreCase))
-                throw new DomainException("Trạng thái sản phẩm phải là 'Available' hoặc 'Sold out'!", 400);
-        }
+        public ProductDomain(){}
     }
 }

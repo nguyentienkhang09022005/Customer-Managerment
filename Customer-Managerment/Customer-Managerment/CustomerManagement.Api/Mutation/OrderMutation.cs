@@ -1,6 +1,6 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-using Customer_Managerment.CustomerManagement.Application.UseCases.OrderHandler;
+using Customer_Managerment.CustomerManagement.Application.UseCases;
 using HotChocolate.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
@@ -15,19 +15,13 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _handler = handler;
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<string> CreateOrderAsync(OrderCreationRequest request)
         {
             return await _handler.CreateOrderAsync(request);
         }
 
-        //[Authorize]
-        //public async Task<OrderResponse> UpdateOrderAsync(OrderUpdateRequest request, Guid idOrder)
-        //{
-        //    return await _handler.UpdateOrderAsync(request, idOrder);
-        //}
-
-        //[Authorize]
+        [Authorize]
         public async Task<string> DeleteOrderAsync(Guid idOrder)
         {
             return await _handler.DeleteOrderAsync(idOrder);

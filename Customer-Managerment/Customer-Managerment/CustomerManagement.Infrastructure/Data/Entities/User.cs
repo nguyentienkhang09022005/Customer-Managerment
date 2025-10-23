@@ -1,4 +1,7 @@
-﻿namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 public partial class User
 {
@@ -20,13 +23,15 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
-    public Guid? IdCompany { get; set; }
+    // Người tạo
+    public ICollection<Activity> CreatedActivities { get; set; } = new List<Activity>();
 
-    public virtual ICollection<Activity> Activities { get; set; } = new List<Activity>();
+    // Là khách hàng
+    public ICollection<Activity> CustomerActivities { get; set; } = new List<Activity>();
+
+    public virtual ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
 
     public virtual ICollection<Case> Cases { get; set; } = new List<Case>();
-
-    public virtual Company? IdCompanyNavigation { get; set; }
 
     public virtual ICollection<Opportunity> Opportunities { get; set; } = new List<Opportunity>();
 

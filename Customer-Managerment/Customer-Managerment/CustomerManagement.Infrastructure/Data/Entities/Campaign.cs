@@ -21,9 +21,9 @@ public partial class Campaign
 
     public DateTime? CreatedAt { get; set; }
 
-    public Guid? IdCompany { get; set; }
+    public Guid? IdUser { get; set; }
 
-    public virtual Company? IdCompanyNavigation { get; set; }
+    public virtual User? IdUserNavigation { get; set; }
 
     public virtual ICollection<Lead> Leads { get; set; } = new List<Lead>();
 }

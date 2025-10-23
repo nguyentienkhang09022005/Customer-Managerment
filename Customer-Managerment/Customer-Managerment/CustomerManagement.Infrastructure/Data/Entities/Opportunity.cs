@@ -20,6 +20,4 @@ public partial class Opportunity
     public Guid? IdUser { get; set; }
 
     public virtual User? IdUserNavigation { get; set; }
-
-    public virtual ICollection<Quote> Quotes { get; set; } = new List<Quote>();
 }

@@ -5,7 +5,7 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 
-namespace Customer_Managerment.CustomerManagement.Application.UseCases.Opportunity
+namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
     public class OpportunityHandler
     {

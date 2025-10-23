@@ -20,4 +20,7 @@ public partial class Activity
     public Guid? IdCustomer { get; set; }
 
     public virtual User? IdUserNavigation { get; set; }
+
+    public virtual User? IdCustomerNavigation { get; set; }
+
 }

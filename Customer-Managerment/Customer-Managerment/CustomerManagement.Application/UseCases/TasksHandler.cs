@@ -6,7 +6,7 @@ using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 
-namespace Customer_Managerment.CustomerManagement.Application.UseCases.Tasks
+namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
     public class TasksHandler
     {

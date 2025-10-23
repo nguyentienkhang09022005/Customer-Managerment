@@ -1,7 +1,6 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Tasks;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Users;
+using Customer_Managerment.CustomerManagement.Application.UseCases;
 using HotChocolate.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation

@@ -15,7 +15,5 @@
         public string? Password { get; set; }
 
         public string? Role { get; set; }
-
-        public Guid? IdCompany { get; set; }
     }
 }

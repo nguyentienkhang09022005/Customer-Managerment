@@ -17,9 +17,9 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
 
             CreateMap<ProductDomain, ProductResponse>();
 
-            CreateMap<Product, ProductResponse>();
+            CreateMap<Product, ProductResponse>();   
 
-            CreateMap<ProductCreationRequest, ProductDomain>();
+            CreateMap<ProductCreationRequest, ProductDomain>(); 
 
             CreateMap<ProductUpdateRequest, ProductDomain>();
 

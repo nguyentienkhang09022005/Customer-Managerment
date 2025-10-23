@@ -1,5 +1,5 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Product;
+using Customer_Managerment.CustomerManagement.Application.UseCases;
 using HotChocolate.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query

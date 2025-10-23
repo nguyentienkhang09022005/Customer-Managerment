@@ -23,5 +23,7 @@ public partial class Company
 
     public virtual ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
 
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
