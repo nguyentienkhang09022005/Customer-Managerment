@@ -15,19 +15,19 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _handler = handler;
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<CampaignResponse> CreateCampaignAsync(CampaignCreationRequest request)
         {
             return await _handler.CreateCampaignAsync(request);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<CampaignResponse> UpdateCampaignAsync(CampaignUpdateRequest request, Guid idCampaign)
         {
             return await _handler.UpdateCampaignAsync(request, idCampaign);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<string> DeleteCampaignAsync(Guid idCampaign)
         {
             return await _handler.DeleteCampaignAsync(idCampaign);

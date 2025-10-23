@@ -155,18 +155,12 @@ public partial class CustomerManagementDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("email");
             entity.Property(e => e.IdCampaign).HasColumnName("id_campaign");
-            entity.Property(e => e.LeadEmail)
-                .HasMaxLength(100)
-                .HasColumnName("lead_email");
             entity.Property(e => e.LeadName)
                 .HasMaxLength(100)
                 .HasColumnName("lead_name");
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .HasColumnName("phone");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
 
             entity.HasOne(d => d.IdCampaignNavigation).WithMany(p => p.Leads)
                 .HasForeignKey(d => d.IdCampaign)
