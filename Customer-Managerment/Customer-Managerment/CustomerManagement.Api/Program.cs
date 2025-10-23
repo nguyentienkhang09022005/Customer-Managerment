@@ -5,6 +5,7 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Activities;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
+using Customer_Managerment.CustomerManagement.Application.UseCases.Cases;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<ICaseRepository, CaseRepository>();
 
 
 
@@ -69,7 +71,7 @@ builder.Services.AddScoped<ProductHandler>();
 builder.Services.AddScoped<UsersHandler>();
 builder.Services.AddScoped<OrderHandler>();
 builder.Services.AddScoped<ActivityHandler>();
-
+builder.Services.AddScoped<CaseHandler>();
 
 
 // Mapper Registration
@@ -107,6 +109,7 @@ builder.Services
         .AddTypeExtension<UserQuery>()
         .AddTypeExtension<OrderQuery>()
         .AddTypeExtension<ActivityQuery>()
+        .AddTypeExtension<CaseQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()
@@ -118,6 +121,7 @@ builder.Services
         .AddTypeExtension<UserMutation>()
         .AddTypeExtension<OrderMutation>()
         .AddTypeExtension<ActivityMutation>()
+        .AddTypeExtension<CaseMutation>()
 
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()

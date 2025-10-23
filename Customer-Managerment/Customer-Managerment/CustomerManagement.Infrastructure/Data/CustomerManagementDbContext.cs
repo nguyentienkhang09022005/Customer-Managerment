@@ -128,10 +128,15 @@ public partial class CustomerManagementDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_case_order");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Cases)
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserCases)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_case_user");
+
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.CustomerCases)
+                .HasForeignKey(d => d.IdCustomer)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_case_customer");
         });
 
         modelBuilder.Entity<Lead>(entity =>

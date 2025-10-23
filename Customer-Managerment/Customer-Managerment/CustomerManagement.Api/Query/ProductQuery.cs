@@ -14,7 +14,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             _handler = handler;
         }
 
-        //[Authorize]
+        [Authorize]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
@@ -23,7 +23,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return await _handler.GetListProductsAsync();
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<ProductResponse> GetInfProductAsync(Guid idProduct)
         {
             return await _handler.GetInfProductAsync(idProduct);

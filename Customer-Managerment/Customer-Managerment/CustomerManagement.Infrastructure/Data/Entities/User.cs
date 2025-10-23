@@ -31,7 +31,8 @@ public partial class User
 
     public virtual ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
 
-    public virtual ICollection<Case> Cases { get; set; } = new List<Case>();
+    public virtual ICollection<Case> CustomerCases { get; set; } = new List<Case>();
+    public virtual ICollection<Case> UserCases { get; set; } = new List<Case>();
 
     public virtual ICollection<Opportunity> Opportunities { get; set; } = new List<Opportunity>();
 

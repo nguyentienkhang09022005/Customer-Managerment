@@ -14,7 +14,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             _handler = handler;
         }
 
-        //[Authorize]
+        [Authorize]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
@@ -23,7 +23,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return await _handler.GetListOpportunitiesAsync(idUser);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<OpportunityResponse> GetInfOpportunityAsync(Guid idOpportunity)
         {
             return await _handler.GetInfOpportunityAsync(idOpportunity);

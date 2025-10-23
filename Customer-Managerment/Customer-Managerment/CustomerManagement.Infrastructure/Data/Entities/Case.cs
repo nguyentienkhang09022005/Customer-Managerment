@@ -26,4 +26,6 @@ public partial class Case
     public virtual Order? IdOrderNavigation { get; set; }
 
     public virtual User? IdUserNavigation { get; set; }
+
+    public virtual User? IdCustomerNavigation { get; set; }
 }

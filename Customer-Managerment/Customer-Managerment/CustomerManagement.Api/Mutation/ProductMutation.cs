@@ -15,16 +15,19 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _handler = handler;
         }
 
+        [Authorize]
         public async Task<ProductResponse> CreateProductAsync(ProductCreationRequest request)
         {
             return await _handler.CreateProductAsync(request);
         }
 
+        [Authorize]
         public async Task<ProductResponse> UpdateProductAsync(ProductUpdateRequest request, Guid idProduct)
         {
             return await _handler.UpdateProductAsync(request, idProduct);
         }
 
+        [Authorize]
         public async Task<string> DeleteProductAsync(Guid idProduct)
         {
             return await _handler.DeleteProductAsync(idProduct);

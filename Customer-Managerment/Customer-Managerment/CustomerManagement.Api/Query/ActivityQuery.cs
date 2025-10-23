@@ -14,7 +14,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             _activityHandler = activityHandler;
         }
 
-        //[Authorize]
+        [Authorize]
         [UseProjection]
         [UseFiltering]
         [UseSorting]
@@ -23,7 +23,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return await _activityHandler.GetListActivitiesAsync(idUser);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<ActivityResponse> GetInfActivityAsync(Guid idActivity)
         {
             return await _activityHandler.GetInfActivityAsync(idActivity);

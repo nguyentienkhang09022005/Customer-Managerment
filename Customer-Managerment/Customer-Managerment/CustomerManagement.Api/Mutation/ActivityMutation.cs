@@ -15,19 +15,19 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _activityHandler = activityHandler;
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<ActivityResponse> CreateActivityAsync(ActivityCreationRequest request)
         {
             return await _activityHandler.CreateActivityAsync(request);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<ActivityResponse> UpdateActivityAsync(ActivityUpdateRequest request, Guid idActivity)
         {
             return await _activityHandler.UpdateActivityAsync(request, idActivity);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<string> DeleteActivityAsync(Guid idActivity)
         {
             return await _activityHandler.DeleteActivityAsync(idActivity);
