@@ -15,7 +15,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _usersHandler = usersHandler;
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<UserResponse> CreateUserAsync(UserCreationRequest userCreationRequest)
         {
             return await _usersHandler.CreateUserAsync(userCreationRequest);

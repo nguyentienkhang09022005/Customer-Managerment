@@ -11,11 +11,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IElasticsearchService _elasticsearchService;
 
-        public UsersHandler(IUserRepository userRepository, IMapper mapper)
+        public UsersHandler(IUserRepository userRepository, IMapper mapper, IElasticsearchService elasticsearchService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _elasticsearchService = elasticsearchService;
         }
 
         public async Task<List<UserResponse>> GetListUsersAsync()
@@ -41,6 +43,9 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var newUser = await _userRepository.AddUserAsync(userDomain);
 
             var userResponse = _mapper.Map<UserResponse>(newUser);
+
+            await _elasticsearchService.IndexUserAsync(userResponse); // Thêm thông tin vào ES
+
             return userResponse;
         }
 
@@ -56,14 +61,23 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             _mapper.Map(userUpdateRequest, userDomain);
 
             var updatedUser = await _userRepository.UpdateUserAsync(userDomain);
+            var userResponse = _mapper.Map<UserResponse>(updatedUser);
 
-            return _mapper.Map<UserResponse>(updatedUser);
+            await _elasticsearchService.IndexUserAsync(userResponse); // Sửa thông tin trong ES
+            return userResponse;
         }
 
         public async Task<string> DeleteUserAsync(Guid idUser)
         {
             await _userRepository.DeleteUserAsync(idUser);
+
+            await _elasticsearchService.DeleteUserAsync(idUser); // Xóa người dùng khỏi ES
             return "Xóa người dùng thành công!";
+        }
+
+        public async Task<List<UserResponse>> SearchUsersAsync(string keyword)
+        {
+            return await _elasticsearchService.SearchUsersAsync(keyword);
         }
     }
 }

@@ -29,5 +29,11 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         {
             return await _usersHandler.GetInfUserAsync(idTask);
         }
+
+        //[Authorize]
+        public async Task<List<UserResponse>> SearchUsersAsync(string keyword)
+        {
+            return await _usersHandler.SearchUsersAsync(keyword);
+        }
     }
 }

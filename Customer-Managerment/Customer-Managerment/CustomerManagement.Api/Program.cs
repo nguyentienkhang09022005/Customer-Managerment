@@ -33,6 +33,8 @@ builder.Configuration["RedisSettings:Password"] = Environment.GetEnvironmentVari
 builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("SENDER_APIKEY");
 builder.Configuration["SendGrid:Email"] = Environment.GetEnvironmentVariable("SENDER_EMAIL");
 builder.Configuration["SendGrid:Name"] = Environment.GetEnvironmentVariable("SENDER_NAME");
+builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
+
 
 // DbContext Registration
 builder.Services.AddPooledDbContextFactory<CustomerManagementDbContext>(options =>
@@ -63,6 +65,7 @@ builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 // Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>();
 
 
 // Handlers
