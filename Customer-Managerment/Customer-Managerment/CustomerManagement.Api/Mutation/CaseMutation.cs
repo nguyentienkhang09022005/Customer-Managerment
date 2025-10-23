@@ -21,13 +21,13 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             return await _handler.CreateCaseAsync(request);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<CaseResponse> UpdateCaseAsync(CaseUpdateRequest request, Guid idCase)
         {
             return await _handler.UpdateCaseAsync(request, idCase);
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<string> DeleteCaseAsync(Guid idCase)
         {
             return await _handler.DeleteCaseAsync(idCase);

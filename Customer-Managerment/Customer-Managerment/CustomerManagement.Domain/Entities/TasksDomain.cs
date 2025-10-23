@@ -17,6 +17,7 @@ namespace Customer_Managerment.CustomerManagement.Domain.Entities
         public TasksDomain(string status) 
         { 
             CheckStatus(status);
+            Status = status;
         }
 
         private void CheckStatus(string status)
