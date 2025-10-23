@@ -35,6 +35,7 @@ builder.Configuration["SendGrid:Email"] = Environment.GetEnvironmentVariable("SE
 builder.Configuration["SendGrid:Name"] = Environment.GetEnvironmentVariable("SENDER_NAME");
 builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
 builder.Configuration["GeminiSettings:ApiKey"] = Environment.GetEnvironmentVariable("APIKEY__GEMINI");
+builder.Configuration["GeminiSettings:BaseUrl"] = Environment.GetEnvironmentVariable("GEMINI__APIURL");
 
 
 // DbContext Registration
