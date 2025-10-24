@@ -7,7 +7,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
     public class ElasticsearchService : IElasticsearchService
     {
         private readonly IElasticClient _client;
-        private const string UserIndexName = "users";
+        private const string StaffIndexName = "staffs";
         private readonly IConfiguration _config;
         public ElasticsearchService(IConfiguration config)
         {
@@ -19,40 +19,38 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
 
             var uri = new Uri(uriString);
             var settings = new ConnectionSettings(uri)
-                .DefaultIndex(UserIndexName); 
+                .DefaultIndex(StaffIndexName); 
 
             _client = new ElasticClient(settings);
 
             // Tạo index nếu chưa có
-            _client.Indices.Create(UserIndexName, c => c
-                .Map<UserResponse>(m => m.AutoMap())
+            _client.Indices.Create(StaffIndexName, c => c
+                .Map<StaffResponse>(m => m.AutoMap())
             );
         }
 
-        public async Task IndexUserAsync(UserResponse user)
+        public async Task IndexStaffAsync(StaffResponse staffResponse)
         {
             // ES tự động tạo mới nếu chưa có ID, hoặc cập nhật nếu ID đã tồn tại
-            await _client.IndexDocumentAsync(user);
+            await _client.IndexDocumentAsync(staffResponse);
         }
 
-        public async Task DeleteUserAsync(Guid idUser)
+        public async Task DeleteStaffAsync(Guid idStaff)
         {
             // Xóa document dựa trên ID
-            await _client.DeleteAsync<UserResponse>(idUser.ToString());
+            await _client.DeleteAsync<StaffResponse>(idStaff.ToString());
         }
 
-        public async Task<List<UserResponse>> SearchUsersAsync(string keyword)
+        public async Task<List<StaffResponse>> SearchStaffsAsync(string keyword)
         {
-            var response = await _client.SearchAsync<UserResponse>(s => s
+            var response = await _client.SearchAsync<StaffResponse>(s => s
                 .Query(q => q
                     .MultiMatch(mm => mm // Tìm kiếm trên nhiều trường
                         .Query(keyword)
                         .Fields(f => f
-                            .Fields(u => u.IdUser)
+                            .Fields(u => u.IdStaff)
                             .Field(u => u.Fullname)
                             .Field(u => u.Email)
-                            .Field(u => u.Phone)
-                            .Field(u => u.Address)
                         )
                         .Fuzziness(Fuzziness.Auto) // Cho phép tìm kiếm "gần đúng"
                     )

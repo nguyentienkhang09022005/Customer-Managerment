@@ -4,6 +4,6 @@
     {
         public string? Token { get; set; }
 
-        public UserResponse? InfUser { get; set; }
+        public StaffResponse? InfStaff { get; set; }
     }
 }

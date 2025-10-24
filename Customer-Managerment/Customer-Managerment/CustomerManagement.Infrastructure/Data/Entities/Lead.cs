@@ -7,15 +7,11 @@ public partial class Lead
 {
     public Guid IdLead { get; set; }
 
-    public string? LeadName { get; set; }
-
-    public string? Email { get; set; }
-
-    public string? Phone { get; set; }
+    public string? Resource { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
-    public Guid? IdCampaign { get; set; }
+    public virtual ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 
-    public virtual Campaign? IdCampaignNavigation { get; set; }
+    public virtual Person IdLeadNavigation { get; set; } = null!;
 }

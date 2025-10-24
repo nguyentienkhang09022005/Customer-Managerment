@@ -8,17 +8,17 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
 {
     public class ForgotPasswordHandler
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IStaffRepository _staffRepository;
         private readonly IFluentEmail _email;
         private readonly IMemoryCache _memoryCache;
         private readonly ILogger<ForgotPasswordHandler> _logger;
 
-        public ForgotPasswordHandler(IUserRepository userRepository, 
+        public ForgotPasswordHandler(IStaffRepository staffRepository, 
                                      IMemoryCache memoryCache, 
                                      IFluentEmail email, 
                                      ILogger<ForgotPasswordHandler> logger)
         {
-            _userRepository = userRepository;
+            _staffRepository = staffRepository;
             _memoryCache = memoryCache;
             _email = email;
             _logger = logger;
@@ -26,7 +26,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         public async Task<string> SendOTPForForgotPasswordHandleAsync(ForgotPasswordRequest forgotPasswordRequest)
         {
             // Nếu không tồn tại email thì trả về lỗi
-            var checkEmail = await _userRepository.GetUserByEmailAsync(forgotPasswordRequest.Email);
+            var checkEmail = await _staffRepository.GetStaffByEmailAsync(forgotPasswordRequest.Email);
             if (checkEmail == null)
             {
                 throw new DomainException("Email không tồn tại!", 404);
@@ -84,13 +84,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
             }
             try
             {
-                var user = await _userRepository.GetUserByEmailAsync(changePasswordRequest.Email);
-                if (user == null)
+                var staff = await _staffRepository.GetStaffByEmailAsync(changePasswordRequest.Email);
+                if (staff == null)
                 {
                     throw new DomainException("Email không tồn tại!", 404);
                 }
-                user.SetPassword(BCrypt.Net.BCrypt.HashPassword(changePasswordRequest.NewPassword));
-                await _userRepository.UpdateUserAsync(user);
+                staff.SetPassword(BCrypt.Net.BCrypt.HashPassword(changePasswordRequest.NewPassword));
+                await _staffRepository.UpdateStaffAsync(staff);
 
                 _memoryCache.Remove(cacheKey);
                 return "Đổi mật khẩu thành công!";

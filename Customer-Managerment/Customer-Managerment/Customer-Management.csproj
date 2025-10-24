@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <Folder Include="CustomerManagement.Api\GraphQL\Type\Input\" />
+    <Folder Include="CustomerManagement.Infrastructure\Data\Entities\" />
   </ItemGroup>
 
 </Project>

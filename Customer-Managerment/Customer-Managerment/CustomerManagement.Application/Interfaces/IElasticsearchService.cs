@@ -5,12 +5,12 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
     public interface IElasticsearchService
     {
         // Ghi hoặc cập nhật một user vào ES
-        Task IndexUserAsync(UserResponse user);
+        Task IndexStaffAsync(StaffResponse staffResponse);
 
-        // Xóa một user khỏi ES
-        Task DeleteUserAsync(Guid idUser);
+        // Xóa một staff khỏi ES
+        Task DeleteStaffAsync(Guid idStaff);
 
-        // Tìm kiếm user
-        Task<List<UserResponse>> SearchUsersAsync(string keyword);
+        // Tìm kiếm staff
+        Task<List<StaffResponse>> SearchStaffsAsync(string keyword);
     }
 }

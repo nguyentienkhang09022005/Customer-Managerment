@@ -11,20 +11,20 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
     {
         private readonly IFluentEmail _email;
         private readonly IMemoryCache _memoryCache;
-        private readonly IUserRepository _userRepository;
+        private readonly IStaffRepository _staffRepository;
         private readonly ILogger<ForgotPasswordHandler> _logger;
 
 
-        private static string DefaultRole = "Employee";
+        private static string DefaultRole = "Sales";
 
         public RegisterHandler(IFluentEmail email,
                           IMemoryCache memoryCache,
-                          IUserRepository userRepository,
+                          IStaffRepository staffRepository,
                           ILogger<ForgotPasswordHandler> logger)
         {
             _email = email;
             _memoryCache = memoryCache;
-            _userRepository = userRepository;
+            _staffRepository = staffRepository;
             _logger = logger;
             _logger = logger;
         }
@@ -33,7 +33,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         public async Task<string> SendOtpToRegisterAsync(RegisterRequest registerRequest)
         {
             // Nếu tồn tại email thì trả về lỗi
-            var checkEmail = await _userRepository.GetUserByEmailAsync(registerRequest.Email);
+            var checkEmail = await _staffRepository.GetStaffByEmailAsync(registerRequest.Email);
             if (checkEmail != null)
             {
                 throw new DomainException("Email đã tồn tại!", 409);
@@ -107,13 +107,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
 
             try
             {
-                // Tạo user mới
-                var newUser = new UserDomain(cacheData.Email, cacheData.Password);
-                newUser.Fullname = cacheData.FullName;
-                newUser.Username = cacheData.UserName;
-                newUser.Role = DefaultRole;
+                // Tạo staff mới
+                var staff = new StaffDomain(cacheData.Email, cacheData.Password);
+                staff.Fullname = cacheData.FullName;
+                staff.Username = cacheData.UserName;
+                staff.Role = DefaultRole;
 
-                await _userRepository.AddUserAsync(newUser);
+                await _staffRepository.AddStaffAsync(staff);
 
                 _memoryCache.Remove(cacheKey);
 

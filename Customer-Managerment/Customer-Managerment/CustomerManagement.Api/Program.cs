@@ -4,7 +4,6 @@ using Customer_Managerment.CustomerManagement.Api.Query;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
-
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
@@ -48,7 +47,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Repositories
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+
 
 
 
@@ -64,7 +64,6 @@ builder.Services.AddHttpClient<IGeminiService, GeminiService>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
-builder.Services.AddScoped<UsersHandler>();
 builder.Services.AddScoped<ChatHandler>();
 
 
@@ -97,14 +96,12 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
-        .AddTypeExtension<UserQuery>()
         .AddTypeExtension<ChatQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
-        .AddTypeExtension<UserMutation>()
         .AddTypeExtension<ChatMutation>()
 
     .AddType<DateType>()

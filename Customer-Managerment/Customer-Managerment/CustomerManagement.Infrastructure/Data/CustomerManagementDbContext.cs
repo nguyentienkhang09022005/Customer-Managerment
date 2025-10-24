@@ -12,131 +12,107 @@ public partial class CustomerManagementDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Activity> Activities { get; set; }
+    public virtual DbSet<Contact> Contacts { get; set; }
 
-    public virtual DbSet<Campaign> Campaigns { get; set; }
+    public virtual DbSet<Customer> Customers { get; set; }
 
-    public virtual DbSet<Case> Cases { get; set; }
+    public virtual DbSet<Deal> Deals { get; set; }
 
     public virtual DbSet<Lead> Leads { get; set; }
 
-    public virtual DbSet<Opportunity> Opportunities { get; set; }
+    public virtual DbSet<Person> People { get; set; }
 
-    public virtual DbSet<Order> Orders { get; set; }
-
-    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-
-    public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<Tasks> Tasks { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
-
+    public virtual DbSet<Staff> Staff { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Activity>(entity =>
+        modelBuilder.Entity<Contact>(entity =>
         {
-            entity.HasKey(e => e.IdActivity).HasName("activity_pkey");
+            entity.HasKey(e => e.IdActivity).HasName("contact_pkey");
 
-            entity.ToTable("activity");
+            entity.ToTable("contact");
 
             entity.Property(e => e.IdActivity)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id_activity");
-            entity.Property(e => e.Date).HasColumnName("date");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.IdCustomer).HasColumnName("id_customer");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.Subject)
-                .HasMaxLength(100)
-                .HasColumnName("subject");
-            entity.Property(e => e.Type)
-                .HasMaxLength(50)
-                .HasColumnName("type");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.CreatedActivities)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_activity_user");
-            
-            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.CustomerActivities)
-                .HasForeignKey(d => d.IdCustomer)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_activity_customer");
-        });
-
-        modelBuilder.Entity<Campaign>(entity =>
-        {
-            entity.HasKey(e => e.IdCampaign).HasName("campaign_pkey");
-
-            entity.ToTable("campaign");
-
-            entity.Property(e => e.IdCampaign)
-                .ValueGeneratedNever()
-                .HasColumnName("id_campaign");
-            entity.Property(e => e.Budget)
-                .HasPrecision(15, 2)
-                .HasColumnName("budget");
-            entity.Property(e => e.CampaignName)
-                .HasMaxLength(100)
-                .HasColumnName("campaign_name");
+            entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.EndDate).HasColumnName("end_date");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.StartDate).HasColumnName("start_date");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Campaigns)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_campaign_user");
-        });
-
-        modelBuilder.Entity<Case>(entity =>
-        {
-            entity.HasKey(e => e.IdCase).HasName("cases_pkey");
-
-            entity.ToTable("cases");
-
-            entity.Property(e => e.IdCase)
-                .ValueGeneratedNever()
-                .HasColumnName("id_case");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.IdCustomer).HasColumnName("id_customer");
-            entity.Property(e => e.IdOrder).HasColumnName("id_order");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.ResolveAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("resolve_at");
+            entity.Property(e => e.IdLead).HasColumnName("id_lead");
+            entity.Property(e => e.IdStaff).HasColumnName("id_staff");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
             entity.Property(e => e.Title)
                 .HasMaxLength(100)
                 .HasColumnName("title");
+            entity.Property(e => e.Type)
+                .HasMaxLength(50)
+                .HasColumnName("type");
 
-            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Cases)
-                .HasForeignKey(d => d.IdOrder)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_case_order");
+            entity.HasOne(d => d.IdLeadNavigation).WithMany(p => p.Contacts)
+                .HasForeignKey(d => d.IdLead)
+                .HasConstraintName("fk_contact_lead");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserCases)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_case_user");
+            entity.HasOne(d => d.IdStaffNavigation).WithMany(p => p.Contacts)
+                .HasForeignKey(d => d.IdStaff)
+                .HasConstraintName("fk_contact_staff");
+        });
 
-            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.CustomerCases)
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.IdLead).HasName("customer_pkey");
+
+            entity.ToTable("customer");
+
+            entity.Property(e => e.IdLead)
+                .ValueGeneratedNever()
+                .HasColumnName("id_lead");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+
+            entity.HasOne(d => d.IdLeadNavigation).WithOne(p => p.Customer)
+                .HasForeignKey<Customer>(d => d.IdLead)
+                .HasConstraintName("fk_customer_person");
+        });
+
+        modelBuilder.Entity<Deal>(entity =>
+        {
+            entity.HasKey(e => e.IdDeal).HasName("deal_pkey");
+
+            entity.ToTable("deal");
+
+            entity.Property(e => e.IdDeal)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id_deal");
+            entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.IdCustomer).HasColumnName("id_customer");
+            entity.Property(e => e.IdStaff).HasColumnName("id_staff");
+            entity.Property(e => e.Price)
+                .HasPrecision(15, 2)
+                .HasColumnName("price");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'Open'::character varying")
+                .HasColumnName("status");
+            entity.Property(e => e.Title)
+                .HasMaxLength(100)
+                .HasColumnName("title");
+
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.Deals)
                 .HasForeignKey(d => d.IdCustomer)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_case_customer");
+                .HasConstraintName("fk_deal_customer");
+
+            entity.HasOne(d => d.IdStaffNavigation).WithMany(p => p.Deals)
+                .HasForeignKey(d => d.IdStaff)
+                .HasConstraintName("fk_deal_staff");
         });
 
         modelBuilder.Entity<Lead>(entity =>
@@ -149,193 +125,72 @@ public partial class CustomerManagementDbContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id_lead");
             entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
+            entity.Property(e => e.Resource)
+                .HasMaxLength(100)
+                .HasColumnName("resource");
+
+            entity.HasOne(d => d.IdLeadNavigation).WithOne(p => p.Lead)
+                .HasForeignKey<Lead>(d => d.IdLead)
+                .HasConstraintName("fk_lead_person");
+        });
+
+        modelBuilder.Entity<Person>(entity =>
+        {
+            entity.HasKey(e => e.IdLead).HasName("person_pkey");
+
+            entity.ToTable("person");
+
+            entity.HasIndex(e => e.Email, "person_email_key").IsUnique();
+
+            entity.Property(e => e.IdLead)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id_lead");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
-            entity.Property(e => e.IdCampaign).HasColumnName("id_campaign");
-            entity.Property(e => e.LeadName)
+            entity.Property(e => e.Fullname)
                 .HasMaxLength(100)
-                .HasColumnName("lead_name");
+                .HasColumnName("fullname");
+            entity.Property(e => e.Location)
+                .HasMaxLength(100)
+                .HasColumnName("location");
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .HasColumnName("phone");
-
-            entity.HasOne(d => d.IdCampaignNavigation).WithMany(p => p.Leads)
-                .HasForeignKey(d => d.IdCampaign)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_lead_campaign");
+            entity.Property(e => e.Salary)
+                .HasPrecision(15, 2)
+                .HasColumnName("salary");
         });
 
-        modelBuilder.Entity<Opportunity>(entity =>
+        modelBuilder.Entity<Staff>(entity =>
         {
-            entity.HasKey(e => e.IdOpportunity).HasName("opportunity_pkey");
+            entity.HasKey(e => e.IdStaff).HasName("staff_pkey");
 
-            entity.ToTable("opportunity");
+            entity.ToTable("staff");
 
-            entity.Property(e => e.IdOpportunity)
-                .ValueGeneratedNever()
-                .HasColumnName("id_opportunity");
-            entity.Property(e => e.Amount)
-                .HasPrecision(15, 2)
-                .HasColumnName("amount");
+            entity.HasIndex(e => e.Email, "staff_email_key").IsUnique();
+
+            entity.HasIndex(e => e.Username, "staff_username_key").IsUnique();
+
+            entity.Property(e => e.IdStaff)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id_staff");
             entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.ExpectedClosedDate).HasColumnName("expected_closed_date");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.OpportunityName)
-                .HasMaxLength(100)
-                .HasColumnName("opportunity_name");
-            entity.Property(e => e.Stage)
-                .HasMaxLength(50)
-                .HasColumnName("stage");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Opportunities)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_opportunity_user");
-        });
-
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.HasKey(e => e.IdOrder).HasName("orders_pkey");
-
-            entity.ToTable("orders");
-
-            entity.Property(e => e.IdOrder)
-                .ValueGeneratedNever()
-                .HasColumnName("id_order");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.IdCustomer).HasColumnName("id_customer");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.PaymentMethod)
-                .HasMaxLength(50)
-                .HasColumnName("payment_method");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.TotalAmount)
-                .HasPrecision(15, 2)
-                .HasColumnName("total_amount");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_order_user");
-        });
-
-        modelBuilder.Entity<OrderDetail>(entity =>
-        {
-            entity.HasKey(e => e.IdOrderDetail).HasName("order_detail_pkey");
-
-            entity.ToTable("order_detail");
-
-            entity.Property(e => e.IdOrderDetail)
-                .ValueGeneratedNever()
-                .HasColumnName("id_order_detail");
-            entity.Property(e => e.IdOrder).HasColumnName("id_order");
-            entity.Property(e => e.IdProduct).HasColumnName("id_product");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.TotalPrice)
-                .HasPrecision(15, 2)
-                .HasColumnName("total_price");
-            entity.Property(e => e.UnitPrice)
-                .HasPrecision(15, 2)
-                .HasColumnName("unit_price");
-
-            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.OrderDetails)
-                .HasForeignKey(d => d.IdOrder)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_order_detail_order");
-
-            entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.OrderDetails)
-                .HasForeignKey(d => d.IdProduct)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_order_detail_product");
-        });
-
-        modelBuilder.Entity<Product>(entity =>
-        {
-            entity.HasKey(e => e.IdProduct).HasName("product_pkey");
-
-            entity.ToTable("product");
-
-            entity.Property(e => e.IdProduct)
-                .ValueGeneratedNever()
-                .HasColumnName("id_product");
-            entity.Property(e => e.Category)
-                .HasMaxLength(50)
-                .HasColumnName("category");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Price)
-                .HasPrecision(15, 2)
-                .HasColumnName("price");
-            entity.Property(e => e.ProductName)
-                .HasMaxLength(100)
-                .HasColumnName("product_name");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-        });
-
-        modelBuilder.Entity<Tasks>(entity =>
-        {
-            entity.HasKey(e => e.IdTask).HasName("task_pkey");
-
-            entity.ToTable("task");
-
-            entity.Property(e => e.IdTask)
-                .ValueGeneratedNever()
-                .HasColumnName("id_task");
-            entity.Property(e => e.DueDate).HasColumnName("due_date");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.Title)
-                .HasMaxLength(100)
-                .HasColumnName("title");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Tasks)
-                .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_task_user");
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.IdUser).HasName("users_pkey");
-
-            entity.ToTable("users");
-
-            entity.Property(e => e.IdUser)
-                .ValueGeneratedNever()
-                .HasColumnName("id_user");
-            entity.Property(e => e.Address)
-                .HasMaxLength(200)
-                .HasColumnName("address");
-            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
             entity.Property(e => e.Fullname)
-                .HasMaxLength(70)
+                .HasMaxLength(100)
                 .HasColumnName("fullname");
             entity.Property(e => e.Password)
                 .HasMaxLength(200)
                 .HasColumnName("password");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("role");

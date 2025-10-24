@@ -11,7 +11,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
 {
     public class AuthenticationHandler
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IStaffRepository _staffRepository;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         private readonly ILogger<ForgotPasswordHandler> _logger;
 
 
-        public AuthenticationHandler(IUserRepository userRepository,
+        public AuthenticationHandler(IStaffRepository staffRepository,
                             ITokenService tokenService,
                             IMapper mapper,
                             IConfiguration config,
@@ -28,7 +28,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                             IRefreshTokenService refreshTokenService,
                             ILogger<ForgotPasswordHandler> logger)
         {
-            _userRepository = userRepository;
+            _staffRepository = staffRepository;
             _refreshTokenService = refreshTokenService;
             _tokenService = tokenService;
             _mapper = mapper;
@@ -40,22 +40,22 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         // Login Handle
         public async Task<AuthenticationResponse> LoginHandleAsync(AuthenticationRequest authenticationRequest)
         {
-            var userDomain = await _userRepository.GetUserByUsernameAsync(authenticationRequest.Username);
-            if (userDomain == null)
+            var staffDomain = await _staffRepository.GetStaffByUsernameAsync(authenticationRequest.Username);
+            if (staffDomain == null)
             {
                 throw new DomainException("Tên đăng nhập không đúng!", 409);
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(authenticationRequest.Password, userDomain.Password))
+            if (!BCrypt.Net.BCrypt.Verify(authenticationRequest.Password, staffDomain.Password))
             {
                 throw new DomainException("Mật khẩu không đúng!", 409);
             }
 
-            var accessToken = _tokenService.generateAccessToken(userDomain);
-            var refreshToken = _tokenService.generateRefreshToken(userDomain);
+            var accessToken = _tokenService.generateAccessToken(staffDomain);
+            var refreshToken = _tokenService.generateRefreshToken(staffDomain);
 
             // Set Refresh Token on Redis
-            await _refreshTokenService.saveRefreshToken(userDomain.IdUser.ToString(),
+            await _refreshTokenService.saveRefreshToken(staffDomain.IdStaff.ToString(),
                                                         refreshToken,
                                                         TimeSpan.FromDays(Convert.ToDouble(_config["JwtSettings:RefreshTokenExpirationDays"] ?? "1"))
             );
@@ -71,11 +71,11 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
                 MaxAge = TimeSpan.FromDays(Convert.ToDouble(_config["JwtSettings:RefreshTokenExpirationDays"] ?? "1"))
             });
 
-            var userReponse = _mapper.Map<UserResponse>(userDomain);
+            var staffReponse = _mapper.Map<StaffResponse>(staffDomain);
             var authenticationResponse = new AuthenticationResponse
             {
                 Token = accessToken,
-                InfUser = userReponse,
+                InfStaff = staffReponse,
             };
 
             return authenticationResponse;
@@ -92,12 +92,12 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
             var jwtToken = await VerifyToken(refreshToken);
 
             // Xóa refresh token trên redis
-            var idUser = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
-            if (string.IsNullOrEmpty(idUser))
+            var idStaff = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            if (string.IsNullOrEmpty(idStaff))
             {
                 throw new DomainException("RefreshToken không hợp lệ!", 400);
             }
-            await _refreshTokenService.deleteRefreshToken(idUser);
+            await _refreshTokenService.deleteRefreshToken(idStaff);
 
             // Xóa cookie refresh token
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
@@ -115,32 +115,32 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
             }
 
             var jwtToken = await VerifyToken(refreshToken);
-            var idUser = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
-            if (string.IsNullOrEmpty(idUser))
+            var idStaff = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            if (string.IsNullOrEmpty(idStaff))
             {
                 throw new DomainException("RefreshToken không hợp lệ!", 400);
             }
 
             // Kiểm tra refresh token có tồn tại trên redis không
-            var existRefreshToken = await _refreshTokenService.getRefreshToken(idUser);
+            var existRefreshToken = await _refreshTokenService.getRefreshToken(idStaff);
             if (existRefreshToken == null || existRefreshToken != refreshToken)
             {
                 throw new DomainException("RefreshToken không tồn tại!", 400);
             }
 
-            var userDomain = await _userRepository.GetUserByIdAsync(Guid.Parse(idUser));
-            if (userDomain == null)
+            var staffDomain = await _staffRepository.GetStaffByIdAsync(Guid.Parse(idStaff));
+            if (staffDomain == null)
             {
-                throw new DomainException("Người dùng không tồn tại!", 404);
+                throw new DomainException("Nhân viên không tồn tại!", 404);
             }
 
-            var newAccessToken = _tokenService.generateAccessToken(userDomain);
+            var newAccessToken = _tokenService.generateAccessToken(staffDomain);
 
-            var userReponse = _mapper.Map<UserResponse>(userDomain);
+            var staffReponse = _mapper.Map<StaffResponse>(staffDomain);
             var authenticationResponse = new AuthenticationResponse
             {
                 Token = newAccessToken,
-                InfUser = userReponse,
+                InfStaff = staffReponse,
             };
             return authenticationResponse;
         }
@@ -148,15 +148,15 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
         // Introspect Token Handle
         public async Task<IntrospectResponse> IntrospectTokenHandleAsync(IntrospectRequest introspectRequest)
         {
-            Guid idUser = Guid.Empty;
+            Guid idStaff = Guid.Empty;
             bool isValid = true;
             try
             {
                 var jwtToken = await VerifyToken(introspectRequest.Token);
-                string idUserStr = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
-                if (!string.IsNullOrEmpty(idUserStr))
+                string idStaffStr = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+                if (!string.IsNullOrEmpty(idStaffStr))
                 {
-                    idUser = Guid.Parse(idUserStr);
+                    idStaff = Guid.Parse(idStaffStr);
                 }
             }
             catch (ArgumentException ex)
@@ -166,7 +166,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
             var introspectResponse = new IntrospectResponse
             {
                 Valid = isValid,
-                IdUser = idUser
+                IdUser = idStaff
             };
             return introspectResponse;
         }

@@ -2,27 +2,23 @@
 
 namespace Customer_Managerment.CustomerManagement.Domain.Entities
 {
-    public class UserDomain
+    public class StaffDomain
     {
-        public Guid IdUser { get; set; }
+        public Guid IdStaff { get; set; }
 
-        public string? Fullname { get; set; }
+        public string Fullname { get; set; } = null!;
 
-        public string? Username { get; set; }
+        public string Email { get; set; } = null!;
 
-        public string? Email { get; set; }
+        public string Username { get; set; } = null!;
 
-        public string? Phone { get; set; }
-
-        public string? Address { get; set; }
-
-        public string? Password { get; set; }
+        public string Password { get; set; } = null!;
 
         public string? Role { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 
-        public UserDomain(string email, string password) 
+        public StaffDomain(string email, string password) 
         {
             SetEmail(email);
             SetPassword(password);
