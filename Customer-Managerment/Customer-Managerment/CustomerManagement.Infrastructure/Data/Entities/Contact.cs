@@ -5,7 +5,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 public partial class Contact
 {
-    public Guid IdActivity { get; set; }
+    public Guid IdContact { get; set; }
 
     public string Type { get; set; } = null!;
 

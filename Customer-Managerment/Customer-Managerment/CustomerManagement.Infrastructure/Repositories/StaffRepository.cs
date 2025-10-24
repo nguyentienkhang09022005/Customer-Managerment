@@ -21,10 +21,10 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         }
 
         // Add Staff
-        public async Task<Staff> AddStaffAsync(StaffDomain staffs)
+        public async Task<Staff> AddStaffAsync(StaffDomain staffDomain)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var staff = _mapper.Map<Staff>(staffs);
+            var staff = _mapper.Map<Staff>(staffDomain);
             if (!string.IsNullOrEmpty(staff.Password))
             {
                 staff.Password = BCrypt.Net.BCrypt.HashPassword(staff.Password);

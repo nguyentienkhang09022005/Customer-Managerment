@@ -9,7 +9,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<StaffDomain?> GetStaffByIdAsync(Guid idStaff);
 
-        Task<StaffDomain?> GetStaffByUsernameAsync(string userName);
+        Task<StaffDomain?> GetStaffByUsernameAsync(string userName);    
 
         Task<StaffDomain?> GetStaffByEmailAsync(string email);
 

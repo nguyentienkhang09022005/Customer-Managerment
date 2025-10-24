@@ -16,7 +16,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             _chatHandler = chatHandler;
         }
 
-        [Authorize] 
+        //[Authorize] 
         public async Task<ChatResponse> SendChatMessageAsync(ChatRequest chatRequest)
         {
             return await _chatHandler.GenerateResponseAsync(chatRequest);

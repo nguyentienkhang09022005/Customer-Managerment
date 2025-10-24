@@ -65,6 +65,7 @@ builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
 builder.Services.AddScoped<ChatHandler>();
+builder.Services.AddScoped<StaffHandler>();
 
 
 // Mapper Registration
@@ -103,6 +104,7 @@ builder.Services
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
         .AddTypeExtension<ChatMutation>()
+        .AddTypeExtension<StaffMutation>()
 
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()

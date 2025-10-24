@@ -23,17 +23,18 @@ public partial class CustomerManagementDbContext : DbContext
     public virtual DbSet<Person> People { get; set; }
 
     public virtual DbSet<Staff> Staff { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Contact>(entity =>
         {
-            entity.HasKey(e => e.IdActivity).HasName("contact_pkey");
+            entity.HasKey(e => e.IdContact).HasName("contact_pkey");
 
             entity.ToTable("contact");
 
-            entity.Property(e => e.IdActivity)
+            entity.Property(e => e.IdContact)
                 .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id_activity");
+                .HasColumnName("id_contact");
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -62,20 +63,20 @@ public partial class CustomerManagementDbContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.IdLead).HasName("customer_pkey");
+            entity.HasKey(e => e.IdCustomer).HasName("customer_pkey");
 
             entity.ToTable("customer");
 
-            entity.Property(e => e.IdLead)
+            entity.Property(e => e.IdCustomer)
                 .ValueGeneratedNever()
-                .HasColumnName("id_lead");
+                .HasColumnName("id_customer");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
 
-            entity.HasOne(d => d.IdLeadNavigation).WithOne(p => p.Customer)
-                .HasForeignKey<Customer>(d => d.IdLead)
+            entity.HasOne(d => d.IdCustomerNavigation).WithOne(p => p.Customer)
+                .HasForeignKey<Customer>(d => d.IdCustomer)
                 .HasConstraintName("fk_customer_person");
         });
 
@@ -139,15 +140,15 @@ public partial class CustomerManagementDbContext : DbContext
 
         modelBuilder.Entity<Person>(entity =>
         {
-            entity.HasKey(e => e.IdLead).HasName("person_pkey");
+            entity.HasKey(e => e.IdPerson).HasName("person_pkey");
 
             entity.ToTable("person");
 
             entity.HasIndex(e => e.Email, "person_email_key").IsUnique();
 
-            entity.Property(e => e.IdLead)
+            entity.Property(e => e.IdPerson)
                 .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id_lead");
+                .HasColumnName("id_person");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");

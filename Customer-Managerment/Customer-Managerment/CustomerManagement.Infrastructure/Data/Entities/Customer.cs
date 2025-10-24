@@ -5,11 +5,11 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 public partial class Customer
 {
-    public Guid IdLead { get; set; }
+    public Guid IdCustomer { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
     public virtual ICollection<Deal> Deals { get; set; } = new List<Deal>();
 
-    public virtual Person IdLeadNavigation { get; set; } = null!;
+    public virtual Person IdCustomerNavigation { get; set; } = null!;
 }

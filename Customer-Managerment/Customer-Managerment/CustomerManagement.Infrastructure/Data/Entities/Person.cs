@@ -5,7 +5,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 public partial class Person
 {
-    public Guid IdLead { get; set; }
+    public Guid IdPerson { get; set; }
 
     public string Fullname { get; set; } = null!;
 

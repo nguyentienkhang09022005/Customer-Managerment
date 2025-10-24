@@ -14,7 +14,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             _chatHandler = chatHandler;
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<string> GetChatWelcomeMessageAsync()
         {
             return await _chatHandler.GetWelcomeMessageAsync();
