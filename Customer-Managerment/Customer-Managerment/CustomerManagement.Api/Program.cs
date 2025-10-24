@@ -3,11 +3,8 @@ using Customer_Managerment.CustomerManagement.Api.Mutation;
 using Customer_Managerment.CustomerManagement.Api.Query;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Activities;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Campaigns;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Cases;
-using Customer_Managerment.CustomerManagement.Application.UseCases.Leads;
+
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
@@ -52,15 +49,6 @@ builder.Services.AddSwaggerGen();
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITasksRepository, TasksRepository>();
-builder.Services.AddScoped<IOpportunityRepository, OpportunityRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
-builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
-builder.Services.AddScoped<ICaseRepository, CaseRepository>();
-builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
-builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 
 
 
@@ -76,15 +64,7 @@ builder.Services.AddHttpClient<IGeminiService, GeminiService>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
-builder.Services.AddScoped<TasksHandler>();
-builder.Services.AddScoped<OpportunityHandler>();
-builder.Services.AddScoped<ProductHandler>();
 builder.Services.AddScoped<UsersHandler>();
-builder.Services.AddScoped<OrderHandler>();
-builder.Services.AddScoped<ActivityHandler>();
-builder.Services.AddScoped<CaseHandler>();
-builder.Services.AddScoped<CampaignHandler>();
-builder.Services.AddScoped<LeadHandler>();
 builder.Services.AddScoped<ChatHandler>();
 
 
@@ -117,30 +97,14 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
-        .AddTypeExtension<TasksQuery>()
-        .AddTypeExtension<OpportunityQuery>()
-        .AddTypeExtension<ProductQuery>()
         .AddTypeExtension<UserQuery>()
-        .AddTypeExtension<OrderQuery>()
-        .AddTypeExtension<ActivityQuery>()
-        .AddTypeExtension<CaseQuery>()
-        .AddTypeExtension<CampaignQuery>()
-        .AddTypeExtension<LeadQuery>()
         .AddTypeExtension<ChatQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
-        .AddTypeExtension<TasksMutation>()
-        .AddTypeExtension<OpportunityMutation>()
-        .AddTypeExtension<ProductMutation>()
         .AddTypeExtension<UserMutation>()
-        .AddTypeExtension<OrderMutation>()
-        .AddTypeExtension<ActivityMutation>()
-        .AddTypeExtension<CaseMutation>()
-        .AddTypeExtension<CampaignMutation>()
-        .AddTypeExtension<LeadMutation>()
         .AddTypeExtension<ChatMutation>()
 
     .AddType<DateType>()
