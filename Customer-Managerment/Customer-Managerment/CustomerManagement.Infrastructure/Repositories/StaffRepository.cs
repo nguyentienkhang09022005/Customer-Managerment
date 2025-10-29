@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Errors.Model;
-using SendGrid.Helpers.Mail;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 {
@@ -75,16 +76,22 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<StaffDomain>(staff);
         }
 
-        public async Task<List<StaffDomain>> GetListStaffAsync()
+        public IQueryable<StaffResponse> GetListStaff()
         {
-            await using var context = _contextFactory.CreateDbContext();
-            return _mapper.Map<List<StaffDomain>>(
-                await context.Staff
-                .AsNoTracking()
-                .IgnoreAutoIncludes()
-                .ToListAsync());
+            var context = _contextFactory.CreateDbContext();
+            return context.Staff
+                .ProjectTo<StaffResponse>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
         }
 
+        public IQueryable<StaffResponse> GetStaffById(Guid idStaff)
+        {
+            var context = _contextFactory.CreateDbContext();
+            return context.Staff
+                .Where(s => s.IdStaff == idStaff)
+                .ProjectTo<StaffResponse>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
+        }
 
         // Update Staff
         public async Task<StaffDomain?> UpdateStaffAsync(StaffDomain staffDomain)

@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
@@ -13,7 +14,9 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<StaffDomain?> GetStaffByEmailAsync(string email);
 
-        Task<List<StaffDomain>> GetListStaffAsync();
+        IQueryable<StaffResponse> GetStaffById(Guid idStaff);
+
+        IQueryable<StaffResponse> GetListStaff();
 
         Task<StaffDomain?> UpdateStaffAsync(StaffDomain staffDomain);
 

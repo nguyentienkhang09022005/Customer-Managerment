@@ -65,11 +65,5 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             }
             return _mapper.Map<StaffResponse>(staffDomain);
         }
-
-        public async Task<List<StaffResponse>> GetAllStaffsAsync()
-        {
-            var staffDomains = await _staffRepository.GetListStaffAsync();
-            return _mapper.Map<List<StaffResponse>>(staffDomains);
-        }
     }
 }
