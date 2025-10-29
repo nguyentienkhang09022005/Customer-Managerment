@@ -48,7 +48,8 @@ builder.Services.AddSwaggerGen();
 
 // Repositories
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
-
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 
 
 
@@ -66,6 +67,9 @@ builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
 builder.Services.AddScoped<ChatHandler>();
 builder.Services.AddScoped<StaffHandler>();
+builder.Services.AddScoped<ContactHandler>();
+builder.Services.AddScoped<LeadHandler>();
+
 
 
 // Mapper Registration
@@ -105,6 +109,9 @@ builder.Services
         .AddTypeExtension<ForgotPasswordMutation>()
         .AddTypeExtension<ChatMutation>()
         .AddTypeExtension<StaffMutation>()
+        .AddTypeExtension<LeadMutation>()
+        .AddTypeExtension<ContactMutation>()
+
 
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()

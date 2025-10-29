@@ -21,7 +21,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         }
 
         // Add Staff
-        public async Task<Staff> AddStaffAsync(StaffDomain staffDomain)
+        public async Task<StaffDomain> AddStaffAsync(StaffDomain staffDomain)
         {
             await using var context = _contextFactory.CreateDbContext();
             var staff = _mapper.Map<Staff>(staffDomain);
@@ -31,9 +31,10 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             }
             staff.IdStaff = Guid.NewGuid();
             staff.CreatedAt = DateTime.Now;
+
             await context.Staff.AddAsync(staff);
             await context.SaveChangesAsync();
-            return staff;
+            return _mapper.Map<StaffDomain>(staff);
         }
 
         // Get Staff By Email
@@ -74,13 +75,14 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<StaffDomain>(staff);
         }
 
-        public async Task<List<Staff>> GetListStaffAsync()
+        public async Task<List<StaffDomain>> GetListStaffAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
-            return await context.Staff
+            return _mapper.Map<List<StaffDomain>>(
+                await context.Staff
                 .AsNoTracking()
                 .IgnoreAutoIncludes()
-                .ToListAsync();
+                .ToListAsync());
         }
 
 
@@ -104,17 +106,6 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .AsNoTracking()
                 .IgnoreAutoIncludes()
                 .AnyAsync(s => s.IdStaff == idStaff);
-        }
-
-        public async Task<StaffDomain?> GetExistingStaffAsync(Guid idStaff)
-        {
-            await using var context = _contextFactory.CreateDbContext();
-            var staff = await context.Staff
-                .AsNoTracking()
-                .IgnoreAutoIncludes()
-                .FirstOrDefaultAsync(s => s.IdStaff == idStaff);
-
-            return staff == null ? null : _mapper.Map<StaffDomain>(staff);
         }
 
         public async Task DeleteStaffAsync(Guid idStaff)

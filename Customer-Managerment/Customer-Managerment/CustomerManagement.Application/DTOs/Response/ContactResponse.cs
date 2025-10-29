@@ -13,5 +13,9 @@
         public string? Status { get; set; }
 
         public DateTime? CreatedAt { get; set; }
-    }
+
+        public LeadResponse? infLeadResponse { get; set; }
+
+        public StaffResponse? infStaffResponse { get; set; }
+    } 
 }

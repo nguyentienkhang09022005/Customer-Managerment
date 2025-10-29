@@ -20,7 +20,7 @@ public partial class CustomerManagementDbContext : DbContext
 
     public virtual DbSet<Lead> Leads { get; set; }
 
-    public virtual DbSet<Person> People { get; set; }
+    public virtual DbSet<Person> Person { get; set; }
 
     public virtual DbSet<Staff> Staff { get; set; }
 
