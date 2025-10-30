@@ -1,5 +1,4 @@
 ﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
@@ -13,7 +12,9 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<ContactDomain?> GetContactByIdAsync(Guid idContact);
 
-        Task<List<ContactDomain>> GetListContactAsync();
+        IQueryable<ContactDomain> GetListContact();
+
+        IQueryable<ContactDomain> GetContactById(Guid idContact);
 
         Task<bool> CheckContactExistsAsync(Guid idContact);
     }

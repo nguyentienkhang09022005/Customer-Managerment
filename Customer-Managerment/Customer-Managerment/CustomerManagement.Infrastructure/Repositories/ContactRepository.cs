@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
@@ -68,14 +69,25 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<ContactDomain>(contact);
         }
 
-        public async Task<List<ContactDomain>> GetListContactAsync()
+        public IQueryable<ContactDomain> GetListContact()
         {
-            await using var context = _contextFactory.CreateDbContext();
-            return _mapper.Map<List<ContactDomain>>(
-                await context.Contacts
-                .AsNoTracking()
-                .IgnoreAutoIncludes()
-                .ToListAsync());
+            var context = _contextFactory.CreateDbContext();
+            return context.Contacts
+                .Include(c => c.IdLeadNavigation)
+                .Include(c => c.IdStaffNavigation)
+                .ProjectTo<ContactDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
+        }
+
+        public IQueryable<ContactDomain> GetContactById(Guid idContact)
+        {
+            var context = _contextFactory.CreateDbContext();
+            return context.Contacts
+                .Where(c => c.IdContact == idContact)
+                .Include(c => c.IdLeadNavigation)
+                .Include(c => c.IdStaffNavigation)
+                .ProjectTo<ContactDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
         }
 
         public async Task<ContactDomain?> UpdateContactAsync(ContactDomain contactDomain)
@@ -84,7 +96,35 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             var contact = await context.Contacts.FindAsync(contactDomain.IdContact);
             if (contact == null) return null;
 
-            // Cập nhật các thuộc tính của staff
+            // Nếu status là Success thì thêm thông tin từ lead sang customer
+            if (contactDomain.Status == StatusContactConstant.ContactCompleted)
+            {
+                // Lấy thông tin lead
+                var lead = await context.Leads
+                    .Include(l => l.IdLeadNavigation)
+                    .FirstOrDefaultAsync(l => l.IdLead == contactDomain.IdLead);
+
+                if (lead != null)
+                {
+                    var existCustomer = await context.Customers
+                        .FirstOrDefaultAsync(c => c.IdCustomer == lead.IdLead);
+
+                    if (existCustomer == null)
+                    {
+                        var customer = new Customer
+                        {
+                            IdCustomer = lead.IdLead,
+                            CreatedAt = DateTime.Now,
+                            IdCustomerNavigation = lead.IdLeadNavigation
+                        };
+
+                        await context.Customers.AddAsync(customer);
+                        await context.SaveChangesAsync();
+                    }
+                }
+            }    
+
+            // Cập nhật các thuộc tính của contact
             _mapper.Map(contactDomain, contact);
             await context.SaveChangesAsync();
             return _mapper.Map<ContactDomain>(contact);

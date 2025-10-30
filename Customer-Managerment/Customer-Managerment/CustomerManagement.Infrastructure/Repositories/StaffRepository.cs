@@ -76,24 +76,23 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<StaffDomain>(staff);
         }
 
-        public IQueryable<StaffResponse> GetListStaff()
+        public IQueryable<StaffDomain> GetListStaff()
         {
             var context = _contextFactory.CreateDbContext();
             return context.Staff
-                .ProjectTo<StaffResponse>(_mapper.ConfigurationProvider)
+                .ProjectTo<StaffDomain>(_mapper.ConfigurationProvider)
                 .AsNoTracking();
         }
 
-        public IQueryable<StaffResponse> GetStaffById(Guid idStaff)
+        public IQueryable<StaffDomain> GetStaffById(Guid idStaff)
         {
             var context = _contextFactory.CreateDbContext();
             return context.Staff
                 .Where(s => s.IdStaff == idStaff)
-                .ProjectTo<StaffResponse>(_mapper.ConfigurationProvider)
+                .ProjectTo<StaffDomain>(_mapper.ConfigurationProvider)
                 .AsNoTracking();
         }
 
-        // Update Staff
         public async Task<StaffDomain?> UpdateStaffAsync(StaffDomain staffDomain)
         {
             await using var context = _contextFactory.CreateDbContext();

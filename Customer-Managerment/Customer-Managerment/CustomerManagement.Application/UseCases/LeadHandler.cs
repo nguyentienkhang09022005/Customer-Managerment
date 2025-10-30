@@ -55,22 +55,6 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var leadResponse = _mapper.Map<LeadResponse>(updatedLead);
             leadResponse.personResponse = _mapper.Map<PersonResponse>(updatedLead.personDomain);
             return leadResponse;
-        }
-
-        public async Task<LeadResponse> GetLeadByIdAsync(Guid idLead)
-        {
-            var leadDomain = await _leadRepository.GetLeadByIdAsync(idLead);
-            if (leadDomain == null)
-            {
-                throw new DomainException("Khách hàng tiềm năng không tồn tại!", 404);
-            }
-            return _mapper.Map<LeadResponse>(leadDomain);
-        }
-
-        public async Task<List<LeadResponse>> GetAllLeadsAsync()
-        {
-            var leadDomains = await _leadRepository.GetListLeadAsync();
-            return _mapper.Map<List<LeadResponse>>(leadDomains);
-        }
+        }  
     }
 }

@@ -6,28 +6,22 @@ using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
 {
-    public class LeadMapper : Profile
+    public class CustomerMapper : Profile
     {
-        public LeadMapper() 
+        public CustomerMapper()
         {
-            CreateMap<Person, PersonDomain>().ReverseMap();
-
-            CreateMap<Lead, LeadDomain>()
-                .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.IdLeadNavigation))
+            CreateMap<Customer, CustomerDomain>()
+                .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.IdCustomerNavigation))
                 .ReverseMap()
-                .ForMember(dest => dest.IdLeadNavigation, opt => opt.MapFrom(src => src.personDomain));
+                .ForMember(dest => dest.IdCustomerNavigation, opt => opt.MapFrom(src => src.personDomain));
 
-            CreateMap<PersonCreationRequest, PersonDomain>();
-            CreateMap<LeadCreationRequest, LeadDomain>()
+            CreateMap<CustomerCreationRequest, CustomerDomain>()
                 .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.Person));
 
-            CreateMap<PersonUpdateRequest, PersonDomain>();
-            CreateMap<LeadUpdateRequest, LeadDomain>()
+            CreateMap<CustomerUpdateRequest, CustomerDomain>()
                 .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.Person));
 
-            CreateMap<PersonDomain, PersonResponse>();
-
-            CreateMap<LeadDomain, LeadResponse>()
+            CreateMap<CustomerDomain, CustomerResponse>()
                 .ForMember(dest => dest.personResponse, opt => opt.MapFrom(src => src.personDomain));
         }
     }

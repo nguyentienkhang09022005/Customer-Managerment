@@ -14,9 +14,9 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<StaffDomain?> GetStaffByEmailAsync(string email);
 
-        IQueryable<StaffResponse> GetStaffById(Guid idStaff);
+        IQueryable<StaffDomain> GetStaffById(Guid idStaff);
 
-        IQueryable<StaffResponse> GetListStaff();
+        IQueryable<StaffDomain> GetListStaff();
 
         Task<StaffDomain?> UpdateStaffAsync(StaffDomain staffDomain);
 

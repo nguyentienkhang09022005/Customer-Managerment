@@ -8,7 +8,9 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<LeadDomain?> GetLeadByIdAsync(Guid idLead);
 
-        Task<List<LeadDomain>> GetListLeadAsync();
+        IQueryable<LeadDomain> GetListLead();
+
+        IQueryable<LeadDomain> GetLeadById(Guid idLead);
 
         Task<LeadDomain?> UpdateLeadAsync(LeadDomain leadDomain);
 

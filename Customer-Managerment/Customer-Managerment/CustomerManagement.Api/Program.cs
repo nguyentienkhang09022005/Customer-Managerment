@@ -50,6 +50,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 
 
@@ -69,6 +70,7 @@ builder.Services.AddScoped<ChatHandler>();
 builder.Services.AddScoped<StaffHandler>();
 builder.Services.AddScoped<ContactHandler>();
 builder.Services.AddScoped<LeadHandler>();
+builder.Services.AddScoped<CustomerHanler>();
 
 
 
@@ -103,6 +105,9 @@ builder.Services
     .AddQueryType(d => d.Name("Query"))
         .AddTypeExtension<ChatQuery>()
         .AddTypeExtension<StaffQuery>()
+        .AddTypeExtension<ContactQuery>()
+        .AddTypeExtension<LeadQuery>()
+        .AddTypeExtension<CustomerQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()
@@ -112,7 +117,7 @@ builder.Services
         .AddTypeExtension<StaffMutation>()
         .AddTypeExtension<LeadMutation>()
         .AddTypeExtension<ContactMutation>()
-
+        .AddTypeExtension<CustomerMutation>()
 
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()

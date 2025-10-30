@@ -42,7 +42,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var createdContact = await _contactRepository.AddContactAsync(contactDomain);
             
             var contactResponse = _mapper.Map<ContactResponse>(createdContact);
-            //contactResponse.infLeadResponse = _mapper.Map<LeadResponse>(lead);
+            contactResponse.infLeadResponse = _mapper.Map<LeadResponse>(lead);
             contactResponse.infStaffResponse = _mapper.Map<StaffResponse>(staff);
             return contactResponse;
         }
@@ -77,7 +77,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             }
 
             var contactResponse = _mapper.Map<ContactResponse>(updatedContact);
-            //contactResponse.infLeadResponse = _mapper.Map<LeadResponse>(lead);
+            contactResponse.infLeadResponse = _mapper.Map<LeadResponse>(lead);
             contactResponse.infStaffResponse = _mapper.Map<StaffResponse>(staff);
             return contactResponse;
         }
@@ -93,12 +93,6 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             contactResponse.infLeadResponse = _mapper.Map<LeadResponse>(contactDomain.IdLead);
             contactResponse.infStaffResponse = _mapper.Map<StaffResponse>(contactDomain.IdStaff);
             return contactResponse;
-        }
-
-        public async Task<List<ContactResponse>> GetAllContactsAsync()
-        {
-            var contactDomains = await _contactRepository.GetListContactAsync();
-            return _mapper.Map<List<ContactResponse>>(contactDomains);
         }
     }
 }

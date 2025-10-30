@@ -1,4 +1,6 @@
-﻿namespace Customer_Managerment.CustomerManagement.Domain.Entities
+﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+
+namespace Customer_Managerment.CustomerManagement.Domain.Entities
 {
     public class ContactDomain
     {
@@ -17,6 +19,10 @@
         public Guid IdStaff { get; set; }
 
         public Guid IdLead { get; set; }
+
+        public LeadDomain? Lead { get; set; }
+
+        public StaffDomain? Staff { get; set; }
 
         public ContactDomain(){}
     }

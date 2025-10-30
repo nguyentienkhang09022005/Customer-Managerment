@@ -40,11 +40,6 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
         public async Task<StaffResponse> UpdateStaffAsync(StaffUpdateRequest staffUpdateRequest, Guid idStaff)
         {
-            var checkEmail = await _staffRepository.GetStaffByEmailAsync(staffUpdateRequest.Email);
-            if (checkEmail != null){
-                throw new DomainException("Email đã tồn tại!", 409);
-            }
-
             var existingStaff = await _staffRepository.GetStaffByIdAsync(idStaff);
             if (existingStaff == null)
             {

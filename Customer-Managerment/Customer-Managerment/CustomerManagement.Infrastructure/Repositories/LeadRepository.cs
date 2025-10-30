@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
@@ -59,15 +60,23 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<LeadDomain>(lead);
         }
 
-        public async Task<List<LeadDomain>> GetListLeadAsync()
+        public IQueryable<LeadDomain> GetListLead()
         {
-            await using var context = _contextFactory.CreateDbContext();
-            var leads = await context.Leads
+            var context = _contextFactory.CreateDbContext();
+            return context.Leads
                 .Include(l => l.IdLeadNavigation)
-                .AsNoTracking()
-                .ToListAsync();
+                .ProjectTo<LeadDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
+        }
 
-            return _mapper.Map<List<LeadDomain>>(leads);
+        public IQueryable<LeadDomain> GetLeadById(Guid idLead)
+        {
+            var context = _contextFactory.CreateDbContext();
+            return context.Leads
+                .Where(l => l.IdLead == idLead)
+                .Include(l => l.IdLeadNavigation)
+                .ProjectTo<LeadDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
         }
 
         public async Task<LeadDomain?> UpdateLeadAsync(LeadDomain leadDomain)
