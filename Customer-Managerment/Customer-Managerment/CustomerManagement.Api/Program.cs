@@ -51,6 +51,7 @@ builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IDealRepository, DealRepository>();
 
 
 
@@ -71,6 +72,7 @@ builder.Services.AddScoped<StaffHandler>();
 builder.Services.AddScoped<ContactHandler>();
 builder.Services.AddScoped<LeadHandler>();
 builder.Services.AddScoped<CustomerHanler>();
+builder.Services.AddScoped<DealHandler>();
 
 
 
@@ -108,6 +110,7 @@ builder.Services
         .AddTypeExtension<ContactQuery>()
         .AddTypeExtension<LeadQuery>()
         .AddTypeExtension<CustomerQuery>()
+        .AddTypeExtension<DealQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()
@@ -118,6 +121,7 @@ builder.Services
         .AddTypeExtension<LeadMutation>()
         .AddTypeExtension<ContactMutation>()
         .AddTypeExtension<CustomerMutation>()
+        .AddTypeExtension<DealMutation>()
 
     .AddType<DateType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
