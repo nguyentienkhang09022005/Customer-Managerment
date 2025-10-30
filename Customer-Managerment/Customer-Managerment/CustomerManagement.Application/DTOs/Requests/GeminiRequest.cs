@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Customer_Managerment.CustomerManagement.Infrastructure.Services.GeminiModels
+namespace Customer_Managerment.CustomerManagement.Application.DTOs.Requests
 {
     public class GeminiRequest
     {

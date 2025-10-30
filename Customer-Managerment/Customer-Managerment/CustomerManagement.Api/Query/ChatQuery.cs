@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Application.UseCases;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
+using Customer_Managerment.CustomerManagement.Application.UseCases;
 using HotChocolate.Authorization;
 using System.Threading.Tasks;
 
@@ -18,6 +19,11 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         public async Task<string> GetChatWelcomeMessageAsync()
         {
             return await _chatHandler.GetWelcomeMessageAsync();
+        }
+
+        public async Task<List<MessageHistoryItem>> GetHistoryMessageAsync(Guid idStaff)
+        {
+            return await _chatHandler.GetChatHistoryAsync(idStaff);
         }
     }
 }

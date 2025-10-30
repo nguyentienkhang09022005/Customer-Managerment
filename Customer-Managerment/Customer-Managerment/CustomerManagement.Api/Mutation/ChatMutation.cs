@@ -1,8 +1,6 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
-using HotChocolate.Authorization;
-using System.Threading.Tasks;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
@@ -20,6 +18,11 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         public async Task<ChatResponse> SendChatMessageAsync(ChatRequest chatRequest)
         {
             return await _chatHandler.GenerateResponseAsync(chatRequest);
+        }
+
+        public async Task<string> DeleteMessageAsync(Guid idStaff)
+        {
+            return await _chatHandler.DeleteChatHistoryAsync(idStaff);
         }
     }
 }

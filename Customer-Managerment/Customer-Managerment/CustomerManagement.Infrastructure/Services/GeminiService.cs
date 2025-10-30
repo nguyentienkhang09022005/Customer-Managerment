@@ -1,6 +1,6 @@
-﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
+using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
-using Customer_Managerment.CustomerManagement.Infrastructure.Services.GeminiModels;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
 {
@@ -70,10 +70,9 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
 
         public async Task<string> GetWelcomeMessageAsync()
         {
-            var systemInstruction = "Bạn là trợ lý ảo của công ty. Hãy tạo một câu chào mừng thân thiện, ngắn gọn (dưới 20 từ) để bắt đầu cuộc trò chuyện với khách hàng.";
-            var userMessage = "Xin chào";
+            var AiIntroduction = "Xin chào, tôi là AI tư vấn về bất động sản. Bạn cần tôi hỗ trợ gì hôm nay nào?";
 
-            return await GenerateChatResponseAsync(systemInstruction, new List<MessageHistoryItem>(), userMessage);
+            return AiIntroduction;
         }
     }
 }

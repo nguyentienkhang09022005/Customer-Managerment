@@ -9,53 +9,70 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     public class ChatHandler
     {
         private readonly IGeminiService _geminiService;
+        private readonly IChatHistoryService _chatHistoryService;
         private readonly IMapper _mapper;
 
-        public ChatHandler(IGeminiService geminiService, IMapper mapper)
+        public ChatHandler(IGeminiService geminiService, IChatHistoryService chatHistoryService, IMapper mapper)
         {
             _geminiService = geminiService;
+            _chatHistoryService = chatHistoryService;
             _mapper = mapper;
         }
 
         public async Task<ChatResponse> GenerateResponseAsync(ChatRequest request)
         {
-            // Lấy danh sách sản phẩm từ ProductHandler
-            //var products = await _productHandler.GetListProductsAsync();
-
-            // Chuyển danh sách sản phẩm thành một chuỗi (JSON)
-            //var productInfo = JsonSerializer.Serialize(products, new JsonSerializerOptions { WriteIndented = false });
-
-            // Tạo bối cảnh hệ thống với thông tin sản phẩm
+            // Tạo bối cảnh hệ thống
             var systemInstruction = $"""
-            Bạn là một trợ lý ảo thông minh và thân thiện của công ty.
-            Nhiệm vụ của bạn là hỗ trợ khách hàng, trả lời các câu hỏi và tư vấn về sản phẩm.
-            
-            Đây là danh sách các sản phẩm của công ty (dưới dạng JSON):
-            
-            Hãy sử dụng thông tin này để trả lời các câu hỏi của khách hàng một cách chính xác.
-            Luôn giữ thái độ chuyên nghiệp, lịch sự và hữu ích.
+            Bạn là một trợ lý AI chuyên nghiệp, được tích hợp trong hệ thống CRM Bất động sản của công ty.
+            Nhiệm vụ của bạn là hỗ trợ Nhân viên (Staff) trong các nghiệp vụ hàng ngày.
+            Người dùng đang chat với bạn chính là một nhân viên (Staff) của công ty.
+
+            Hãy trả lời các câu hỏi của nhân viên liên quan đến việc quản lý Khách hàng tiềm năng (Leads),
+            Khách hàng (Customers), Tương tác (Contacts), và Giao dịch (Deals).
+
+            Ví dụ, nhân viên có thể hỏi:
+            - "Tóm tắt thông tin của Lead 'Nguyễn Văn A'?"
+            - "Tôi có bao nhiêu deal đang ở trạng thái 'Pending'?"
+            - "Gợi ý nội dung email để chăm sóc Customer 'Trần Thị B'?"
+
+            Hãy luôn giữ thái độ chuyên nghiệp, chính xác và hỗ trợ.
+            Bạn đang nói chuyện với đồng nghiệp (nhân viên), không phải khách hàng bên ngoài.
             """;
 
+            // Lấy lịch sử trò chuyện và gửi yêu cầu đến Gemini AI
+            var history = await _chatHistoryService.GetHistoryAsync(request.IdStaff);
             var aiMessage = await _geminiService.GenerateChatResponseAsync(
                 systemInstruction,
-                request.History,
+                history,
                 request.UserMessage
             );
+            aiMessage = aiMessage.Replace("\\n", "\n").Replace("\\r", "");
 
-            var updatedHistory = new List<MessageHistoryItem>(request.History);
-            updatedHistory.Add(new MessageHistoryItem { Role = "user", Message = request.UserMessage });
-            updatedHistory.Add(new MessageHistoryItem { Role = "model", Message = aiMessage });
+            // Lưu vào Redis
+            await _chatHistoryService.SaveMessageAsync(request.IdStaff, new MessageHistoryItem { Role = "staff", Message = request.UserMessage });
+            await _chatHistoryService.SaveMessageAsync(request.IdStaff, new MessageHistoryItem { Role = "model", Message = aiMessage });
 
             return new ChatResponse
             {
-                AiResponse = aiMessage,
-                UpdatedHistory = updatedHistory
+                AiResponse = aiMessage
             };
         }
 
         public async Task<string> GetWelcomeMessageAsync()
         {
             return await _geminiService.GetWelcomeMessageAsync();
+        }
+
+        public async Task<List<MessageHistoryItem>> GetChatHistoryAsync(Guid idStaff)
+        {
+            var history = await _chatHistoryService.GetHistoryAsync(idStaff);
+            return history;
+        }
+
+        public async Task<string> DeleteChatHistoryAsync(Guid idStaff)
+        {
+            await _chatHistoryService.DeleteHistoryAsync(idStaff);
+            return "Xóa lịch sử trò chuyện thành công!";
         }
     }
 }

@@ -5,6 +5,5 @@ namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
     public class ChatResponse
     {
         public string AiResponse { get; set; }
-        public List<MessageHistoryItem> UpdatedHistory { get; set; }
     }
 }

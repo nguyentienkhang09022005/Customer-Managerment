@@ -60,6 +60,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>();
 builder.Services.AddHttpClient<IGeminiService, GeminiService>();
+builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>();
 
 
 
