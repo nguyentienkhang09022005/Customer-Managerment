@@ -10,11 +10,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     public class StaffHandler
     {
         private readonly IStaffRepository _staffRepository;
+        private readonly IElasticsearchService _elasticsearchService;
         private readonly IMapper _mapper;
 
-        public StaffHandler(IStaffRepository staffRepository, IMapper mapper)
+        public StaffHandler(IStaffRepository staffRepository, IElasticsearchService elasticsearchService ,IMapper mapper)
         {
             _staffRepository = staffRepository;
+            _elasticsearchService = elasticsearchService;
             _mapper = mapper;
         }
 
@@ -28,12 +30,16 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var staffDomain = _mapper.Map<StaffDomain>(staffCreationRequest);
 
             var createdStaff = await _staffRepository.AddStaffAsync(staffDomain);
-            return _mapper.Map<StaffResponse>(createdStaff);
+            
+            var staffResponse = _mapper.Map<StaffResponse>(createdStaff);
+            await _elasticsearchService.IndexStaffAsync(staffResponse); // Lưu vào Elasticsearch
+            return staffResponse;
         }
 
         public async Task<string> DeleteStaffAsync(Guid idStaff)
         {
             await _staffRepository.DeleteStaffAsync(idStaff);
+            await _elasticsearchService.DeleteStaffAsync(idStaff); // Xóa khỏi Elasticsearch
 
             return "Xóa nhân viên thành công!";
         }
