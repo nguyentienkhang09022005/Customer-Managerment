@@ -21,7 +21,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         [UseSorting]
         public IQueryable<CustomerResponse> GetCustomers()
         {
-            var customers = _customerRepository.GetListCusotmer();
+            var customers = _customerRepository.GetListCustomer();
             return customers.ProjectTo<CustomerResponse>(_mapper.ConfigurationProvider);
         }
 

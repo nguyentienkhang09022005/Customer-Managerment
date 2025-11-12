@@ -89,7 +89,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return _mapper.Map<CustomerDomain>(customer);
         }
 
-        public IQueryable<CustomerDomain> GetListCusotmer()
+        public IQueryable<CustomerDomain> GetListCustomer()
         {
             var context = _contextFactory.CreateDbContext();
             return context.Customers

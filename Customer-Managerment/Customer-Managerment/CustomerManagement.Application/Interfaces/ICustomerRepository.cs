@@ -8,7 +8,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         Task<CustomerDomain?> GetCustomerByIdAsync(Guid idCustomer);
 
-        IQueryable<CustomerDomain> GetListCusotmer();
+        IQueryable<CustomerDomain> GetListCustomer();
 
         IQueryable<CustomerDomain> GetCustomerById(Guid idCustomer);
 
