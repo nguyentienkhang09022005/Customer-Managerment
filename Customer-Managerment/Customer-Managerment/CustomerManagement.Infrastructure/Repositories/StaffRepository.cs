@@ -44,7 +44,6 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             await using var context = _contextFactory.CreateDbContext();
             var user = await context.Staff
                 .IgnoreAutoIncludes()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
             if (user == null) return null;
             return _mapper.Map<StaffDomain>(user);

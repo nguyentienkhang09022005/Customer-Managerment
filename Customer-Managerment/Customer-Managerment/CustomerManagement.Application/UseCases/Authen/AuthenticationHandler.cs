@@ -100,7 +100,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases.Authen
             await _refreshTokenService.deleteRefreshToken(idStaff);
 
             // Xóa cookie refresh token
-            _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Path = "/"
+            });
 
             return "Đăng xuất thành công!";
         }
