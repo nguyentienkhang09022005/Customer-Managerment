@@ -25,9 +25,9 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
         }
 
-        public IQueryable<DealResponse> GetContactById(Guid idContact)
+        public IQueryable<DealResponse> GetDealById(Guid idDeal)
         {
-            var deal = _dealRepository.GetDealById(idContact);
+            var deal = _dealRepository.GetDealById(idDeal);
             return deal.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
         }
     }
