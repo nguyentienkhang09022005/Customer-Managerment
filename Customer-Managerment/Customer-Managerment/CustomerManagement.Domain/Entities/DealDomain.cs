@@ -8,7 +8,7 @@
 
         public string? Content { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 

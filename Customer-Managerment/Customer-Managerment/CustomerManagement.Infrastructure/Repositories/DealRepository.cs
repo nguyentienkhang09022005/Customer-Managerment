@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
@@ -97,8 +98,49 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 
             // Cập nhật các thuộc tính của deal
             _mapper.Map(dealDomain, deal);
+            context.Entry(deal).Property(c => c.Title).IsModified = false;
+            context.Entry(deal).Property(c => c.Content).IsModified = false;
+            context.Entry(deal).Property(c => c.Price).IsModified = false;
+
             await context.SaveChangesAsync();
             return _mapper.Map<DealDomain>(deal);
+        }
+
+        public async Task<decimal> GetTotalProfitAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+
+            return await context.Deals
+                .AsNoTracking()
+                .Where(d => d.Status == StatuDealConstant.DealWon)
+                .SumAsync(d => (decimal?)d.Price) ?? 0m;
+        }
+
+
+        public async Task<int> getTotalDealsAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Deals.CountAsync();
+        }
+
+        public async Task<QuantityStatisticsDetailDealResponse> QuantityStatisticsDetailDealResponse()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var totalPending = await context.Deals
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatuDealConstant.DealPending);
+            var totalWon = await context.Deals
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatuDealConstant.DealWon);
+            var totalLost = await context.Deals
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatuDealConstant.DealLost);
+            return new QuantityStatisticsDetailDealResponse
+            {
+                QuantityDealsPending = totalPending,
+                QuantityDealsWon = totalWon,
+                QuantityDealsLost = totalLost
+            };
         }
     }
 }

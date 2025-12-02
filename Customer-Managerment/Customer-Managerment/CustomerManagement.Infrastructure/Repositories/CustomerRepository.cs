@@ -117,5 +117,11 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             await context.SaveChangesAsync();
             return _mapper.Map<CustomerDomain>(existingCustomer);
         }
+
+        public async Task<int> getTotalCustomersAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Customers.CountAsync();
+        }
     }
 }

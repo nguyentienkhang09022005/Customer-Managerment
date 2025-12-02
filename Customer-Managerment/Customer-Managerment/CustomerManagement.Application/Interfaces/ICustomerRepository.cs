@@ -17,5 +17,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task DeleteCustomerAsync(Guid idCustomer);
 
         Task<bool> CheckCustomerExistsAsync(Guid idCustomer);
+
+        Task<int> getTotalCustomersAsync();
     }
 }

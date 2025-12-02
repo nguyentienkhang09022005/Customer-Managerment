@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
@@ -17,5 +18,11 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         IQueryable<DealDomain> GetDealById(Guid idDeal);
 
         Task<bool> CheckDealExistsAsync(Guid idDeal);
+
+        Task<decimal> GetTotalProfitAsync();
+
+        Task<int> getTotalDealsAsync();
+
+        Task<QuantityStatisticsDetailDealResponse> QuantityStatisticsDetailDealResponse();
     }
 }

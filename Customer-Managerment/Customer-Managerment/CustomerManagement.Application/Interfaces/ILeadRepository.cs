@@ -19,5 +19,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<bool> CheckLeadExistsAsync(Guid idLead);
 
         Task<bool> checkPersonByEmailAsync(string email);
+
+        Task<int> getTotalLeadsAsync();
     }
 }

@@ -128,5 +128,11 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .AnyAsync(l => l.Email == email);
             return checkPerson;
         }
+
+        public async Task<int> getTotalLeadsAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Leads.CountAsync();
+        }
     }
 }

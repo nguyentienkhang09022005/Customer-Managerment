@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
@@ -17,5 +18,9 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         IQueryable<ContactDomain> GetContactById(Guid idContact);
 
         Task<bool> CheckContactExistsAsync(Guid idContact);
+
+        Task<int> getTotalContactsAsync();
+
+        Task<QuantityStatisticsDetailContactResponse> QuantityStatisticsDetailContactResponse();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Customer_Managerment.CustomerManagement.Api.MiddleWare;
+﻿using Customer_Managerment.CustomerManagement.Api.Input.Type;
+using Customer_Managerment.CustomerManagement.Api.MiddleWare;
 using Customer_Managerment.CustomerManagement.Api.Mutation;
 using Customer_Managerment.CustomerManagement.Api.Query;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
@@ -74,8 +75,8 @@ builder.Services.AddScoped<ContactHandler>();
 builder.Services.AddScoped<LeadHandler>();
 builder.Services.AddScoped<CustomerHanler>();
 builder.Services.AddScoped<DealHandler>();
-
-
+builder.Services.AddScoped<StatisticsHandler>();
+builder.Services.AddScoped<ChartDealHandler>();
 
 // Mapper Registration
 builder.Services.AddAutoMapper(typeof(Program));
@@ -105,6 +106,7 @@ builder.Services.AddMemoryCache();
 // GraphQL Registration
 builder.Services
     .AddGraphQLServer()
+    .AddType<QuantityStatisticsResponseType>()
     .AddQueryType(d => d.Name("Query"))
         .AddTypeExtension<ChatQuery>()
         .AddTypeExtension<StaffQuery>()
@@ -113,6 +115,7 @@ builder.Services
         .AddTypeExtension<CustomerQuery>()
         .AddTypeExtension<DealQuery>()
         .AddTypeExtension<ElasticSearchQuery>()
+        .AddTypeExtension<StatisticsQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<RegisterMutation>()

@@ -2,7 +2,7 @@
 {
     public class DealUpdateRequest
     {
-        public string Title { get; set; } = null!;
+        public string? Title { get; set; }
 
         public string? Content { get; set; }
 

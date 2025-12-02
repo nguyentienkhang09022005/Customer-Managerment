@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
@@ -97,7 +98,7 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             if (contact == null) return null;
 
             // Nếu status là Success thì thêm thông tin từ lead sang customer
-            if (contactDomain.Status == StatusContactConstant.ContactCompleted)
+            if (contactDomain.Status == StatusContactConstant.ContactDone)
             {
                 // Lấy thông tin lead
                 var lead = await context.Leads
@@ -126,8 +127,46 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 
             // Cập nhật các thuộc tính của contact
             _mapper.Map(contactDomain, contact);
+            context.Entry(contact).Property(c => c.Type).IsModified = false;
+            context.Entry(contact).Property(c => c.Title).IsModified = false;
+            context.Entry(contact).Property(c => c.Content).IsModified = false;
+
             await context.SaveChangesAsync();
             return _mapper.Map<ContactDomain>(contact);
+        }
+
+        public async Task<int> getTotalContactsAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Contacts.CountAsync();
+        }
+
+        public async Task<QuantityStatisticsDetailContactResponse> QuantityStatisticsDetailContactResponse()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var totalPending = await context.Contacts
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatusContactConstant.ContactPending);
+            var totalInProgress = await context.Contacts
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatusContactConstant.ContactInProgress);
+            var totalFailed = await context.Contacts
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatusContactConstant.ContactFailed);
+            var totalDone = await context.Contacts
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatusContactConstant.ContactDone);
+            var totalCanceled = await context.Contacts
+                .AsNoTracking()
+                .CountAsync(c => c.Status == StatusContactConstant.ContactCanceled);
+            return new QuantityStatisticsDetailContactResponse
+            {
+                QuantityContactsPending = totalPending,
+                QuantityContactsInProgress = totalInProgress,
+                QuantityContactsDone = totalDone,
+                QuantityContactsCancel = totalCanceled,
+                QuantityContactsFailed = totalFailed
+            };
         }
     }
 }

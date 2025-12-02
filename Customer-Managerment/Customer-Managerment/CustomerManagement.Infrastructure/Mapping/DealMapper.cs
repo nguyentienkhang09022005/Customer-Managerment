@@ -21,6 +21,9 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
                 .ForMember(dest => dest.infCustomerResponse, opt => opt.MapFrom(src => src.Customer))
                 .ForMember(dest => dest.infStaffResponse, opt => opt.MapFrom(src => src.Staff));
 
+            CreateMap<DealDomain, ListSuccessfullDealResponse>();
+
+            CreateMap<DealDomain, ListFailedDealResponse>();
 
             CreateMap<DealCreationRequest, DealDomain>();
 
