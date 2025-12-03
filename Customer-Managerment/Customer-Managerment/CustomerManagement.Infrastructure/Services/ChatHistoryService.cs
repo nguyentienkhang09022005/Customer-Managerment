@@ -1,6 +1,5 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 

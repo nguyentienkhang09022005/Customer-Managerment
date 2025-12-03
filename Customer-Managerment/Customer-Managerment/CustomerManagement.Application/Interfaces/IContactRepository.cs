@@ -15,6 +15,8 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         IQueryable<ContactDomain> GetListContact();
 
+        Task<List<ContactDomain>> GetListContactAsync();
+
         IQueryable<ContactDomain> GetContactById(Guid idContact);
 
         Task<bool> CheckContactExistsAsync(Guid idContact);

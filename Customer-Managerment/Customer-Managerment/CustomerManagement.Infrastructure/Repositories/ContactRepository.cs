@@ -80,6 +80,18 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .AsNoTracking();
         }
 
+        public async Task<List<ContactDomain>> GetListContactAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+
+            return await context.Contacts
+                .Include(c => c.IdLeadNavigation)
+                .Include(c => c.IdStaffNavigation)
+                .ProjectTo<ContactDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public IQueryable<ContactDomain> GetContactById(Guid idContact)
         {
             var context = _contextFactory.CreateDbContext();

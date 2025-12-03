@@ -11,36 +11,82 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IGeminiService _geminiService;
         private readonly IChatHistoryService _chatHistoryService;
         private readonly IMapper _mapper;
+        private readonly ILeadRepository _leadRepository;
+        private readonly IContactRepository _contactRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IDealRepository _dealRepository;
+        private readonly ILogger<ChatHandler> _logger;
 
-        public ChatHandler(IGeminiService geminiService, IChatHistoryService chatHistoryService, IMapper mapper)
+
+        public ChatHandler(IGeminiService geminiService,
+                           IChatHistoryService chatHistoryService,
+                           IMapper mapper,
+                           ILeadRepository leadRepository,
+                           IContactRepository contactRepository,
+                           ICustomerRepository customerRepository,
+                           IDealRepository dealRepository,
+                           ILogger<ChatHandler> logger)
         {
             _geminiService = geminiService;
             _chatHistoryService = chatHistoryService;
             _mapper = mapper;
+            _leadRepository = leadRepository;
+            _contactRepository = contactRepository;
+            _customerRepository = customerRepository;
+            _dealRepository = dealRepository;
+            _logger = logger;
         }
 
         public async Task<ChatResponse> GenerateResponseAsync(ChatRequest request)
         {
-            // Tạo bối cảnh hệ thống
+            var listLead = await _leadRepository.GetListLeadAsync();
+            var listCustomer = await _customerRepository.GetListCustomerAsync();
+            var listDeal = await _dealRepository.GetListDealAsync();
+            var listContact = await _contactRepository.GetListContactAsync();
+
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = false };
+
+            var listLeadJson = JsonSerializer.Serialize(listLead, jsonOptions);
+            var listCustomerJson = JsonSerializer.Serialize(listCustomer, jsonOptions);
+            var listDealJson = JsonSerializer.Serialize(listDeal, jsonOptions);
+            var listContactJson = JsonSerializer.Serialize(listContact, jsonOptions);
+
             var systemInstruction = $"""
-            Bạn là một trợ lý AI chuyên nghiệp, được tích hợp trong hệ thống CRM Bất động sản của công ty.
-            Nhiệm vụ của bạn là hỗ trợ Nhân viên (Staff) trong các nghiệp vụ hàng ngày.
-            Người dùng đang chat với bạn chính là một nhân viên (Staff) của công ty.
+            Bạn là một trợ lý AI chuyên nghiệp tên gọi là **CRMie**, được tích hợp trong hệ thống CRM Bất động sản của công ty.
+            Nhiệm vụ của bạn là hỗ trợ Nhân viên (Staff) trong các nghiệp vụ quản lý Leads, Customers, Contacts và Deals.
 
-            Hãy trả lời các câu hỏi của nhân viên liên quan đến việc quản lý Khách hàng tiềm năng (Leads),
-            Khách hàng (Customers), Tương tác (Contacts), và Giao dịch (Deals).
+            **Quy tắc bảo mật nghiêm ngặt:**
+            - Tuyệt đối không tiết lộ ID, email, token, password, hoặc bất kỳ thông tin kỹ thuật nhạy cảm nào.
+            - Không trả trực tiếp toàn bộ JSON hay dữ liệu thô từ database.
+            - Không thực hiện truy vấn SQL hoặc bất kỳ hành động nào có thể gây rủi ro SQL injection.
+            - Chỉ cung cấp thông tin ở mức tổng quan, số liệu đã được làm ẩn thông tin nhạy cảm.
 
-            Ví dụ, nhân viên có thể hỏi:
+            **Cách trả lời:**
+            - Giải thích rõ ràng, ngắn gọn, thân thiện và chuyên nghiệp.
+            - Thêm emoji phù hợp nếu cần để giao tiếp tự nhiên.
+            - Nếu dữ liệu bị thiếu, trả lời nhẹ nhàng, không đoán dữ liệu.
+            - Trả lời chi ý rõ ràng, không lan man và không trả lời trên 1 dòng.
+
+            **Ví dụ câu hỏi hợp lệ:**
             - "Tóm tắt thông tin của Lead 'Nguyễn Văn A'?"
             - "Tôi có bao nhiêu deal đang ở trạng thái 'Pending'?"
-            - "Gợi ý nội dung email để chăm sóc Customer 'Trần Thị B'?"
+            - "Gợi ý nội dung email chăm sóc Customer 'Trần Thị B'?"
 
-            Hãy luôn giữ thái độ chuyên nghiệp, chính xác và hỗ trợ.
-            Bạn đang nói chuyện với đồng nghiệp (nhân viên), không phải khách hàng bên ngoài.
+            **Dữ liệu tham khảo (đã được ẩn thông tin nhạy cảm):**
+            - Danh sách Lead: {listLeadJson}
+            - Danh sách Customer: {listCustomerJson}
+            - Danh sách Deal: {listDealJson}
+            - Danh sách Contact: {listContactJson}
+
+            **Hướng dẫn AI:**
+            - Luôn trả lời theo vai trò là trợ lý của nhân viên, không trả lời như khách hàng bên ngoài.
+            - Không tiết lộ bất kỳ thông tin nhạy cảm nào.
+            - Không in trực tiếp JSON hay SQL query.
+            - Chỉ cung cấp thông tin cần thiết để hỗ trợ nghiệp vụ của nhân viên.
             """;
 
-            // Lấy lịch sử trò chuyện và gửi yêu cầu đến Gemini AI
             var history = await _chatHistoryService.GetHistoryAsync(request.IdStaff);
+
             var aiMessage = await _geminiService.GenerateChatResponseAsync(
                 systemInstruction,
                 history,
@@ -48,8 +94,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             );
             aiMessage = aiMessage.Replace("\\n", "\n").Replace("\\r", "");
 
-            // Lưu vào Redis
-            await _chatHistoryService.SaveMessageAsync(request.IdStaff, new MessageHistoryItem { Role = "staff", Message = request.UserMessage });
+            await _chatHistoryService.SaveMessageAsync(request.IdStaff, new MessageHistoryItem { Role = "user", Message = request.UserMessage });
             await _chatHistoryService.SaveMessageAsync(request.IdStaff, new MessageHistoryItem { Role = "model", Message = aiMessage });
 
             return new ChatResponse

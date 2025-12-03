@@ -15,6 +15,8 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         IQueryable<DealDomain> GetListDeal();
 
+        Task<List<DealDomain>> GetListDealAsync();
+
         IQueryable<DealDomain> GetDealById(Guid idDeal);
 
         Task<bool> CheckDealExistsAsync(Guid idDeal);

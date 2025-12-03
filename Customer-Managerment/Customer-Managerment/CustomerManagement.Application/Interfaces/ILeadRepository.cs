@@ -10,6 +10,8 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 
         IQueryable<LeadDomain> GetListLead();
 
+        Task<List<LeadDomain>> GetListLeadAsync();
+
         IQueryable<LeadDomain> GetLeadById(Guid idLead);
 
         Task<LeadDomain?> UpdateLeadAsync(LeadDomain leadDomain);

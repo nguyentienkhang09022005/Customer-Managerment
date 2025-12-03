@@ -90,6 +90,18 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .AsNoTracking();
         }
 
+        public async Task<List<DealDomain>> GetListDealAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+
+            return await context.Deals
+                .Include(d => d.IdCustomerNavigation)
+                .Include(d => d.IdStaffNavigation)
+                .ProjectTo<DealDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<DealDomain?> UpdateDealAsync(DealDomain dealDomain)
         {
             await using var context = _contextFactory.CreateDbContext();

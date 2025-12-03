@@ -24,7 +24,6 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
         {
             var geminiRequest = new GeminiRequest
             {
-                // Thêm hướng dẫn hệ thống (chứa thông tin sản phẩm)
                 SystemInstruction = new SystemInstruction
                 {
                     Parts = new List<GeminiPart> { new GeminiPart { Text = systemInstruction } }
@@ -32,7 +31,6 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
                 Contents = new List<GeminiContent>()
             };
 
-            // Thêm lịch sử trò chuyện
             foreach (var item in history)
             {
                 geminiRequest.Contents.Add(new GeminiContent
@@ -42,7 +40,6 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
                 });
             }
 
-            // Khởi tạo tin nhắn mới
             geminiRequest.Contents.Add(new GeminiContent
             {
                 Role = "user",
@@ -55,13 +52,11 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
-                // Log lỗi 
                 throw new Exception($"Gemini API call failed: {response.StatusCode} - {errorBody}");
             }
 
             var apiResponse = await response.Content.ReadFromJsonAsync<GeminiApiResponse>();
 
-            // Trích xuất văn bản từ phản hồi
             var generatedText = apiResponse?.Candidates?.FirstOrDefault()
                                 ?.Content?.Parts?.FirstOrDefault()?.Text;
 

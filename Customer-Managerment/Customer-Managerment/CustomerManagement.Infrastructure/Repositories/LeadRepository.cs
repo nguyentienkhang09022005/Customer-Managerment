@@ -69,6 +69,17 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .AsNoTracking();
         }
 
+        public async Task<List<LeadDomain>> GetListLeadAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+
+            return await context.Leads
+                .Include(l => l.IdLeadNavigation)
+                .ProjectTo<LeadDomain>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public IQueryable<LeadDomain> GetLeadById(Guid idLead)
         {
             var context = _contextFactory.CreateDbContext();
