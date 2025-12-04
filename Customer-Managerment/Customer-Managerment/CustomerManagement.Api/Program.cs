@@ -143,7 +143,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "https://collaborative-model.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // Allow send Cookie

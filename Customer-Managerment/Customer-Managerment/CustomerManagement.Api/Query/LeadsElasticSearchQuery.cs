@@ -20,8 +20,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
                                                                         "personResponse.fullname",
                                                                         "personResponse.email",
                                                                         "personResponse.phone",
-                                                                        "personResponse.location"
-);
+                                                                        "personResponse.location");
 
         }
     }
