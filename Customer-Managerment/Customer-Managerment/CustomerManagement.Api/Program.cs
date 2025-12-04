@@ -114,7 +114,11 @@ builder.Services
         .AddTypeExtension<LeadQuery>()
         .AddTypeExtension<CustomerQuery>()
         .AddTypeExtension<DealQuery>()
-        .AddTypeExtension<ElasticSearchQuery>()
+        .AddTypeExtension<StaffElasticSearchQuery>()
+        .AddTypeExtension<CustomersElasticSearchQuery>()
+        .AddTypeExtension<LeadsElasticSearchQuery>()
+        .AddTypeExtension<DealsElasticSearchQuery>()
+        .AddTypeExtension<ContactsElasticSearchQuery>()
         .AddTypeExtension<StatisticsQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))

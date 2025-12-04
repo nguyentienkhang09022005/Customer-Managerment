@@ -13,15 +13,18 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IStaffRepository _staffRepository;
         private readonly ILeadRepository _leadRepository;
         private readonly IMapper _mapper;
+        private readonly IElasticsearchService _elasticsearchService;
 
         public ContactHandler(IContactRepository contactRepository, 
                               IStaffRepository staffRepository, 
                               ILeadRepository leadRepository,
+                              IElasticsearchService elasticsearchService,
                               IMapper mapper)
         {
             _contactRepository = contactRepository;
             _staffRepository = staffRepository;
             _leadRepository = leadRepository;
+            _elasticsearchService = elasticsearchService;
             _mapper = mapper;
         }
 
@@ -44,12 +47,15 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var contactResponse = _mapper.Map<ContactResponse>(createdContact);
             contactResponse.infLeadResponse = _mapper.Map<LeadResponse>(lead);
             contactResponse.infStaffResponse = _mapper.Map<StaffResponse>(staff);
+
+            await _elasticsearchService.IndexAsync(contactResponse, "contacts");
             return contactResponse;
         }
 
         public async Task<string> DeleteContactAsync(Guid idContact)
         {
             await _contactRepository.DeleteContactAsync(idContact);
+            await _elasticsearchService.DeleteAsync<ContactResponse>(idContact.ToString(), "contacts"); // Xóa khỏi Elasticsearch
 
             return "Xóa hoạt động thành công!";
         }

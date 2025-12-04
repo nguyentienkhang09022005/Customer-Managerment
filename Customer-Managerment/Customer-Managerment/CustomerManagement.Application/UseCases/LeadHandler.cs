@@ -4,18 +4,23 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
     public class LeadHandler
     {
         private readonly ILeadRepository _leadRepository;
+        private readonly IElasticsearchService _elasticsearchService;
         private readonly IMapper _mapper;
 
-        public LeadHandler(ILeadRepository leadRepository, IMapper mapper)
+        public LeadHandler(ILeadRepository leadRepository, 
+                           IMapper mapper, 
+                           IElasticsearchService elasticsearchService)
         {
             _leadRepository = leadRepository;
             _mapper = mapper;
+            _elasticsearchService = elasticsearchService;
         }
 
         public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest leadCreationRequest)
@@ -31,12 +36,15 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
             var leadResponse = _mapper.Map<LeadResponse>(createdLead);
             leadResponse.personResponse = _mapper.Map<PersonResponse>(createdLead.personDomain);
+            await _elasticsearchService.IndexAsync(leadResponse, "leads");
+
             return leadResponse;
         }
 
         public async Task<string> DeleteLeadAsync(Guid idLead)
         {
             await _leadRepository.DeleteLeadAsync(idLead);
+            await _elasticsearchService.DeleteAsync<LeadResponse>(idLead.ToString(), "leads"); // Xóa khỏi Elasticsearch
 
             return "Xóa khách hàng tiềm năng thành công!";
         }

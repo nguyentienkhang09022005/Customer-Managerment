@@ -4,17 +4,20 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
     [ExtendObjectType(OperationTypeNames.Query)]
-    public class ElasticSearchQuery
+    public class StaffElasticSearchQuery
     {
         private readonly IElasticsearchService _elasticsearchService;
-        public ElasticSearchQuery(IElasticsearchService elasticsearchService)
+        public StaffElasticSearchQuery(IElasticsearchService elasticsearchService)
         {
             _elasticsearchService = elasticsearchService;
         }
 
         public async Task<List<StaffResponse>> SearchStaffsAsync(string keyword)
         {
-            return await _elasticsearchService.SearchStaffsAsync(keyword);
+            return await _elasticsearchService.SearchAsync<StaffResponse>(keyword, 
+                                                                          "staffs", 
+                                                                          "fullname", 
+                                                                          "email");
         }
     }
 }

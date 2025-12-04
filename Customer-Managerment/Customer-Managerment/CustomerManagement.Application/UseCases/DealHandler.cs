@@ -13,16 +13,19 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IStaffRepository _staffRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
+        private readonly IElasticsearchService _elasticsearchService;
 
         public DealHandler(IDealRepository dealRepository, 
                            IStaffRepository staffRepository, 
                            ICustomerRepository customerRepository, 
-                           IMapper mapper)
+                           IMapper mapper,
+                           IElasticsearchService elasticsearchService)
         {
             _dealRepository = dealRepository;
             _staffRepository = staffRepository;
             _customerRepository = customerRepository;
             _mapper = mapper;
+            _elasticsearchService = elasticsearchService;
         }
 
 
@@ -47,12 +50,15 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var dealResponse = _mapper.Map<DealResponse>(createdDeal);
             dealResponse.infCustomerResponse = _mapper.Map<CustomerResponse>(customer);
             dealResponse.infStaffResponse = _mapper.Map<StaffResponse>(staff);
+
+            await _elasticsearchService.IndexAsync(dealResponse, "deals");
             return dealResponse;
         }
 
         public async Task<string> DeleteDealAsync(Guid idDeal)
         {
             await _dealRepository.DeleteDealAsync(idDeal);
+            await _elasticsearchService.DeleteAsync<DealResponse>(idDeal.ToString(), "deals"); // Xóa khỏi Elasticsearch
 
             return "Xóa deal thành công!";
         }

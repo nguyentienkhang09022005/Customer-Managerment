@@ -32,14 +32,14 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var createdStaff = await _staffRepository.AddStaffAsync(staffDomain);
             
             var staffResponse = _mapper.Map<StaffResponse>(createdStaff);
-            await _elasticsearchService.IndexStaffAsync(staffResponse); // Lưu vào Elasticsearch
+            await _elasticsearchService.IndexAsync(staffResponse, "staffs"); // Lưu vào Elasticsearch
             return staffResponse;
         }
 
         public async Task<string> DeleteStaffAsync(Guid idStaff)
         {
             await _staffRepository.DeleteStaffAsync(idStaff);
-            await _elasticsearchService.DeleteStaffAsync(idStaff); // Xóa khỏi Elasticsearch
+            await _elasticsearchService.DeleteAsync<StaffResponse>(idStaff.ToString(), "staffs"); // Xóa khỏi Elasticsearch
 
             return "Xóa nhân viên thành công!";
         }

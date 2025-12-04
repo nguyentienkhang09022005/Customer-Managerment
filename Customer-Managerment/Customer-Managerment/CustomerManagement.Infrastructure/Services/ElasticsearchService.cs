@@ -1,5 +1,4 @@
-﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-using Customer_Managerment.CustomerManagement.Application.Interfaces;
+﻿using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Nest;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
@@ -7,8 +6,8 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
     public class ElasticsearchService : IElasticsearchService
     {
         private readonly IElasticClient _client;
-        private const string StaffIndexName = "staffs";
         private readonly IConfiguration _config;
+
         public ElasticsearchService(IConfiguration config)
         {
             _config = config;
@@ -19,45 +18,57 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
 
             var uri = new Uri(uriString);
             var settings = new ConnectionSettings(uri)
-                .DefaultIndex(StaffIndexName); 
+                    .DisableDirectStreaming();
 
             _client = new ElasticClient(settings);
+        }
 
-            // Tạo index nếu chưa có
-            _client.Indices.Create(StaffIndexName, c => c
-                .Map<StaffResponse>(m => m.AutoMap())
+        public async Task IndexAsync<T>(T document, string index) where T : class
+        {
+            await CreateIndexIfNotExist<T>(index);
+
+            var idProp = document.GetType().GetProperty("IdLead") 
+                         ?? document.GetType().GetProperty("IdCustomer")
+                         ?? document.GetType().GetProperty("IdDeal")
+                         ?? document.GetType().GetProperty("IdContact")
+                         ?? document.GetType().GetProperty("Id");
+            var idValue = idProp?.GetValue(document)?.ToString();
+
+            var response = await _client.IndexAsync(document, idx => idx
+                .Index(index)
+                .Id(idValue)
             );
         }
 
-        public async Task IndexStaffAsync(StaffResponse staffResponse)
+        public async Task DeleteAsync<T>(string id, string index) where T : class
         {
-            // ES tự động tạo mới nếu chưa có ID, hoặc cập nhật nếu ID đã tồn tại
-            await _client.IndexDocumentAsync(staffResponse);
+            await _client.DeleteAsync<T>(id, del => del.Index(index));
         }
 
-        public async Task DeleteStaffAsync(Guid idStaff)
+        public async Task<List<T>> SearchAsync<T>(string keyword, string indexName, params string[] fields) where T : class
         {
-            // Xóa document dựa trên ID
-            await _client.DeleteAsync<StaffResponse>(idStaff.ToString());
-        }
+            await CreateIndexIfNotExist<T>(indexName);
 
-        public async Task<List<StaffResponse>> SearchStaffsAsync(string keyword)
-        {
-            var response = await _client.SearchAsync<StaffResponse>(s => s
+            var response = await _client.SearchAsync<T>(s => s
+                .Index(indexName)
                 .Query(q => q
-                    .MultiMatch(mm => mm // Tìm kiếm trên nhiều trường
+                    .MultiMatch(mm => mm
                         .Query(keyword)
-                        .Fields(f => f
-                            .Fields(u => u.IdStaff)
-                            .Field(u => u.Fullname)
-                            .Field(u => u.Email)
-                        )
-                        .Fuzziness(Fuzziness.Auto) // Cho phép tìm kiếm "gần đúng"
+                        .Fields(f => f.Fields(fields))
+                        .Fuzziness(Fuzziness.Auto)
                     )
                 )
             );
 
             return response.Documents.ToList();
+        }
+
+        private async Task CreateIndexIfNotExist<T>(string indexName) where T : class
+        {
+            var exists = await _client.Indices.ExistsAsync(indexName);
+            if (exists.Exists) return;
+
+            await _client.Indices.CreateAsync(indexName, c => c.Map<T>(m => m.AutoMap()));
         }
     }
 }

@@ -4,13 +4,10 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
     public interface IElasticsearchService
     {
-        // Ghi hoặc cập nhật một user vào ES
-        Task IndexStaffAsync(StaffResponse staffResponse);
+        Task IndexAsync<T>(T document, string index) where T : class;
 
-        // Xóa một staff khỏi ES
-        Task DeleteStaffAsync(Guid idStaff);
+        Task DeleteAsync<T>(string id, string index) where T : class;
 
-        // Tìm kiếm staff
-        Task<List<StaffResponse>> SearchStaffsAsync(string keyword);
+        Task<List<T>> SearchAsync<T>(string keyword, string indexName, params string[] fields) where T : class;
     }
 }

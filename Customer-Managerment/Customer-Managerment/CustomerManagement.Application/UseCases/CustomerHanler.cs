@@ -12,12 +12,17 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly ICustomerRepository _customerRepository;
         private readonly ILeadRepository _leadRepository;
         private readonly IMapper _mapper;
+        private readonly IElasticsearchService _elasticsearchService;
 
-        public CustomerHanler(ICustomerRepository customerRepository, ILeadRepository leadRepository, IMapper mapper)
+        public CustomerHanler(ICustomerRepository customerRepository, 
+                              ILeadRepository leadRepository, 
+                              IMapper mapper, 
+                              IElasticsearchService elasticsearchService)
         {
             _customerRepository = customerRepository;
             _leadRepository = leadRepository;
             _mapper = mapper;
+            _elasticsearchService = elasticsearchService;
         }
 
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerCreationRequest customerCreationRequest)
@@ -34,12 +39,14 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
             var customerResponse = _mapper.Map<CustomerResponse>(createdCustomer);
             customerResponse.personResponse = _mapper.Map<PersonResponse>(createdCustomer.personDomain);
+            await _elasticsearchService.IndexAsync(customerResponse, "customers");
             return customerResponse;
         }
 
         public async Task<string> DeletecCustomerAsync(Guid idCustomer)
         {
             await _customerRepository.DeleteCustomerAsync(idCustomer);
+            await _elasticsearchService.DeleteAsync<CustomerResponse>(idCustomer.ToString(), "customers"); // Xóa khỏi Elasticsearch
 
             return "Xóa khách hàng thành công!";
         }
