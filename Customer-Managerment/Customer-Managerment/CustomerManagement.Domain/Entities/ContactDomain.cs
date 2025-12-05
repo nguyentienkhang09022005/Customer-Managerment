@@ -1,6 +1,4 @@
-﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
-
-namespace Customer_Managerment.CustomerManagement.Domain.Entities
+﻿namespace Customer_Managerment.CustomerManagement.Domain.Entities
 {
     public class ContactDomain
     {

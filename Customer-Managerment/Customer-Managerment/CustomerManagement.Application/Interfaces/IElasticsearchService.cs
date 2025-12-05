@@ -1,6 +1,4 @@
-﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-
-namespace Customer_Managerment.CustomerManagement.Application.Interfaces
+﻿namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
     public interface IElasticsearchService
     {

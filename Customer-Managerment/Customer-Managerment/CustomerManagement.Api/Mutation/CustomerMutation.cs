@@ -28,5 +28,10 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         {
             return await _customerHanler.UpdateCustomerAsync(customerUpdateRequest, idCustomer);
         }
+
+        public async Task<string> ImportCustomerExcelAsync(IFile file)
+        {
+            return await _customerHanler.ImportCustomerExcelAsync(file);
+        }
     }
 }

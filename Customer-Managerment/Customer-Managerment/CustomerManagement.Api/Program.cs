@@ -12,9 +12,12 @@ using HotChocolate.AspNetCore.Voyager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 DotNetEnv.Env.Load();
 
@@ -133,6 +136,7 @@ builder.Services
         .AddTypeExtension<DealMutation>()
 
     .AddType<DateType>()
+    .AddType<UploadType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()
     .AddAuthorization()
@@ -195,10 +199,10 @@ app.UseAuthorization();
 // Endpoint GraphQL
 app.MapGraphQL("/graphql");
 
-// Voyager UI để trực quan hóa schema
+// Voyager UI
 app.UseVoyager(
-    "/graphql",  // endpoint của GraphQL
-    "/voyager"   // đường dẫn để mở giao diện Voyager
+    "/graphql",
+    "/voyager"
 );
 
 

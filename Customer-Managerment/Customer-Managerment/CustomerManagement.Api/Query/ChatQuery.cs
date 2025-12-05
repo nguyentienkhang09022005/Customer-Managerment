@@ -1,7 +1,5 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
-using HotChocolate.Authorization;
-using System.Threading.Tasks;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {

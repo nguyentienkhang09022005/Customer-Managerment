@@ -3,6 +3,7 @@
     public class IntrospectResponse
     {
         public bool Valid { get; set; }
+
         public Guid IdUser { get; set; }
     }
 }

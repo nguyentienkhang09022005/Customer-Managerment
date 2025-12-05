@@ -3,6 +3,7 @@
     public class ConfirmOTPRequest
     {
         public required string Email { get; set; }
+
         public required string OTP { get; set; }
     }
 }

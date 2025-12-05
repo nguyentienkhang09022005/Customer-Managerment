@@ -21,7 +21,6 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
                 .ForMember(dest => dest.infLeadResponse, opt => opt.MapFrom(src => src.Lead))
                 .ForMember(dest => dest.infStaffResponse, opt => opt.MapFrom(src => src.Staff));
 
-
             CreateMap<ContactCreationRequest, ContactDomain>();
 
             CreateMap<ContactUpdateRequest, ContactDomain>();

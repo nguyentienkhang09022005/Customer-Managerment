@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
+﻿namespace Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 public partial class Customer
 {

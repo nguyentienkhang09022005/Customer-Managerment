@@ -1,7 +1,4 @@
-﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
-using System.Collections.Generic;
-
-namespace Customer_Managerment.CustomerManagement.Application.DTOs.Requests
+﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Requests
 {
     public class ChatRequest
     {

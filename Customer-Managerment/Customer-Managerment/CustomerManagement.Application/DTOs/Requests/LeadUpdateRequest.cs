@@ -3,6 +3,7 @@
     public class LeadUpdateRequest
     {
         public string? Resource { get; set; }
+
         public PersonUpdateRequest Person { get; set; } = new();
     }
 

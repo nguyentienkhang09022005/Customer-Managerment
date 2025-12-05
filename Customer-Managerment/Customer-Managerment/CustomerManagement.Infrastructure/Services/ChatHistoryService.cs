@@ -62,7 +62,8 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
                 new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
-                });
+                }
+            );
         }
     }
 }

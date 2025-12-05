@@ -28,5 +28,10 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         {
             return await _leadHandler.UpdateLeadAsync(leadUpdateRequest, idLead);
         }
+
+        public async Task<string> ImportLeadExcelAsync(IFile file)
+        {
+            return await _leadHandler.ImportLeadExcelAsync(file);
+        }
     }
 }

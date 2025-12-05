@@ -4,6 +4,7 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using OfficeOpenXml;
 
 namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
@@ -39,7 +40,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
             var customerResponse = _mapper.Map<CustomerResponse>(createdCustomer);
             customerResponse.personResponse = _mapper.Map<PersonResponse>(createdCustomer.personDomain);
-            await _elasticsearchService.IndexAsync(customerResponse, "customers");
+            //await _elasticsearchService.IndexAsync(customerResponse, "customers");
             return customerResponse;
         }
 
@@ -65,6 +66,48 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var customerResponse = _mapper.Map<CustomerResponse>(updatedCustomer);
             customerResponse.personResponse = _mapper.Map<PersonResponse>(updatedCustomer.personDomain);
             return customerResponse;
+        }
+        public async Task<string> ImportCustomerExcelAsync(IFile file)
+        {
+            if (file == null || file.Length == 0)
+                throw new DomainException("File không hợp lệ!", 400);
+
+            using var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+
+            using var package = new ExcelPackage(stream);
+            var worksheet = package.Workbook.Worksheets[0];
+            var rowCount = worksheet.Dimension.Rows;
+
+            var importedCount = 0;
+
+            for (int row = 2; row <= rowCount; row++)
+            {
+                var customerRequest = new CustomerCreationRequest
+                {
+                    Person = new PersonCreationRequest
+                    {
+                        Fullname = worksheet.Cells[row, 1].Text,
+                        Email = worksheet.Cells[row, 2].Text,
+                        Phone = worksheet.Cells[row, 3].Text,
+                        Salary = decimal.TryParse(worksheet.Cells[row, 4].Text, out var salary) ? salary : 0,
+                        Location = worksheet.Cells[row, 5].Text
+                    }
+                };
+
+                try
+                {
+                    await CreateCustomerAsync(customerRequest);
+                    importedCount++;
+                }
+                catch (DomainException ex)
+                {
+                    if (ex.StatusCode == 409) continue;
+                    throw;
+                }
+            }
+
+            return "Tải lên file excel thành công!";
         }
     }
 }

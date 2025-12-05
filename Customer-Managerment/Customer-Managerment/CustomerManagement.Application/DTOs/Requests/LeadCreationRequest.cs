@@ -3,6 +3,7 @@
     public class LeadCreationRequest
     {
         public string? Resource { get; set; }
+
         public PersonCreationRequest Person { get; set; } = new();
     }
 
