@@ -1,27 +1,23 @@
-﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
     public interface IStaffRepository
     {
-        Task<StaffDomain> AddStaffAsync(StaffDomain users);
-
-        Task<StaffDomain?> GetStaffByIdAsync(Guid idStaff);
-
-        Task<StaffDomain?> GetStaffByUsernameAsync(string userName);    
-
-        Task<StaffDomain?> GetStaffByEmailAsync(string email);
-
-        IQueryable<StaffDomain> GetStaffById(Guid idStaff);
-
-        IQueryable<StaffDomain> GetListStaff();
-
-        Task<StaffDomain?> UpdateStaffAsync(StaffDomain staffDomain);
-
+        Task<Person> AddStaffAsync(Person staff);
+        Task<Person?> GetStaffByIdAsync(Guid idStaff);
+        Task<Person?> GetStaffByUsernameAsync(string userName);
+        Task<Person?> GetStaffByEmailAsync(string email);
+        Task<List<Person>> GetStaffByRoleAsync(string role);
+        IQueryable<Person> GetStaffById(Guid idStaff);
+        IQueryable<Person> GetListStaff();
+        Task<Person?> UpdateStaffAsync(Person staff);
         Task<bool> CheckStaffExistsAsync(Guid idStaff);
-
-        Task DeleteStaffAsync(Guid idStaff);
+        Task<bool> SoftDeleteStaffAsync(Guid idStaff);
+        Task<bool> RestoreStaffAsync(Guid idStaff);
+        Task<bool> UpdateStaffStatusAsync(Guid idStaff, int status);
+        Task<bool> UpdateLastActiveAsync(Guid idStaff);
+        Task<List<Person>> GetOnlineStaffsAsync();
+        Task<List<Person>> GetStaffsByStatusAsync(int status);
     }
 }

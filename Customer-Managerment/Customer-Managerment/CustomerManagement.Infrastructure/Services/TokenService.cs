@@ -1,4 +1,4 @@
-﻿using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,13 +16,13 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
             _config = config;
         }
 
-        public string generateAccessToken(StaffDomain staff)
+        public string GenerateAccessToken(Person staff)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, staff.IdStaff.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, staff.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, staff.Email ?? string.Empty),
                 new Claim(ClaimTypes.Name, staff.Fullname ?? string.Empty),
                 new Claim(ClaimTypes.Role, staff.Role ?? string.Empty),
@@ -42,13 +42,13 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
             return new JwtSecurityTokenHandler().WriteToken(accessToken);
         }
 
-        public string generateRefreshToken(StaffDomain staff)
+        public string GenerateRefreshToken(Person staff)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, staff.IdStaff.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, staff.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, staff.Email ?? string.Empty),
                 new Claim(ClaimTypes.Name, staff.Fullname ?? string.Empty),
                 new Claim(ClaimTypes.Role, staff.Role ?? string.Empty),

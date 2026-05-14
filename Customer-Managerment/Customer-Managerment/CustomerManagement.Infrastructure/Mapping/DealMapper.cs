@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
 {
@@ -10,24 +9,54 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
     {
         public DealMapper()
         {
-            CreateMap<Deal, DealDomain>()
+            // Deal -> DealResponse
+            CreateMap<Deal, DealResponse>()
+                .ForMember(dest => dest.IdDeal, opt => opt.MapFrom(src => src.IdDeal))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
                 .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.IdCustomerNavigation))
                 .ForMember(dest => dest.Staff, opt => opt.MapFrom(src => src.IdStaffNavigation));
 
-            CreateMap<DealDomain, Deal>()
-                .ForMember(dest => dest.IdDeal, opt => opt.Ignore());
+            // DealCreationRequest -> Deal
+            CreateMap<DealCreationRequest, Deal>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.IdStaff, opt => opt.MapFrom(src => src.IdStaff))
+                .ForMember(dest => dest.IdCustomer, opt => opt.MapFrom(src => src.IdCustomer))
+                .ForMember(dest => dest.IdDeal, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.IdStaffNavigation, opt => opt.Ignore())
+                .ForMember(dest => dest.IdCustomerNavigation, opt => opt.Ignore());
 
-            CreateMap<DealDomain, DealResponse>()
-                .ForMember(dest => dest.infCustomerResponse, opt => opt.MapFrom(src => src.Customer))
-                .ForMember(dest => dest.infStaffResponse, opt => opt.MapFrom(src => src.Staff));
+            // DealUpdateRequest -> Deal
+            CreateMap<DealUpdateRequest, Deal>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<DealDomain, ListSuccessfullDealResponse>();
+            // Deal -> ListSuccessfullDealResponse
+            CreateMap<Deal, ListSuccessfullDealResponse>()
+                .ForMember(dest => dest.IdDeal, opt => opt.MapFrom(src => src.IdDeal))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
-            CreateMap<DealDomain, ListFailedDealResponse>();
-
-            CreateMap<DealCreationRequest, DealDomain>();
-
-            CreateMap<DealUpdateRequest, DealDomain>();
+            // Deal -> ListFailedDealResponse
+            CreateMap<Deal, ListFailedDealResponse>()
+                .ForMember(dest => dest.IdDeal, opt => opt.MapFrom(src => src.IdDeal))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
         }
     }
 }

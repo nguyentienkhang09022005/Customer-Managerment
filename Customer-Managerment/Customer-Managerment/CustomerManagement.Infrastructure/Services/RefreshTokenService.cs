@@ -13,19 +13,19 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
         }
 
         // Delete RefreshToken on Redis
-        public async Task deleteRefreshToken(string idUser)
+        public async Task DeleteRefreshTokenAsync(string idUser)
         {
             await _cache.RemoveAsync($"refresh_token:{idUser}");
         }
 
         // Get RefreshToken on Redis
-        public async Task<string?> getRefreshToken(string idUser)
+        public async Task<string?> GetRefreshTokenAsync(string idUser)
         {
             return await _cache.GetStringAsync($"refresh_token:{idUser}");
         }
 
         // Add RefreshToken on Redis
-        public async Task saveRefreshToken(string idUser, string refreshToken, TimeSpan duration)
+        public async Task SaveRefreshTokenAsync(string idUser, string refreshToken, TimeSpan duration)
         {
             await _cache.SetStringAsync(
                 $"refresh_token:{idUser}",

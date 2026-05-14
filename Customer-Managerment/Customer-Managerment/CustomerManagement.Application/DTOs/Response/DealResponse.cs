@@ -1,4 +1,4 @@
-﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
+namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
 {
     public class DealResponse
     {
@@ -10,12 +10,14 @@
 
         public decimal? Price { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
 
         public string? Status { get; set; }
 
-        public CustomerResponse? infCustomerResponse { get; set; }
+        public CustomerResponse? Customer { get; set; }
 
-        public StaffResponse? infStaffResponse { get; set; }
+        public StaffResponse? Staff { get; set; }
     }
 }

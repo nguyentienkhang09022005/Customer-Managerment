@@ -1,11 +1,13 @@
-﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
+namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
 {
     public class CustomerResponse
     {
-        public Guid IdCustomer { get; set; }
+        public Guid Id { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public PersonResponse Person { get; set; } = null!;
 
-        public PersonResponse? personResponse { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
+using Customer_Managerment.CustomerManagement.Application.Handlers.Auth;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {

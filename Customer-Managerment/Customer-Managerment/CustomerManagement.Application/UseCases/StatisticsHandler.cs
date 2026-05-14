@@ -24,17 +24,24 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         public async Task<QuantityStatisticsResponse> GetQuantityStatisticsResponseAsync()
         {
             var totalProfit = await _dealRepository.GetTotalProfitAsync();
-            var totalLeads = await _leadRepository.getTotalLeadsAsync();
-            var totalCustomers = await _customerRepository.getTotalCustomersAsync();
-            var totalContacts = await _contactRepository.getTotalContactsAsync();
-            var totalDeals = await _dealRepository.getTotalDealsAsync();
+            var totalLeads = await _leadRepository.GetTotalLeadsAsync();
+            var totalCustomers = await _customerRepository.GetTotalCustomersAsync();
+            var totalContacts = await _contactRepository.GetTotalContactsAsync();
+            var totalDeals = await _dealRepository.GetTotalDealsAsync();
+
+            // Get detail statistics
+            var contactDetails = await _contactRepository.QuantityStatisticsDetailContactResponse();
+            var dealDetails = await _dealRepository.QuantityStatisticsDetailDealResponse();
+
             var statisticsResponse = new QuantityStatisticsResponse
             {
                 TotalProfit = totalProfit,
                 QuantityLeads = totalLeads,
                 QuantityCustomers = totalCustomers,
                 QuantityContacts = totalContacts,
-                QuantityDeals = totalDeals
+                QuantityDeals = totalDeals,
+                quantityStatisticsDetailContactResponse = contactDetails,
+                quantityStatisticsDetailDealResponse = dealDetails
             };
             return statisticsResponse;
         }

@@ -2,10 +2,12 @@
 {
     public class StatuDealConstant
     {
-        public const string DealPending = "Pending";
+        public const string DealOpen = "OPEN";
 
-        public const string DealWon = "Won";
+        public const string DealNegotiating = "NEGOTIATING";
 
-        public const string DealLost = "Lost";
+        public const string DealWon = "WON";
+
+        public const string DealLost = "LOST";
     }
 }

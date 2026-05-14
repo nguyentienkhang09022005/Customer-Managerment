@@ -1,4 +1,4 @@
-﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
+namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
 {
     public class ContactResponse
     {
@@ -12,10 +12,12 @@
 
         public string? Status { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public LeadResponse? infLeadResponse { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
-        public StaffResponse? infStaffResponse { get; set; }
-    } 
+        public LeadResponse? Lead { get; set; }
+
+        public StaffResponse? Staff { get; set; }
+    }
 }

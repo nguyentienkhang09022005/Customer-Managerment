@@ -2,14 +2,16 @@
 {
     public class StatusContactConstant
     {
-        public const string ContactPending = "Pending";
+        public const string ContactNew = "NEW";
 
-        public const string ContactInProgress = "In Progress";
+        public const string ContactInProgress = "IN_PROGRESS";
 
-        public const string ContactDone = "Done";
+        public const string ContactSuccess = "SUCCESS";
 
-        public const string ContactCanceled = "Canceled";
+        public const string ContactFailed = "FAILED";
 
-        public const string ContactFailed = "Failed";
+        public const string ContactClosed = "CLOSED";
+
+        public const string ContactCanceled = "CANCELED";
     }
 }

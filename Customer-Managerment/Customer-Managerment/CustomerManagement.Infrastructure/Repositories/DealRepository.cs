@@ -1,11 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Errors.Model;
 
@@ -22,114 +21,101 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<DealDomain> AddDealAsync(DealDomain dealDomain)
+        public async Task<Deal> AddDealAsync(Deal deal)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var deal = _mapper.Map<Deal>(dealDomain);
 
             deal.IdDeal = Guid.NewGuid();
-            deal.Status = StatuDealConstant.DealPending;
-            deal.CreatedAt = DateTime.Now;
+            deal.Status = StatuDealConstant.DealOpen;
+            deal.CreatedAt = DateTime.UtcNow;
+            deal.IsDeleted = false;
 
             await context.Deals.AddAsync(deal);
             await context.SaveChangesAsync();
-            return _mapper.Map<DealDomain>(deal);
+            return deal;
         }
 
-        public async Task<bool> CheckDealExistsAsync(Guid idDeal)
+        public async Task<Deal?> GetDealByIdAsync(Guid idDeal)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return await context.Deals
-                .AsNoTracking()
-                .IgnoreAutoIncludes()
-                .AnyAsync(d => d.IdDeal == idDeal);
-        }
+            var deal = await context.Deals
+                    .IgnoreQueryFilters()
+                    .Include(d => d.IdCustomerNavigation)
+                    .Include(d => d.IdStaffNavigation)
+                    .FirstOrDefaultAsync(d => d.IdDeal == idDeal);
 
-        public async Task DeleteDealAsync(Guid idDeal)
-        {
-            await using var context = _contextFactory.CreateDbContext();
-            var deal = await context.Deals.FindAsync(idDeal);
             if (deal == null)
                 throw new NotFoundException("Không tìm thấy deal!");
 
-            context.Deals.Remove(deal);
-            await context.SaveChangesAsync();
+            return deal;
         }
 
-        public IQueryable<DealDomain> GetDealById(Guid idDeal)
+        public IQueryable<Deal> GetListDeal()
+        {
+            var context = _contextFactory.CreateDbContext();
+            return context.Deals
+                .Include(d => d.IdCustomerNavigation)
+                .Include(d => d.IdStaffNavigation)
+                .AsNoTracking();
+        }
+
+        public async Task<List<Deal>> GetListDealAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Deals
+                .Include(d => d.IdCustomerNavigation)
+                .Include(d => d.IdStaffNavigation)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public IQueryable<Deal> GetDealById(Guid idDeal)
         {
             var context = _contextFactory.CreateDbContext();
             return context.Deals
                 .Where(d => d.IdDeal == idDeal)
                 .Include(d => d.IdCustomerNavigation)
                 .Include(d => d.IdStaffNavigation)
-                .ProjectTo<DealDomain>(_mapper.ConfigurationProvider)
                 .AsNoTracking();
         }
 
-        public async Task<DealDomain?> GetDealByIdAsync(Guid idDeal)
+        public async Task<Deal?> UpdateDealAsync(Deal deal)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var deal = await context.Deals
-                    .AsNoTracking()
-                    .IgnoreAutoIncludes()
-                    .FirstOrDefaultAsync(d => d.IdDeal == idDeal);
-
-            if (deal == null)
-                throw new NotFoundException("Không tìm thấy deal!");
-            return _mapper.Map<DealDomain>(deal);
-        }
-
-        public IQueryable<DealDomain> GetListDeal()
-        {
-            var context = _contextFactory.CreateDbContext();
-            return context.Deals
+            var existingDeal = await context.Deals
                 .Include(d => d.IdCustomerNavigation)
                 .Include(d => d.IdStaffNavigation)
-                .ProjectTo<DealDomain>(_mapper.ConfigurationProvider)
-                .AsNoTracking();
-        }
+                .FirstOrDefaultAsync(d => d.IdDeal == deal.IdDeal);
 
-        public async Task<List<DealDomain>> GetListDealAsync()
-        {
-            await using var context = _contextFactory.CreateDbContext();
+            if (existingDeal == null)
+                return null;
 
-            return await context.Deals
-                .Include(d => d.IdCustomerNavigation)
-                .Include(d => d.IdStaffNavigation)
-                .ProjectTo<DealDomain>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<DealDomain?> UpdateDealAsync(DealDomain dealDomain)
-        {
-            await using var context = _contextFactory.CreateDbContext();
-            var deal= await context.Deals.FindAsync(dealDomain.IdDeal);
-            if (deal == null) return null;
-
-            // Cập nhật các thuộc tính của deal
-            _mapper.Map(dealDomain, deal);
-            context.Entry(deal).Property(c => c.Title).IsModified = false;
-            context.Entry(deal).Property(c => c.Content).IsModified = false;
-            context.Entry(deal).Property(c => c.Price).IsModified = false;
+            existingDeal.Title = deal.Title;
+            existingDeal.Content = deal.Content;
+            existingDeal.Price = deal.Price;
+            existingDeal.Status = deal.Status;
+            existingDeal.UpdatedAt = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
-            return _mapper.Map<DealDomain>(deal);
+            return existingDeal;
+        }
+
+        public async Task<bool> CheckDealExistsAsync(Guid idDeal)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Deals
+                .AnyAsync(d => d.IdDeal == idDeal);
         }
 
         public async Task<decimal> GetTotalProfitAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
-
             return await context.Deals
-                .AsNoTracking()
                 .Where(d => d.Status == StatuDealConstant.DealWon)
                 .SumAsync(d => (decimal?)d.Price) ?? 0m;
         }
 
-
-        public async Task<int> getTotalDealsAsync()
+        public async Task<int> GetTotalDealsAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
             return await context.Deals.CountAsync();
@@ -138,21 +124,35 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<QuantityStatisticsDetailDealResponse> QuantityStatisticsDetailDealResponse()
         {
             await using var context = _contextFactory.CreateDbContext();
-            var totalPending = await context.Deals
-                .AsNoTracking()
-                .CountAsync(c => c.Status == StatuDealConstant.DealPending);
+            var totalOpen = await context.Deals
+                .CountAsync(c => c.Status == StatuDealConstant.DealOpen);
             var totalWon = await context.Deals
-                .AsNoTracking()
                 .CountAsync(c => c.Status == StatuDealConstant.DealWon);
             var totalLost = await context.Deals
-                .AsNoTracking()
                 .CountAsync(c => c.Status == StatuDealConstant.DealLost);
+
             return new QuantityStatisticsDetailDealResponse
             {
-                QuantityDealsPending = totalPending,
+                QuantityDealsPending = totalOpen,
                 QuantityDealsWon = totalWon,
                 QuantityDealsLost = totalLost
             };
+        }
+
+        public async Task<bool> SoftDeleteDealAsync(Guid idDeal)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var deal = await context.Deals
+                .FirstOrDefaultAsync(d => d.IdDeal == idDeal);
+
+            if (deal == null)
+                return false;
+
+            deal.IsDeleted = true;
+            deal.DeletedAt = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+            return true;
         }
     }
 }

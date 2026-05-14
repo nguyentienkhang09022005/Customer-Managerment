@@ -1,27 +1,19 @@
-﻿using Customer_Managerment.CustomerManagement.Domain.Entities;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Application.Interfaces
 {
     public interface ILeadRepository
     {
-        Task<LeadDomain> AddLeadAsync(LeadDomain leadDomain);
-
-        Task<LeadDomain?> GetLeadByIdAsync(Guid idLead);
-
-        IQueryable<LeadDomain> GetListLead();
-
-        Task<List<LeadDomain>> GetListLeadAsync();
-
-        IQueryable<LeadDomain> GetLeadById(Guid idLead);
-
-        Task<LeadDomain?> UpdateLeadAsync(LeadDomain leadDomain);
-
-        Task DeleteLeadAsync(Guid idLead);
-
+        Task<Person> AddLeadAsync(Person lead);
+        Task<Person?> GetLeadByIdAsync(Guid idLead);
+        IQueryable<Person> GetListLead();
+        Task<List<Person>> GetListLeadAsync();
+        IQueryable<Person> GetLeadById(Guid idLead);
+        Task<Person?> UpdateLeadAsync(Person lead);
         Task<bool> CheckLeadExistsAsync(Guid idLead);
-
-        Task<bool> checkPersonByEmailAsync(string email);
-
-        Task<int> getTotalLeadsAsync();
+        Task<bool> CheckPersonByEmailAsync(string email);
+        Task<int> GetTotalLeadsAsync();
+        Task<bool> SoftDeleteLeadAsync(Guid idLead);
+        Task<bool> RestoreLeadAsync(Guid idLead);
     }
 }

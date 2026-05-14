@@ -1,15 +1,15 @@
-﻿using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
-
 namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
 {
     public class LeadResponse
     {
-        public Guid IdLead { get; set; }
+        public Guid Id { get; set; }
+
+        public PersonResponse Person { get; set; } = null!;
 
         public string? Resource { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public PersonResponse? personResponse { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

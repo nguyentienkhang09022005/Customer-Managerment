@@ -1,0 +1,2308 @@
+{
+	"info": {
+		"name": "Customer Management GraphQL API",
+		"description": "Full collection of Customer Management GraphQL APIs with sample requests. Environment: http://localhost:7109/graphql. Updated: 2026-05-15 with Calendar/Scheduling and Analytics Dashboard APIs.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:7109/graphql"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.login) {",
+									"        pm.environment.set('jwtToken', jsonData.data.login.token);",
+									"        pm.environment.set('refreshToken', jsonData.data.login.refreshToken);",
+									"        pm.environment.set('staffId', jsonData.data.login.infStaff.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Login($authenticationRequest: AuthenticationRequestInput!) {\n  login(authenticationRequest: $authenticationRequest) {\n    token\n    infStaff {\n      id\n      person {\n        fullname\n        email\n      }\n      username\n      role\n    }\n  }\n}",
+								"variables": "{\n  \"authenticationRequest\": {\n    \"username\": \"admin\",\n    \"password\": \"Admin@123\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RefreshToken {\n  refreshToken {\n    token\n    infStaff {\n      id\n      username\n      role\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Logout {\n  logout\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Introspect Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Introspect($introspectRequest: IntrospectRequestInput!) {\n  introspect(introspectRequest: $introspectRequest) {\n    valid\n    idUser\n  }\n}",
+								"variables": "{\n  \"introspectRequest\": {\n    \"token\": \"{{jwtToken}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Forgot Password",
+			"item": [
+				{
+					"name": "Send OTP Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation SendOTPForgotPassword($forgotPasswordRequest: ForgotPasswordRequestInput!) {\n  sendOTPForgotPassword(forgotPasswordRequest: $forgotPasswordRequest)\n}",
+								"variables": "{\n  \"forgotPasswordRequest\": {\n    \"email\": \"admin@example.com\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm OTP Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ConfirmOTPForgotPassword($changePasswordRequest: ChangePasswordRequestInput!) {\n  confirmOTPForgotPassword(changePasswordRequest: $changePasswordRequest)\n}",
+								"variables": "{\n  \"changePasswordRequest\": {\n    \"email\": \"admin@example.com\",\n    \"otp\": \"123456\",\n    \"newPassword\": \"NewPassword@123\",\n    \"confirmPassword\": \"NewPassword@123\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Staffs",
+			"item": [
+				{
+					"name": "Get All Staffs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetStaffs {\n  staffs {\n    id\n    username\n    role\n    salary\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Staff By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetStaffById($idStaff: UUID!) {\n  staffById(idStaff: $idStaff) {\n    id\n    username\n    role\n    salary\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Staff",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createStaff) {",
+									"        pm.environment.set('staffId', jsonData.data.createStaff.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateStaff($input: StaffInput!) {\n  createStaff(input: $input) {\n    id\n    username\n    role\n    salary\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"fullname\": \"Tran Van B\",\n    \"email\": \"tranvanb@example.com\",\n    \"phone\": \"0909123456\",\n    \"location\": \"Ho Chi Minh City\",\n    \"username\": \"tranvanb\",\n    \"password\": \"Password@123\",\n    \"role\": \"STAFF\",\n    \"salary\": 15000000\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Staff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateStaff($input: StaffUpdateInput!, $idStaff: UUID!) {\n  updateStaff(input: $input, idStaff: $idStaff) {\n    id\n    username\n    role\n    salary\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"fullname\": \"Tran Van B Updated\",\n    \"email\": \"tranvanbupdated@example.com\",\n    \"phone\": \"0909123457\",\n    \"location\": \"Ha Noi\",\n    \"role\": \"STAFF\",\n    \"salary\": 20000000\n  },\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Staff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteStaff($idStaff: UUID!) {\n  deleteStaff(idStaff: $idStaff)\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore Staff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RestoreStaff($idStaff: UUID!) {\n  restoreStaff(idStaff: $idStaff) {\n    id\n    username\n    role\n    person {\n      fullname\n      email\n    }\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Staffs (Elasticsearch)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchStaffs($searchText: String!) {\n  searchStaffs(searchText: $searchText) {\n    id\n    username\n    role\n    person {\n      fullname\n      email\n      phone\n    }\n  }\n}",
+								"variables": "{\n  \"searchText\": \"admin\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leads",
+			"item": [
+				{
+					"name": "Get All Leads",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetLeads {\n  leads {\n    id\n    resource\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lead By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetLeadById($idLead: UUID!) {\n  leadById(idLead: $idLead) {\n    id\n    resource\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n  }\n}",
+								"variables": "{\n  \"idLead\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Lead",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createLead) {",
+									"        pm.environment.set('leadId', jsonData.data.createLead.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateLead($leadCreationRequest: LeadCreationRequestInput!) {\n  createLead(leadCreationRequest: $leadCreationRequest) {\n    id\n    resource\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n  }\n}",
+								"variables": "{\n  \"leadCreationRequest\": {\n    \"fullname\": \"Le Thi C\",\n    \"email\": \"lethic@example.com\",\n    \"phone\": \"0909123458\",\n    \"location\": \"Da Nang\",\n    \"resource\": \"Website\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Lead",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateLead($leadUpdateRequest: LeadUpdateRequestInput!, $idLead: UUID!) {\n  updateLead(leadUpdateRequest: $leadUpdateRequest, idLead: $idLead) {\n    id\n    resource\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"leadUpdateRequest\": {\n    \"fullname\": \"Le Thi C Updated\",\n    \"email\": \"lethicupdated@example.com\",\n    \"phone\": \"0909123459\",\n    \"location\": \"Hue\",\n    \"resource\": \"Referral\"\n  },\n  \"idLead\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Lead",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteLead($idLead: UUID!) {\n  deleteLead(idLead: $idLead)\n}",
+								"variables": "{\n  \"idLead\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Leads (Elasticsearch)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchLeads($searchText: String!) {\n  searchLeads(searchText: $searchText) {\n    id\n    resource\n    person {\n      fullname\n      email\n      phone\n    }\n  }\n}",
+								"variables": "{\n  \"searchText\": \"customer\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetCustomers {\n  customers {\n    id\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetCustomerById($idCustomer: UUID!) {\n  customerById(idCustomer: $idCustomer) {\n    id\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n  }\n}",
+								"variables": "{\n  \"idCustomer\": \"{{customerId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createCustomer) {",
+									"        pm.environment.set('customerId', jsonData.data.createCustomer.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateCustomer($customerCreationRequest: CustomerCreationRequestInput!) {\n  createCustomer(request: $customerCreationRequest) {\n    id\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    createdAt\n  }\n}",
+								"variables": "{\n  \"customerCreationRequest\": {\n    \"fullname\": \"Customer D\",\n    \"email\": \"customerd@example.com\",\n    \"phone\": \"0909123460\",\n    \"location\": \"Can Tho\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateCustomer($customerUpdateRequest: CustomerUpdateRequestInput!, $idCustomer: UUID!) {\n  updateCustomer(request: $customerUpdateRequest, idCustomer: $idCustomer) {\n    id\n    person {\n      fullname\n      email\n      phone\n      location\n    }\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"customerUpdateRequest\": {\n    \"fullname\": \"Customer D Updated\",\n    \"email\": \"customerdupdated@example.com\",\n    \"phone\": \"0909123461\",\n    \"location\": \"Vung Tau\"\n  },\n  \"idCustomer\": \"{{customerId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteCustomer($idCustomer: UUID!) {\n  deleteCustomer(idCustomer: $idCustomer)\n}",
+								"variables": "{\n  \"idCustomer\": \"{{customerId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RestoreCustomer($idCustomer: UUID!) {\n  restoreCustomer(idCustomer: $idCustomer) {\n    id\n    person {\n      fullname\n      email\n    }\n  }\n}",
+								"variables": "{\n  \"idCustomer\": \"{{customerId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Customers (Elasticsearch)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchCustomers($searchText: String!) {\n  searchCustomers(searchText: $searchText) {\n    id\n    person {\n      fullname\n      email\n      phone\n    }\n  }\n}",
+								"variables": "{\n  \"searchText\": \"vip\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "Get All Contacts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetContacts {\n  contacts {\n    idContact\n    type\n    title\n    content\n    status\n    createdAt\n    updatedAt\n    lead {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetContactById($idContact: UUID!) {\n  contactById(idContact: $idContact) {\n    idContact\n    type\n    title\n    content\n    status\n    createdAt\n    lead {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n    }\n  }\n}",
+								"variables": "{\n  \"idContact\": \"{{contactId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createContact) {",
+									"        pm.environment.set('contactId', jsonData.data.createContact.idContact);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateContact($contactCreationRequest: ContactCreationRequestInput!) {\n  createContact(contactCreationRequest: $contactCreationRequest) {\n    idContact\n    type\n    title\n    content\n    status\n    createdAt\n    lead {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n    }\n  }\n}",
+								"variables": "{\n  \"contactCreationRequest\": {\n    \"type\": \"Email\",\n    \"title\": \"Initial Contact\",\n    \"content\": \"First contact with lead\",\n    \"idStaff\": \"{{staffId}}\",\n    \"idLead\": \"{{leadId}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateContact($contactUpdateRequest: ContactUpdateRequestInput!, $idContact: UUID!) {\n  updateContact(contactUpdateRequest: $contactUpdateRequest, idContact: $idContact) {\n    idContact\n    type\n    title\n    content\n    status\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"contactUpdateRequest\": {\n    \"type\": \"Phone\",\n    \"title\": \"Follow Up Contact\",\n    \"content\": \"Follow up with lead\",\n    \"status\": \"IN_PROGRESS\"\n  },\n  \"idContact\": \"{{contactId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteContact($idContact: UUID!) {\n  deleteContact(idContact: $idContact)\n}",
+								"variables": "{\n  \"idContact\": \"{{contactId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Contacts (Elasticsearch)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchContacts($searchText: String!) {\n  searchContacts(searchText: $searchText) {\n    idContact\n    type\n    title\n    content\n    status\n    lead {\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"searchText\": \"follow\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Deals",
+			"item": [
+				{
+					"name": "Get All Deals",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetDeals {\n  deals {\n    idDeal\n    title\n    content\n    price\n    status\n    createdAt\n    updatedAt\n    customer {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Deal By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetDealById($idDeal: UUID!) {\n  dealById(idDeal: $idDeal) {\n    idDeal\n    title\n    content\n    price\n    status\n    createdAt\n    customer {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n    }\n  }\n}",
+								"variables": "{\n  \"idDeal\": \"{{dealId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Deal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createDeal) {",
+									"        pm.environment.set('dealId', jsonData.data.createDeal.idDeal);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateDeal($dealCreationRequest: DealCreationRequestInput!) {\n  createDeal(dealCreationRequest: $dealCreationRequest) {\n    idDeal\n    title\n    content\n    price\n    status\n    createdAt\n    customer {\n      id\n      person {\n        fullname\n      }\n    }\n    staff {\n      id\n      username\n    }\n  }\n}",
+								"variables": "{\n  \"dealCreationRequest\": {\n    \"title\": \"New Deal\",\n    \"content\": \"Deal description\",\n    \"price\": 50000000,\n    \"idStaff\": \"{{staffId}}\",\n    \"idCustomer\": \"{{customerId}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Deal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateDeal($dealUpdateRequest: DealUpdateRequestInput!, $idDeal: UUID!) {\n  updateDeal(dealUpdateRequest: $dealUpdateRequest, idDeal: $idDeal) {\n    idDeal\n    title\n    content\n    price\n    status\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"dealUpdateRequest\": {\n    \"title\": \"Updated Deal\",\n    \"content\": \"Updated description\",\n    \"price\": 60000000,\n    \"status\": \"NEGOTIATING\"\n  },\n  \"idDeal\": \"{{dealId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Deal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteDeal($idDeal: UUID!) {\n  deleteDeal(idDeal: $idDeal)\n}",
+								"variables": "{\n  \"idDeal\": \"{{dealId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Deals (Elasticsearch)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchDeals($searchText: String!) {\n  searchDeals(searchText: $searchText) {\n    idDeal\n    title\n    content\n    price\n    status\n    customer {\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"searchText\": \"deal\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks (NEW - 2026-05-14)",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTasks {\n  tasks {\n    idTask\n    title\n    description\n    dueDate\n    priority\n    status\n    createdAt\n    updatedAt\n    idStaffAssigned\n    linkedEntityType\n    linkedEntityId\n    staffAssigned {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTaskById($idTask: UUID!) {\n  taskById(idTask: $idTask) {\n    idTask\n    title\n    description\n    dueDate\n    priority\n    status\n    createdAt\n    updatedAt\n    idStaffAssigned\n    linkedEntityType\n    linkedEntityId\n    staffAssigned {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idTask\": \"{{taskId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks By Staff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTasksByStaff($idStaff: UUID!) {\n  tasksByStaff(idStaff: $idStaff) {\n    idTask\n    title\n    description\n    dueDate\n    priority\n    status\n    createdAt\n    staffAssigned {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks By Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTasksByStatus($status: Int!) {\n  tasksByStatus(status: $status) {\n    idTask\n    title\n    description\n    dueDate\n    priority\n    status\n    staffAssigned {\n      id\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"status\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createTask) {",
+									"        pm.environment.set('taskId', jsonData.data.createTask.idTask);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateTask($input: TaskInput!) {\n  createTask(input: $input) {\n    idTask\n    title\n    description\n    dueDate\n    priority\n    status\n    createdAt\n    staffAssigned {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"title\": \"Follow up with Lead\",\n    \"description\": \"Call and schedule meeting with the lead\",\n    \"dueDate\": \"2026-05-20T10:00:00Z\",\n    \"priority\": \"HIGH\",\n    \"status\": \"PENDING\",\n    \"idStaffAssigned\": \"{{staffId}}\",\n    \"linkedEntityType\": \"Lead\",\n    \"linkedEntityId\": \"{{leadId}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateTask($input: TaskUpdateInput!, $idTask: UUID!) {\n  updateTask(input: $input, idTask: $idTask) {\n    idTask\n    title\n    description\n    dueDate\n    priority\n    status\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"title\": \"Updated Task Title\",\n    \"description\": \"Updated description\",\n    \"priority\": \"URGENT\",\n    \"status\": \"IN_PROGRESS\"\n  },\n  \"idTask\": \"{{taskId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation AssignTask($idTask: UUID!, $idStaff: UUID!) {\n  assignTask(idTask: $idTask, idStaff: $idStaff) {\n    idTask\n    title\n    status\n    staffAssigned {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idTask\": \"{{taskId}}\",\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateTaskStatus($idTask: UUID!, $status: Int!) {\n  updateTaskStatus(idTask: $idTask, status: $status) {\n    idTask\n    title\n    status\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"idTask\": \"{{taskId}}\",\n  \"status\": 2\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteTask($idTask: UUID!) {\n  deleteTask(idTask: $idTask)\n}",
+								"variables": "{\n  \"idTask\": \"{{taskId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RestoreTask($idTask: UUID!) {\n  restoreTask(idTask: $idTask) {\n    idTask\n    title\n    status\n    isDeleted\n  }\n}",
+								"variables": "{\n  \"idTask\": \"{{taskId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notes (NEW - 2026-05-14)",
+			"item": [
+				{
+					"name": "Get Notes By Entity",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetNotesByEntity($entityType: String!, $entityId: UUID!) {\n  notesByEntity(entityType: $entityType, entityId: $entityId) {\n    idNote\n    content\n    type\n    isPinned\n    createdAt\n    updatedAt\n    idStaff\n    linkedEntityType\n    linkedEntityId\n    parentNoteId\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n    mentions {\n      idMention\n      idStaffMentioned\n      staffMentioned {\n        id\n        username\n        person {\n          fullname\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"entityType\": \"Lead\",\n  \"entityId\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Note By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetNoteById($idNote: UUID!) {\n  noteById(idNote: $idNote) {\n    idNote\n    content\n    type\n    isPinned\n    createdAt\n    updatedAt\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n    mentions {\n      idMention\n      staffMentioned {\n        id\n        person {\n          fullname\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idNote\": \"{{noteId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pinned Notes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetPinnedNotes($entityType: String!, $entityId: UUID!) {\n  pinnedNotes(entityType: $entityType, entityId: $entityId) {\n    idNote\n    content\n    type\n    isPinned\n    createdAt\n    staff {\n      id\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"entityType\": \"Lead\",\n  \"entityId\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createNote) {",
+									"        pm.environment.set('noteId', jsonData.data.createNote.idNote);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateNote($input: NoteInput!) {\n  createNote(input: $input) {\n    idNote\n    content\n    type\n    isPinned\n    createdAt\n    idStaff\n    linkedEntityType\n    linkedEntityId\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"content\": \"This is a test note with @admin mention\",\n    \"type\": \"COMMENT\",\n    \"idStaff\": \"{{staffId}}\",\n    \"linkedEntityType\": \"Lead\",\n    \"linkedEntityId\": \"{{leadId}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateNote($input: NoteUpdateInput!, $idNote: UUID!) {\n  updateNote(input: $input, idNote: $idNote) {\n    idNote\n    content\n    isPinned\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"content\": \"Updated note content\"\n  },\n  \"idNote\": \"{{noteId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pin Note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation PinNote($idNote: UUID!) {\n  pinNote(idNote: $idNote) {\n    idNote\n    isPinned\n  }\n}",
+								"variables": "{\n  \"idNote\": \"{{noteId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unpin Note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UnpinNote($idNote: UUID!) {\n  unpinNote(idNote: $idNote) {\n    idNote\n    isPinned\n  }\n}",
+								"variables": "{\n  \"idNote\": \"{{noteId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reply Note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ReplyNote($idNote: UUID!, $parentId: UUID!) {\n  replyNote(idNote: $idNote, parentId: $parentId) {\n    idNote\n    content\n    parentNoteId\n  }\n}",
+								"variables": "{\n  \"idNote\": \"{{noteId}}\",\n  \"parentId\": \"{{noteId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteNote($idNote: UUID!) {\n  deleteNote(idNote: $idNote)\n}",
+								"variables": "{\n  \"idNote\": \"{{noteId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications (NEW - 2026-05-14)",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetNotifications($idStaff: UUID!) {\n  notifications(idStaff: $idStaff) {\n    idNotification\n    title\n    message\n    type\n    isRead\n    isPinned\n    createdAt\n    idStaff\n    relatedEntityType\n    relatedEntityId\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Notifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUnreadNotifications($idStaff: UUID!) {\n  unreadNotifications(idStaff: $idStaff) {\n    idNotification\n    title\n    message\n    type\n    isRead\n    createdAt\n    relatedEntityType\n    relatedEntityId\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pinned Notifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetPinnedNotifications($idStaff: UUID!) {\n  pinnedNotifications(idStaff: $idStaff) {\n    idNotification\n    title\n    message\n    type\n    isRead\n    isPinned\n    createdAt\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notification By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetNotificationById($idNotification: UUID!) {\n  notificationById(idNotification: $idNotification) {\n    idNotification\n    title\n    message\n    type\n    isRead\n    isPinned\n    createdAt\n    staff {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idNotification\": \"{{notificationId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Count",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUnreadCount($idStaff: UUID!) {\n  unreadCount(idStaff: $idStaff)\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark As Read",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation MarkAsRead($idNotification: UUID!) {\n  markAsRead(idNotification: $idNotification)\n}",
+								"variables": "{\n  \"idNotification\": \"{{notificationId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark All As Read",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation MarkAllAsRead($idStaff: UUID!) {\n  markAllAsRead(idStaff: $idStaff)\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pin Notification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation PinNotification($idNotification: UUID!) {\n  pinNotification(idNotification: $idNotification)\n}",
+								"variables": "{\n  \"idNotification\": \"{{notificationId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteNotification($idNotification: UUID!) {\n  deleteNotification(idNotification: $idNotification)\n}",
+								"variables": "{\n  \"idNotification\": \"{{notificationId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Statistics",
+			"item": [
+				{
+					"name": "Get Statistics",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetStatistics {\n  statistics {\n    totalProfit\n    quantityCustomers\n    quantityLeads\n    quantityContacts\n    quantityDeals\n    quantityStatisticsDetailContactResponse {\n      quantityContactsPending\n      quantityContactsInProgress\n      quantityContactsDone\n      quantityContactsCancel\n      quantityContactsFailed\n    }\n    quantityStatisticsDetailDealResponse {\n      quantityDealsPending\n      quantityDealsWon\n      quantityDealsLost\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chart Deal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetChartDeal {\n  chartDeal {\n    successfullDealValue\n    failedDealValue\n    listSuccessfullDeal {\n      idDeal\n      price\n      status\n      createdAt\n    }\n    listFailedDeal {\n      idDeal\n      price\n      status\n      createdAt\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat (AI)",
+			"item": [
+				{
+					"name": "Get Welcome Message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetWelcomeMessage {\n  getChatWelcomeMessageAsync\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chat History",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetHistoryMessage($idStaff: UUID!) {\n  historyMessage(idStaff: $idStaff) {\n    role\n    message\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Chat Message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation SendChatMessage($chatRequest: ChatRequestInput!) {\n  sendChatMessage(chatRequest: $chatRequest) {\n    aiResponse\n  }\n}",
+								"variables": "{\n  \"chatRequest\": {\n    \"idStaff\": \"{{staffId}}\",\n    \"userMessage\": \"Hello, I need help with customer management\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chat History",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteMessage($idStaff: UUID!) {\n  deleteMessage(idStaff: $idStaff)\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calendar Events (NEW - 2026-05-15)",
+			"item": [
+				{
+					"name": "Get All Calendar Events",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetCalendarEvents($fromDate: DateTime!, $toDate: DateTime!, $idStaff: UUID) {\n  calendarEvents(fromDate: $fromDate, toDate: $toDate, idStaff: $idStaff) {\n    idEvent\n    title\n    description\n    eventType\n    startTime\n    endTime\n    location\n    isAllDay\n    reminderMinutes\n    status\n    createdAt\n    updatedAt\n    idStaff\n    relatedEntityType\n    relatedEntityId\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n    participants {\n      id\n      idEvent\n      idStaff\n      status\n      respondedAt\n      staff {\n        id\n        username\n        person {\n          fullname\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-05-01T00:00:00Z\",\n  \"toDate\": \"2026-05-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Calendar Event By ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetCalendarEventById($idEvent: UUID!) {\n  calendarEventById(idEvent: $idEvent) {\n    idEvent\n    title\n    description\n    eventType\n    startTime\n    endTime\n    location\n    isAllDay\n    reminderMinutes\n    status\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n    participants {\n      id\n      idStaff\n      status\n      respondedAt\n      staff {\n        username\n        person {\n          fullname\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idEvent\": \"{{calendarEventId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Events",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetMyEvents($idStaff: UUID!, $fromDate: DateTime!, $toDate: DateTime!) {\n  myEvents(idStaff: $idStaff, fromDate: $fromDate, toDate: $toDate) {\n    idEvent\n    title\n    description\n    eventType\n    startTime\n    endTime\n    status\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\",\n  \"fromDate\": \"2026-05-01T00:00:00Z\",\n  \"toDate\": \"2026-05-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Upcoming Events",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUpcomingEvents($idStaff: UUID!, $days: Int!) {\n  upcomingEvents(idStaff: $idStaff, days: $days) {\n    idEvent\n    title\n    startTime\n    endTime\n    eventType\n    status\n    staff {\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\",\n  \"days\": 7\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Calendar Event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.createCalendarEvent) {",
+									"        pm.environment.set('calendarEventId', jsonData.data.createCalendarEvent.idEvent);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateCalendarEvent($input: CalendarEventInput!) {\n  createCalendarEvent(input: $input) {\n    idEvent\n    title\n    description\n    eventType\n    startTime\n    endTime\n    location\n    isAllDay\n    status\n    staff {\n      id\n      username\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"title\": \"Team Meeting\",\n    \"description\": \"Weekly team sync\",\n    \"eventType\": MEETING,\n    \"startTime\": \"2026-05-20T10:00:00Z\",\n    \"endTime\": \"2026-05-20T11:00:00Z\",\n    \"location\": \"Conference Room A\",\n    \"isAllDay\": false,\n    \"reminderMinutes\": 15,\n    \"idStaff\": \"{{staffId}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Calendar Event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateCalendarEvent($input: CalendarEventUpdateInput!, $idEvent: UUID!) {\n  updateCalendarEvent(input: $input, idEvent: $idEvent) {\n    idEvent\n    title\n    description\n    startTime\n    endTime\n    status\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"title\": \"Updated Team Meeting\",\n    \"description\": \"Updated description\",\n    \"status\": IN_PROGRESS\n  },\n  \"idEvent\": \"{{calendarEventId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Participant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation AddParticipant($input: EventParticipantInput!) {\n  addParticipant(input: $input) {\n    idEvent\n    participants {\n      id\n      idStaff\n      status\n      staff {\n        username\n        person {\n          fullname\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"idEvent\": \"{{calendarEventId}}\",\n    \"idStaff\": \"{{staffId}}\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Participant Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateParticipantStatus($idParticipant: UUID!, $status: Int!) {\n  updateParticipantStatus(idParticipant: $idParticipant, status: $status) {\n    id\n    status\n    respondedAt\n  }\n}",
+								"variables": "{\n  \"idParticipant\": \"{{participantId}}\",\n  \"status\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Calendar Event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CancelCalendarEvent($idEvent: UUID!) {\n  cancelCalendarEvent(idEvent: $idEvent)\n}",
+								"variables": "{\n  \"idEvent\": \"{{calendarEventId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Calendar Event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteCalendarEvent($idEvent: UUID!) {\n  deleteCalendarEvent(idEvent: $idEvent)\n}",
+								"variables": "{\n  \"idEvent\": \"{{calendarEventId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics Dashboard (NEW - 2026-05-15)",
+			"item": [
+				{
+					"name": "Get Dashboard Summary",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetDashboardSummary($fromDate: DateTime!, $toDate: DateTime!) {\n  dashboardSummary(fromDate: $fromDate, toDate: $toDate) {\n    totalLeads\n    totalCustomers\n    activeDeals\n    totalContacts\n    totalRevenue\n    conversionRate\n    averageDealValue\n    leadsCreatedThisMonth\n    customersCreatedThisMonth\n    dealsWonThisMonth\n    dealsLostThisMonth\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Revenue Chart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetRevenueChart($fromDate: DateTime!, $toDate: DateTime!, $groupBy: String!) {\n  revenueChart(fromDate: $fromDate, toDate: $toDate, groupBy: $groupBy) {\n    dataPoints {\n      date\n      wonAmount\n      lostAmount\n      pipelineValue\n    }\n    totalRevenue\n    totalLost\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\",\n  \"groupBy\": \"month\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pipeline Funnel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetPipelineFunnel {\n  pipelineFunnel {\n    openDealsCount\n    negotiatingDealsCount\n    wonDealsCount\n    openDealsValue\n    negotiatingDealsValue\n    wonDealsValue\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top Performing Staff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTopPerformingStaff($limit: Int) {\n  topPerformingStaff(limit: $limit) {\n    staffPerformances {\n      idStaff\n      staffName\n      totalDealsCreated\n      wonDeals\n      lostDeals\n      winRate\n      totalRevenue\n      averageDealValue\n      contactsCreated\n      leadsCreated\n    }\n    totalStaff\n  }\n}",
+								"variables": "{\n  \"limit\": 10\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Staff Performance Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetStaffPerformanceReport($idStaff: UUID!, $fromDate: DateTime!, $toDate: DateTime!) {\n  staffPerformanceReport(idStaff: $idStaff, fromDate: $fromDate, toDate: $toDate) {\n    idStaff\n    staffName\n    totalDealsCreated\n    wonDeals\n    lostDeals\n    winRate\n    totalRevenue\n    averageDealValue\n    contactsCreated\n    leadsCreated\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\",\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lead Conversion Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetLeadConversionReport($fromDate: DateTime!, $toDate: DateTime!) {\n  leadConversionReport(fromDate: $fromDate, toDate: $toDate) {\n    totalLeads\n    convertedLeads\n    lostLeads\n    conversionRate\n    averageConversionDays\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Deals Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ExportDealsReport($fromDate: DateTime!, $toDate: DateTime!) {\n  exportDealsReport(fromDate: $fromDate, toDate: $toDate) {\n    fileName\n    downloadUrl\n    contentType\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Leads Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ExportLeadsReport($fromDate: DateTime!, $toDate: DateTime!) {\n  exportLeadsReport(fromDate: $fromDate, toDate: $toDate) {\n    fileName\n    downloadUrl\n    contentType\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Customers Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ExportCustomersReport($fromDate: DateTime!, $toDate: DateTime!) {\n  exportCustomersReport(fromDate: $fromDate, toDate: $toDate) {\n    fileName\n    downloadUrl\n    contentType\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Team Assignment (NEW - 2026-05-15)",
+			"item": [
+				{
+					"name": "Get Team Members",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTeamMembers($entityType: String!, $entityId: UUID!) {\n  teamMembers(entityType: $entityType, entityId: $entityId) {\n    id\n    entityType\n    entityId\n    idStaff\n    role\n    assignedAt\n    assignedBy\n    canEdit\n    canDelete\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"entityType\": \"Lead\",\n  \"entityId\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Teams",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetMyTeams($idStaff: UUID!) {\n  myTeams(idStaff: $idStaff) {\n    id\n    entityType\n    entityId\n    role\n    assignedAt\n    canEdit\n    canDelete\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team Member Permissions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTeamMemberPermissions($idTeamMember: UUID!) {\n  teamMemberPermissions(idTeamMember: $idTeamMember) {\n    id\n    entityType\n    entityId\n    role\n    canEdit\n    canDelete\n    assignedAt\n    staff {\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Team Member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation AddTeamMember($input: AddTeamMemberInput!) {\n  addTeamMember(input: $input) {\n    id\n    entityType\n    entityId\n    role\n    canEdit\n    canDelete\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"entityType\": \"Lead\",\n    \"entityId\": \"{{leadId}}\",\n    \"idStaff\": \"{{staffId}}\",\n    \"role\": \"MEMBER\",\n    \"canEdit\": true,\n    \"canDelete\": false\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Team Member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateTeamMember($input: UpdateTeamMemberInput!, $idTeamMember: UUID!) {\n  updateTeamMember(input: $input, idTeamMember: $idTeamMember) {\n    id\n    role\n    canEdit\n    canDelete\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"role\": \"OWNER\",\n    \"canEdit\": true,\n    \"canDelete\": true\n  },\n  \"idTeamMember\": \"{{teamMemberId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Team Member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RemoveTeamMember($idTeamMember: UUID!) {\n  removeTeamMember(idTeamMember: $idTeamMember)\n}",
+								"variables": "{\n  \"idTeamMember\": \"{{teamMemberId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Ownership",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation TransferOwnership($entityType: String!, $entityId: UUID!, $newOwnerId: UUID!) {\n  transferOwnership(entityType: $entityType, entityId: $entityId, newOwnerId: $newOwnerId) {\n    id\n    role\n    staff {\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"entityType\": \"Lead\",\n  \"entityId\": \"{{leadId}}\",\n  \"newOwnerId\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Audit Log (NEW - 2026-05-15)",
+			"item": [
+				{
+					"name": "Get Audit Logs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetAuditLogs($entityType: String, $entityId: UUID, $fromDate: DateTime, $toDate: DateTime) {\n  auditLogs(entityType: $entityType, entityId: $entityId, fromDate: $fromDate, toDate: $toDate) {\n    idLog\n    action\n    entityType\n    entityId\n    oldValues\n    newValues\n    idStaff\n    staffName\n    ipAddress\n    userAgent\n    timestamp\n    description\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Audit Logs By Staff",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetAuditLogsByStaff($idStaff: UUID!, $fromDate: DateTime, $toDate: DateTime) {\n  auditLogsByStaff(idStaff: $idStaff, fromDate: $fromDate, toDate: $toDate) {\n    idLog\n    action\n    entityType\n    entityId\n    staffName\n    timestamp\n    description\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Audit Logs By Action",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetAuditLogsByAction($action: String!, $fromDate: DateTime, $toDate: DateTime) {\n  auditLogsByAction(action: $action, fromDate: $fromDate, toDate: $toDate) {\n    idLog\n    action\n    entityType\n    entityId\n    staffName\n    timestamp\n    description\n  }\n}",
+								"variables": "{\n  \"action\": \"CREATE\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Entity History",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetEntityHistory($entityType: String!, $entityId: UUID!) {\n  entityHistory(entityType: $entityType, entityId: $entityId) {\n    idLog\n    action\n    entityType\n    entityId\n    oldValues\n    newValues\n    staffName\n    timestamp\n    description\n  }\n}",
+								"variables": "{\n  \"entityType\": \"Lead\",\n  \"entityId\": \"{{leadId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Audit Statistics",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetAuditStatistics($fromDate: DateTime!, $toDate: DateTime!) {\n  auditStatistics(fromDate: $fromDate, toDate: $toDate) {\n    totalActions\n    totalEntities\n    topActions {\n      action\n      count\n    }\n    topEntities {\n      entityType\n      count\n    }\n  }\n}",
+								"variables": "{\n  \"fromDate\": \"2026-01-01T00:00:00Z\",\n  \"toDate\": \"2026-12-31T23:59:59Z\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Staff Presence (NEW - 2026-05-15)",
+			"item": [
+				{
+					"name": "Get All Staff Statuses",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetStaffStatuses {\n  staffStatuses {\n    idStaff\n    fullname\n    email\n    status\n    statusName\n    lastActiveAt\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Online Staffs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetOnlineStaffs {\n  onlineStaffs {\n    idStaff\n    fullname\n    email\n    status\n    statusName\n    lastActiveAt\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Staff Activity Logs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetStaffActivityLogs($idStaff: UUID!, $fromDate: DateTime, $toDate: DateTime) {\n  staffActivityLogs(idStaff: $idStaff, fromDate: $fromDate, toDate: $toDate) {\n    idLog\n    idStaff\n    staffName\n    action\n    entityType\n    entityId\n    timestamp\n    ipAddress\n    userAgent\n  }\n}",
+								"variables": "{\n  \"idStaff\": \"{{staffId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update My Status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateMyStatus($status: Int!) {\n  updateMyStatus(status: $status) {\n    idStaff\n    fullname\n    status\n    statusName\n    lastActiveAt\n  }\n}",
+								"variables": "{\n  \"status\": 1\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Last Active",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation RefreshLastActive {\n  refreshLastActive {\n    idStaff\n    fullname\n    status\n    statusName\n    lastActiveAt\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
@@ -25,10 +26,10 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return staffs.ProjectTo<StaffResponse>(_mapper.ConfigurationProvider);
         }
 
-        public IQueryable<StaffResponse> GetStaffById(Guid idStaff)
+        public StaffResponse? GetStaffById(Guid idStaff)
         {
-            var staff = _staffRepository.GetStaffById(idStaff);
-            return staff.ProjectTo<StaffResponse>(_mapper.ConfigurationProvider);
+            var staff = _staffRepository.GetStaffById(idStaff).FirstOrDefault();
+            return staff == null ? null : _mapper.Map<StaffResponse>(staff);
         }
     }
 }

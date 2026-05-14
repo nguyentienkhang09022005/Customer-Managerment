@@ -1,15 +1,19 @@
-﻿namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
+namespace Customer_Managerment.CustomerManagement.Application.DTOs.Response
 {
     public class StaffResponse
     {
-        public Guid IdStaff { get; set; }
+        public Guid Id { get; set; }
 
-        public string Fullname { get; set; } = null!;
+        public PersonResponse Person { get; set; } = null!;
 
-        public string Email { get; set; } = null!;
+        public string Username { get; set; } = null!;
 
         public string? Role { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public decimal? Salary { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }

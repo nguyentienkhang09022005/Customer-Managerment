@@ -2,6 +2,8 @@
 using Customer_Managerment.CustomerManagement.Api.MiddleWare;
 using Customer_Managerment.CustomerManagement.Api.Mutation;
 using Customer_Managerment.CustomerManagement.Api.Query;
+using Customer_Managerment.CustomerManagement.Api.Types;
+using Customer_Managerment.CustomerManagement.Application.Handlers.Auth;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
@@ -39,6 +41,7 @@ builder.Configuration["GeminiSettings:BaseUrl"] = Environment.GetEnvironmentVari
 
 
 // DbContext Registration
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddPooledDbContextFactory<CustomerManagementDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"))
 );
@@ -56,6 +59,15 @@ builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IDealRepository, DealRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<INoteMentionRepository, NoteMentionRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IStaffActivityLogRepository, StaffActivityLogRepository>();
+builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<ICalendarEventRepository, CalendarEventRepository>();
+builder.Services.AddScoped<IEventParticipantRepository, EventParticipantRepository>();
 
 
 
@@ -69,17 +81,25 @@ builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>();
 
 
 // Handlers
-builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
 builder.Services.AddScoped<ChatHandler>();
 builder.Services.AddScoped<StaffHandler>();
 builder.Services.AddScoped<ContactHandler>();
 builder.Services.AddScoped<LeadHandler>();
-builder.Services.AddScoped<CustomerHanler>();
+builder.Services.AddScoped<CustomerHandler>();
 builder.Services.AddScoped<DealHandler>();
 builder.Services.AddScoped<StatisticsHandler>();
 builder.Services.AddScoped<ChartDealHandler>();
+builder.Services.AddScoped<TaskHandler>();
+builder.Services.AddScoped<NoteHandler>();
+builder.Services.AddScoped<NotificationHandler>();
+builder.Services.AddScoped<StaffPresenceHandler>();
+builder.Services.AddScoped<TeamAssignmentHandler>();
+builder.Services.AddScoped<AuditLogHandler>();
+builder.Services.AddScoped<CalendarHandler>();
+builder.Services.AddScoped<ReportHandler>();
+builder.Services.AddScoped<ExportHandler>();
 
 // Mapper Registration
 builder.Services.AddAutoMapper(typeof(Program));
@@ -110,6 +130,8 @@ builder.Services.AddMemoryCache();
 builder.Services
     .AddGraphQLServer()
     .AddType<QuantityStatisticsResponseType>()
+    .AddType<DashboardResponseType>()
+    .AddType<RevenueChartResponseType>()
     .AddQueryType(d => d.Name("Query"))
         .AddTypeExtension<ChatQuery>()
         .AddTypeExtension<StaffQuery>()
@@ -123,9 +145,16 @@ builder.Services
         .AddTypeExtension<DealsElasticSearchQuery>()
         .AddTypeExtension<ContactsElasticSearchQuery>()
         .AddTypeExtension<StatisticsQuery>()
+        .AddTypeExtension<TaskQuery>()
+        .AddTypeExtension<NoteQuery>()
+        .AddTypeExtension<NotificationQuery>()
+        .AddTypeExtension<StaffPresenceQuery>()
+        .AddTypeExtension<TeamAssignmentQuery>()
+        .AddTypeExtension<AuditLogQuery>()
+        .AddTypeExtension<CalendarQuery>()
+        .AddTypeExtension<ReportQuery>()
 
     .AddMutationType(d => d.Name("Mutation"))
-        .AddTypeExtension<RegisterMutation>()
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
         .AddTypeExtension<ChatMutation>()
@@ -134,9 +163,14 @@ builder.Services
         .AddTypeExtension<ContactMutation>()
         .AddTypeExtension<CustomerMutation>()
         .AddTypeExtension<DealMutation>()
+        .AddTypeExtension<TaskMutation>()
+        .AddTypeExtension<NoteMutation>()
+        .AddTypeExtension<NotificationMutation>()
+        .AddTypeExtension<StaffPresenceMutation>()
+        .AddTypeExtension<TeamAssignmentMutation>()
+        .AddTypeExtension<CalendarMutation>()
 
     .AddType<DateType>()
-    .AddType<UploadType>()
     .AddErrorFilter<GraphQLExceptionFilter>()
     .AddFiltering()
     .AddAuthorization()

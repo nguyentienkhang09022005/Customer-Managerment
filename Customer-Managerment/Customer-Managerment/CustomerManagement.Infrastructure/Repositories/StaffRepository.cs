@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+    using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Errors.Model;
 
@@ -20,107 +19,192 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        // Add Staff
-        public async Task<StaffDomain> AddStaffAsync(StaffDomain staffDomain)
+        public async Task<Person> AddStaffAsync(Person staff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var staff = _mapper.Map<Staff>(staffDomain);
-            if (!string.IsNullOrEmpty(staff.Password))
+
+            staff.Id = Guid.NewGuid();
+            staff.Discriminator = PersonType.Staff;
+            staff.CreatedAt = DateTime.UtcNow;
+            staff.IsDeleted = false;
+
+            if (!string.IsNullOrEmpty(staff.PasswordHash))
             {
-                staff.Password = BCrypt.Net.BCrypt.HashPassword(staff.Password);
+                staff.PasswordHash = BCrypt.Net.BCrypt.HashPassword(staff.PasswordHash);
             }
-            staff.IdStaff = Guid.NewGuid();
-            staff.CreatedAt = DateTime.Now;
 
-            await context.Staff.AddAsync(staff);
+            await context.Persons.AddAsync(staff);
             await context.SaveChangesAsync();
-            return _mapper.Map<StaffDomain>(staff);
+            return staff;
         }
 
-        // Get Staff By Email
-        public async Task<StaffDomain?> GetStaffByEmailAsync(string email)
+        public async Task<Person?> GetStaffByEmailAsync(string email)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var user = await context.Staff
-                .IgnoreAutoIncludes()
-                .FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null) return null;
-            return _mapper.Map<StaffDomain>(user);
+            var staff = await context.Persons
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Email == email && p.Discriminator == PersonType.Staff);
+
+            return staff;
         }
 
-        // Get Staff By Username
-        public async Task<StaffDomain?> GetStaffByUsernameAsync(string userName)
+        public async Task<Person?> GetStaffByUsernameAsync(string userName)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var user = await context.Staff
-                .IgnoreAutoIncludes()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Username == userName);
-            if (user == null) return null;
-            return _mapper.Map<StaffDomain>(user);
+            var staff = await context.Persons
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Username == userName && p.Discriminator == PersonType.Staff);
+
+            return staff;
         }
 
-        // Get Staff By Id
-        public async Task<StaffDomain?> GetStaffByIdAsync(Guid idStaff)
+        public async Task<Person?> GetStaffByIdAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var staff = await context.Staff
-                    .AsNoTracking()
-                    .IgnoreAutoIncludes()
-                    .FirstOrDefaultAsync(s => s.IdStaff == idStaff);
+            var staff = await context.Persons
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == idStaff && p.Discriminator == PersonType.Staff);
 
             if (staff == null)
                 throw new NotFoundException("Không tìm thấy thông tin nhân viên!");
-            return _mapper.Map<StaffDomain>(staff);
+
+            return staff;
         }
 
-        public IQueryable<StaffDomain> GetListStaff()
+        public IQueryable<Person> GetListStaff()
         {
             var context = _contextFactory.CreateDbContext();
-            return context.Staff
-                .ProjectTo<StaffDomain>(_mapper.ConfigurationProvider)
+            return context.Persons
+                .Where(p => p.Discriminator == PersonType.Staff)
                 .AsNoTracking();
         }
 
-        public IQueryable<StaffDomain> GetStaffById(Guid idStaff)
+        public IQueryable<Person> GetStaffById(Guid idStaff)
         {
             var context = _contextFactory.CreateDbContext();
-            return context.Staff
-                .Where(s => s.IdStaff == idStaff)
-                .ProjectTo<StaffDomain>(_mapper.ConfigurationProvider)
+            return context.Persons
+                .Where(p => p.Id == idStaff && p.Discriminator == PersonType.Staff)
                 .AsNoTracking();
         }
 
-        public async Task<StaffDomain?> UpdateStaffAsync(StaffDomain staffDomain)
+        public async Task<Person?> UpdateStaffAsync(Person staff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var staff = await context.Staff.FindAsync(staffDomain.IdStaff);
-            if (staff == null) return null;
+            var existingStaff = await context.Persons
+                .FirstOrDefaultAsync(p => p.Id == staff.Id && p.Discriminator == PersonType.Staff);
 
-            // Cập nhật các thuộc tính của staff
-            _mapper.Map(staffDomain, staff);
-            await context.SaveChangesAsync();   
-            return _mapper.Map<StaffDomain>(staff);
+            if (existingStaff == null)
+                return null;
+
+            existingStaff.Fullname = staff.Fullname;
+            existingStaff.Email = staff.Email;
+            existingStaff.Phone = staff.Phone;
+            existingStaff.Location = staff.Location;
+            existingStaff.Role = staff.Role;
+            existingStaff.Salary = staff.Salary;
+            existingStaff.UpdatedAt = DateTime.UtcNow;
+            existingStaff.PasswordHash = staff.PasswordHash;
+
+            await context.SaveChangesAsync();
+            return existingStaff;
         }
 
         public async Task<bool> CheckStaffExistsAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return await context.Staff
-                .AsNoTracking()
-                .IgnoreAutoIncludes()
-                .AnyAsync(s => s.IdStaff == idStaff);
+            return await context.Persons
+                .AnyAsync(p => p.Id == idStaff && p.Discriminator == PersonType.Staff);
         }
 
-        public async Task DeleteStaffAsync(Guid idStaff)
+        public async Task<bool> SoftDeleteStaffAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var staff = await context.Staff.FindAsync(idStaff);
-            if (staff == null)
-                throw new NotFoundException("Không tìm thấy nhân viên!");
+            var staff = await context.Persons
+                .FirstOrDefaultAsync(p => p.Id == idStaff && p.Discriminator == PersonType.Staff);
 
-            context.Staff.Remove(staff);
+            if (staff == null)
+                return false;
+
+            staff.IsDeleted = true;
+            staff.DeletedAt = DateTime.UtcNow;
+
             await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreStaffAsync(Guid idStaff)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var staff = await context.Persons
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == idStaff && p.Discriminator == PersonType.Staff);
+
+            if (staff == null || !staff.IsDeleted)
+                return false;
+
+            staff.IsDeleted = false;
+            staff.DeletedAt = null;
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<Person>> GetStaffByRoleAsync(string role)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Persons
+                .Where(p => p.Discriminator == PersonType.Staff && p.Role == role && !p.IsDeleted)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<bool> UpdateStaffStatusAsync(Guid idStaff, int status)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var staff = await context.Persons
+                .FirstOrDefaultAsync(p => p.Id == idStaff && p.Discriminator == PersonType.Staff);
+
+            if (staff == null)
+                return false;
+
+            staff.Status = status;
+            staff.UpdatedAt = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateLastActiveAsync(Guid idStaff)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var staff = await context.Persons
+                .FirstOrDefaultAsync(p => p.Id == idStaff && p.Discriminator == PersonType.Staff);
+
+            if (staff == null)
+                return false;
+
+            staff.LastActiveAt = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<Person>> GetOnlineStaffsAsync()
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Persons
+                .Where(p => p.Discriminator == PersonType.Staff && p.Status == 1 && !p.IsDeleted)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<Person>> GetStaffsByStatusAsync(int status)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            return await context.Persons
+                .Where(p => p.Discriminator == PersonType.Staff && p.Status == status && !p.IsDeleted)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

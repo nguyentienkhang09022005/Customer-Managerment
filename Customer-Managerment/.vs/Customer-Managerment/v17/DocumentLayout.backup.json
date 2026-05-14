@@ -3,8 +3,464 @@
   "WorkspaceRootPath": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Managerment.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Managerment.csproj|solutionrelative:customer-managerment\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\contacthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\contacthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\staffhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\staffhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\statisticshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\statisticshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\leadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\leadhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\customerhanler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\customerhanler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\dealhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\dealhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\chartdealhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\chartdealhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\repositories\\leadrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\repositories\\leadrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\repositories\\dealrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\repositories\\dealrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\repositories\\customerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\repositories\\customerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\repositories\\contactrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\repositories\\contactrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\chathandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\chathandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\entities\\staffdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\entities\\staffdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\.env||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\.env||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\customermutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\customermutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\leadmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\leadmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\services\\chathistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\services\\chathistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\repositories\\staffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\repositories\\staffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\middleware\\graphqlexceptionfilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\middleware\\graphqlexceptionfilter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\igeminiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\igeminiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\entities\\contactdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\entities\\contactdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\mapping\\contactmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\mapping\\contactmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\chatquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\chatquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\leadquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\leadquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\input\\type\\quantitystatisticsresponsetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\input\\type\\quantitystatisticsresponsetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\authenticationmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\authenticationmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\chatmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\chatmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\contactmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\contactmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\dealmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\dealmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\forgotpasswordmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\forgotpasswordmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\registermutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\registermutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\mutation\\staffmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\mutation\\staffmutation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\contactquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\contactquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\contactselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\contactselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\customerquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\customerquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\customerselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\customerselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\dealquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\dealquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\dealselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\dealselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\leadselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\leadselasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\staffelasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\staffelasticsearchquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\staffquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\staffquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.api\\query\\statisticsquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.api\\query\\statisticsquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\authenticationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\authenticationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\changepasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\changepasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\chatrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\chatrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\confirmotprequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\confirmotprequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\contactcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\contactcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\contactupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\contactupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\customercreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\customercreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\customerupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\customerupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\dealcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\dealcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\dealupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\dealupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\geminirequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\geminirequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\introspectrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\introspectrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\leadcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\leadcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\leadupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\leadupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\staffcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\staffcreationrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\requests\\staffupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\requests\\staffupdaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\authenticationresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\authenticationresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\chartdealresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\chartdealresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\chatresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\chatresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\contactresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\contactresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\customerresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\customerresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\dealresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\dealresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\geminiapiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\geminiapiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\introspectresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\introspectresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\leadresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\leadresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\personresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\personresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\messagehistoryitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\messagehistoryitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\quantitystatisticsresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\quantitystatisticsresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\dtos\\response\\staffresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\dtos\\response\\staffresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\ichathistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\ichathistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\icontactrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\icontactrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\icustomerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\icustomerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\idealrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\idealrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\ielasticsearchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\ielasticsearchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\ileadrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\ileadrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\irefreshtokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\irefreshtokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\istaffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\istaffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\authen\\authenticationhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\authen\\authenticationhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\authen\\registercachedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\authen\\registercachedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\authen\\forgotpasswordhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\authen\\forgotpasswordhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\authen\\forgotpasswordcachedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\authen\\forgotpasswordcachedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.application\\usecases\\authen\\registerhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.application\\usecases\\authen\\registerhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\constant\\statuscontactconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\constant\\statuscontactconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\constant\\statudealconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\constant\\statudealconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\entities\\customerdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\entities\\customerdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\entities\\dealdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\entities\\dealdomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\entities\\leaddomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\entities\\leaddomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\entities\\persondomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\entities\\persondomain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.domain\\exception\\domainexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.domain\\exception\\domainexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\entities\\contact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\entities\\contact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\entities\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\entities\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\entities\\deal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\entities\\deal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\entities\\lead.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\entities\\lead.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\entities\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\entities\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\entities\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\entities\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\mapping\\customermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\mapping\\customermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\mapping\\leadmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\mapping\\leadmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\mapping\\staffmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\mapping\\staffmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\services\\refreshtokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\services\\refreshtokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\services\\geminiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\services\\geminiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\services\\elasticsearchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\services\\elasticsearchservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\mapping\\dealmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\mapping\\dealmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\customermanagement.infrastructure\\data\\customermanagementdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\customermanagement.infrastructure\\data\\customermanagementdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|d:\\projectasp.net\\customer-managerment\\customer-managerment\\customer-managerment\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{1CCA033A-8DEA-4CC4-A8CB-648F65F1F49C}|Customer-Managerment\\Customer-Management.csproj|solutionrelative:customer-managerment\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +470,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 257,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,16 +486,1384 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LeadHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\LeadHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\LeadHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\LeadHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\LeadHandler.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAwCcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T04:04:08.208Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "LeadRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\LeadRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\LeadRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\LeadRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\LeadRepository.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAgwBcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:50:50.864Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StaffHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\StaffHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\StaffHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\StaffHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\StaffHandler.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwCIAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T09:25:12.603Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CustomerHanler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\CustomerHanler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\CustomerHanler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\CustomerHanler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\CustomerHanler.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAowCsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:04:01.24Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ContactHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\ContactHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\ContactHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\ContactHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\ContactHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:17:50.75Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DealHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\DealHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\DealHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\DealHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\DealHandler.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAADUAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:20:47.645Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StatisticsHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\StatisticsHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\StatisticsHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\StatisticsHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\StatisticsHandler.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwCIAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T03:43:43.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ChartDealHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChartDealHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChartDealHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChartDealHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChartDealHandler.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAA6wB4AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T07:20:05.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DealRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\DealRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\DealRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\DealRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\DealRepository.cs",
+              "ViewState": "AgIAAH0AAAAAAAAAAAAqwJUAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T07:57:40.278Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CustomerRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\CustomerRepository.cs",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAAAIoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:08:51.33Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ContactRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\ContactRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\ContactRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\ContactRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\ContactRepository.cs",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAuwK4AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T02:38:33.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ChatHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChatHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChatHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChatHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\ChatHandler.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAmwHEAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:51:45.05Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "StaffDomain.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\StaffDomain.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\StaffDomain.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\StaffDomain.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\StaffDomain.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAowCEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:11:48.07Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": ".env",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\.env",
+              "RelativeDocumentMoniker": "Customer-Managerment\\.env",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\.env",
+              "RelativeToolTip": "Customer-Managerment\\.env",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-10-15T02:28:17.836Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CustomerMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\CustomerMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\CustomerMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\CustomerMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\CustomerMutation.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAYwCEAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:38:51.69Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Program.cs",
-              "RelativeDocumentMoniker": "Customer-Managerment\\Program.cs",
-              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Program.cs",
-              "RelativeToolTip": "Customer-Managerment\\Program.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Program.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Program.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Program.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Program.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAvwBMAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T02:13:16.053Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ChatHistoryService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ChatHistoryService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ChatHistoryService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ChatHistoryService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ChatHistoryService.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAmwCEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T09:23:58.561Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "StaffRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\StaffRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\StaffRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\StaffRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Repositories\\StaffRepository.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:43:48.258Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "LeadMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\LeadMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\LeadMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\LeadMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\LeadMutation.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:59:41.206Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "GraphQLExceptionFilter.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\MiddleWare\\GraphQLExceptionFilter.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\MiddleWare\\GraphQLExceptionFilter.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\MiddleWare\\GraphQLExceptionFilter.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\MiddleWare\\GraphQLExceptionFilter.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAmwDMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T02:31:29.887Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ChatQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\ChatQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\ChatQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\ChatQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\ChatQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:52:05.658Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\appsettings.json",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\appsettings.json",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-15T03:10:14.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ContactDomain.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\ContactDomain.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\ContactDomain.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\ContactDomain.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\ContactDomain.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T02:13:16.053Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-24T10:00:38.042Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ContactMapper.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\ContactMapper.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\ContactMapper.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\ContactMapper.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\ContactMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:18:13.53Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Customer-Managerment\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Customer-Managerment\\Properties\\launchSettings.json",
+              "ViewState": "AgIAABcAAAAAAAAAAAAswCAAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-05T03:06:33.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IGeminiService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IGeminiService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IGeminiService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IGeminiService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IGeminiService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:32:41.755Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "LeadQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\LeadQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\LeadQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\LeadQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\LeadQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T03:45:40.37Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "QuantityStatisticsResponseType.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Input\\Type\\QuantityStatisticsResponseType.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Input\\Type\\QuantityStatisticsResponseType.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Input\\Type\\QuantityStatisticsResponseType.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Input\\Type\\QuantityStatisticsResponseType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T04:19:07.144Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AuthenticationMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\AuthenticationMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\AuthenticationMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\AuthenticationMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\AuthenticationMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T08:08:41.357Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "ChatMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\ChatMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\ChatMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\ChatMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\ChatMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:52:41.467Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "ContactMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\ContactMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\ContactMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\ContactMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\ContactMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:59:30.308Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "DealMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\DealMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\DealMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\DealMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\DealMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:31:12.383Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ForgotPasswordMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\ForgotPasswordMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\ForgotPasswordMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\ForgotPasswordMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\ForgotPasswordMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T09:15:14.395Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "RegisterMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\RegisterMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\RegisterMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\RegisterMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\RegisterMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T06:32:22.523Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "StaffMutation.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\StaffMutation.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\StaffMutation.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Mutation\\StaffMutation.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Mutation\\StaffMutation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T09:42:43.304Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "ContactQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\ContactQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\ContactQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\ContactQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\ContactQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T02:26:01.875Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "ContactsElasticSearchQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\ContactsElasticSearchQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\ContactsElasticSearchQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\ContactsElasticSearchQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\ContactsElasticSearchQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T03:00:46.739Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "CustomerQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\CustomerQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\CustomerQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\CustomerQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\CustomerQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:36:48.635Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "CustomersElasticSearchQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\CustomersElasticSearchQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\CustomersElasticSearchQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\CustomersElasticSearchQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\CustomersElasticSearchQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T02:59:45.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "DealQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\DealQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\DealQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\DealQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\DealQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:31:25.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "DealsElasticSearchQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\DealsElasticSearchQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\DealsElasticSearchQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\DealsElasticSearchQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\DealsElasticSearchQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T03:00:35.95Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "LeadsElasticSearchQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\LeadsElasticSearchQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\LeadsElasticSearchQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\LeadsElasticSearchQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\LeadsElasticSearchQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwA4AAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T03:00:07.511Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "StaffElasticSearchQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\StaffElasticSearchQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\StaffElasticSearchQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\StaffElasticSearchQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\StaffElasticSearchQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-31T02:17:08.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "StaffQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\StaffQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\StaffQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\StaffQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\StaffQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T08:40:13.121Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "StatisticsQuery.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\StatisticsQuery.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Api\\Query\\StatisticsQuery.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Api\\Query\\StatisticsQuery.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Api\\Query\\StatisticsQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T04:36:56.947Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "AuthenticationRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\AuthenticationRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\AuthenticationRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\AuthenticationRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\AuthenticationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T07:45:18.345Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "ChangePasswordRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChangePasswordRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChangePasswordRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChangePasswordRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChangePasswordRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T09:09:35.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "ChatRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChatRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChatRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChatRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ChatRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:31:54.517Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "ConfirmOTPRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ConfirmOTPRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ConfirmOTPRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ConfirmOTPRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ConfirmOTPRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T07:00:06.04Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "ContactCreationRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactCreationRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactCreationRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactCreationRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactCreationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T10:00:16.879Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "ContactUpdateRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactUpdateRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactUpdateRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ContactUpdateRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T10:01:43.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "CustomerCreationRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerCreationRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerCreationRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerCreationRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerCreationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:10:40.73Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "CustomerUpdateRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerUpdateRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerUpdateRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\CustomerUpdateRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:10:50.404Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "DealCreationRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealCreationRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealCreationRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealCreationRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealCreationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:00:38.083Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "DealUpdateRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealUpdateRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealUpdateRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\DealUpdateRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:01:21.375Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "ForgotPasswordRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ForgotPasswordRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ForgotPasswordRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ForgotPasswordRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\ForgotPasswordRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T09:06:12.837Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "GeminiRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\GeminiRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\GeminiRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\GeminiRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\GeminiRequest.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:45:32.617Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "IntrospectRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\IntrospectRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\IntrospectRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\IntrospectRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\IntrospectRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T07:56:25.689Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "LeadCreationRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadCreationRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadCreationRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadCreationRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadCreationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:48:04.964Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "LeadUpdateRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadUpdateRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadUpdateRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\LeadUpdateRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:49:13.119Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "RegisterRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\RegisterRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\RegisterRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\RegisterRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T04:00:05.125Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "StaffCreationRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffCreationRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffCreationRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffCreationRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffCreationRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T09:20:56.853Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "StaffUpdateRequest.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffUpdateRequest.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffUpdateRequest.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffUpdateRequest.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Requests\\StaffUpdateRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T09:22:38.843Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "AuthenticationResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\AuthenticationResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\AuthenticationResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\AuthenticationResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\AuthenticationResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T07:43:02.54Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "ChartDealResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChartDealResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChartDealResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChartDealResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChartDealResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T07:03:30.392Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "ChatResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChatResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChatResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChatResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ChatResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:32:17.748Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "ContactResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ContactResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ContactResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ContactResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\ContactResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T10:05:58.006Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "CustomerResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\CustomerResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\CustomerResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\CustomerResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\CustomerResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:11:04.737Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "DealResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\DealResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\DealResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\DealResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\DealResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:02:48.808Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "GeminiApiResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\GeminiApiResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\GeminiApiResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\GeminiApiResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\GeminiApiResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:49:04.091Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "IntrospectResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\IntrospectResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\IntrospectResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\IntrospectResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\IntrospectResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T07:56:49.112Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "LeadResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\LeadResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\LeadResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\LeadResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\LeadResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T10:07:58.358Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "PersonResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\PersonResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\PersonResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\PersonResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\PersonResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T10:10:01.746Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 73,
+              "Title": "MessageHistoryItem.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\MessageHistoryItem.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\MessageHistoryItem.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\MessageHistoryItem.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\MessageHistoryItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:31:31.744Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 74,
+              "Title": "QuantityStatisticsResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\QuantityStatisticsResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\QuantityStatisticsResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\QuantityStatisticsResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\QuantityStatisticsResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T03:38:56.342Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 75,
+              "Title": "StaffResponse.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\StaffResponse.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\StaffResponse.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\StaffResponse.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\DTOs\\Response\\StaffResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:36:11.764Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 76,
+              "Title": "IChatHistoryService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IChatHistoryService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IChatHistoryService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IChatHistoryService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IChatHistoryService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T09:24:20.553Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 77,
+              "Title": "IContactRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IContactRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IContactRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IContactRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IContactRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T10:27:28.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 78,
+              "Title": "ICustomerRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ICustomerRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ICustomerRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ICustomerRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ICustomerRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:04:53.47Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 79,
+              "Title": "IDealRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IDealRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IDealRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IDealRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IDealRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T07:55:42.459Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 80,
+              "Title": "IElasticsearchService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IElasticsearchService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IElasticsearchService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IElasticsearchService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IElasticsearchService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T08:39:51.875Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 81,
+              "Title": "ILeadRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ILeadRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ILeadRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ILeadRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ILeadRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:50:28.444Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 82,
+              "Title": "IRefreshTokenService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IRefreshTokenService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IRefreshTokenService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IRefreshTokenService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IRefreshTokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:30:13.525Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 83,
+              "Title": "IStaffRepository.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IStaffRepository.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IStaffRepository.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IStaffRepository.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\IStaffRepository.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwBIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:43:13.169Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 84,
+              "Title": "ITokenService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ITokenService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ITokenService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ITokenService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\Interfaces\\ITokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:09:42.875Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 85,
+              "Title": "AuthenticationHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\AuthenticationHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\AuthenticationHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\AuthenticationHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\AuthenticationHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGoAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:02:16.057Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 86,
+              "Title": "RegisterCacheData.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterCacheData.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterCacheData.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterCacheData.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterCacheData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:58:27.126Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 87,
+              "Title": "ForgotPasswordHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFsAAABlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:02:24.667Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 88,
+              "Title": "ForgotPasswordCacheData.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordCacheData.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordCacheData.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordCacheData.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\ForgotPasswordCacheData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T09:07:56.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 89,
+              "Title": "RegisterHandler.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterHandler.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterHandler.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterHandler.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Application\\UseCases\\Authen\\RegisterHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:02:06.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 90,
+              "Title": "StatusContactConstant.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatusContactConstant.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatusContactConstant.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatusContactConstant.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatusContactConstant.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T02:49:40.103Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 91,
+              "Title": "StatuDealConstant.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatuDealConstant.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatuDealConstant.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatuDealConstant.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Constant\\StatuDealConstant.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T08:07:55.752Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 92,
+              "Title": "CustomerDomain.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\CustomerDomain.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\CustomerDomain.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\CustomerDomain.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\CustomerDomain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:02:42.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 93,
+              "Title": "DealDomain.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\DealDomain.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\DealDomain.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\DealDomain.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\DealDomain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T07:54:16.951Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 94,
+              "Title": "LeadDomain.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\LeadDomain.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\LeadDomain.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\LeadDomain.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\LeadDomain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:47:05.21Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 95,
+              "Title": "PersonDomain.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\PersonDomain.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\PersonDomain.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Entities\\PersonDomain.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Entities\\PersonDomain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:46:24.151Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 96,
+              "Title": "DomainException.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Exception\\DomainException.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Domain\\Exception\\DomainException.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Domain\\Exception\\DomainException.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Domain\\Exception\\DomainException.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T02:26:55.774Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 97,
+              "Title": "Contact.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Contact.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Contact.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Contact.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Contact.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:07:01.731Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 98,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Customer.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Customer.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Customer.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Customer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:07:02.781Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 99,
+              "Title": "Deal.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Deal.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Deal.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Deal.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Deal.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:07:20.269Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 100,
+              "Title": "Lead.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Lead.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Lead.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Lead.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Lead.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:06:59.182Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 101,
+              "Title": "Person.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Person.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Person.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Person.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Person.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:07:06.734Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 102,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Staff.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Staff.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Staff.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\Entities\\Staff.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:07:08.114Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 103,
+              "Title": "CustomerMapper.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\CustomerMapper.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\CustomerMapper.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\CustomerMapper.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\CustomerMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T04:04:15.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 104,
+              "Title": "LeadMapper.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\LeadMapper.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\LeadMapper.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\LeadMapper.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\LeadMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T03:54:58.364Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 105,
+              "Title": "StaffMapper.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\StaffMapper.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\StaffMapper.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\StaffMapper.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\StaffMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:45:11.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 106,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\TokenService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\TokenService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\TokenService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\TokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAABuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:03:39.313Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 107,
+              "Title": "RefreshTokenService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\RefreshTokenService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\RefreshTokenService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\RefreshTokenService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\RefreshTokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-16T03:30:40.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 108,
+              "Title": "GeminiService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\GeminiService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\GeminiService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\GeminiService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\GeminiService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCUAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:49:46.104Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 109,
+              "Title": "ElasticsearchService.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ElasticsearchService.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ElasticsearchService.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ElasticsearchService.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Services\\ElasticsearchService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwAEAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T08:40:36.235Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 110,
+              "Title": "DealMapper.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\DealMapper.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\DealMapper.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\DealMapper.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Mapping\\DealMapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T07:58:44.108Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 111,
+              "Title": ".dockerignore",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\.dockerignore",
+              "RelativeDocumentMoniker": ".dockerignore",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\.dockerignore",
+              "RelativeToolTip": ".dockerignore",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-10-16T10:08:23.632Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 112,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Dockerfile",
+              "RelativeDocumentMoniker": "Customer-Managerment\\Dockerfile",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\Dockerfile",
+              "RelativeToolTip": "Customer-Managerment\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-10-16T10:07:59.252Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 113,
+              "Title": "CustomerManagementDbContext.cs",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\CustomerManagementDbContext.cs",
+              "RelativeDocumentMoniker": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\CustomerManagementDbContext.cs",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\CustomerManagementDbContext.cs",
+              "RelativeToolTip": "Customer-Managerment\\CustomerManagement.Infrastructure\\Data\\CustomerManagementDbContext.cs",
+              "ViewState": "AgIAAHAAAAAAAAAAAADwvxUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T08:44:17.83Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 114,
+              "Title": ".gitignore",
+              "DocumentMoniker": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\.gitignore",
+              "RelativeDocumentMoniker": "Customer-Managerment\\.gitignore",
+              "ToolTip": "D:\\ProjectASP.NET\\Customer-Managerment\\Customer-Managerment\\Customer-Managerment\\.gitignore",
+              "RelativeToolTip": "Customer-Managerment\\.gitignore",
+              "ViewState": "AgIAACcAAAAAAAAAAOBvwA4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-10-15T02:28:34.558Z"
             }
           ]
         },

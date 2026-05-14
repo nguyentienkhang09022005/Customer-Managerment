@@ -1,34 +1,58 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Mapping
 {
     public class LeadMapper : Profile
     {
-        public LeadMapper() 
+        public LeadMapper()
         {
-            CreateMap<Person, PersonDomain>().ReverseMap();
+            // Person <-> LeadResponse
+            CreateMap<Person, LeadResponse>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Resource, opt => opt.MapFrom(src => src.Resource))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src));
 
-            CreateMap<Lead, LeadDomain>()
-                .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.IdLeadNavigation))
-                .ReverseMap()
-                .ForMember(dest => dest.IdLeadNavigation, opt => opt.MapFrom(src => src.personDomain));
+            CreateMap<Person, PersonResponse>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Fullname, opt => opt.MapFrom(src => src.Fullname))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt));
 
-            CreateMap<PersonCreationRequest, PersonDomain>();
-            CreateMap<LeadCreationRequest, LeadDomain>()
-                .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.Person));
+            // LeadCreationRequest -> Person
+            CreateMap<LeadCreationRequest, Person>()
+                .ForMember(dest => dest.Fullname, opt => opt.MapFrom(src => src.Fullname))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.Resource, opt => opt.MapFrom(src => src.Resource))
+                .ForMember(dest => dest.Discriminator, opt => opt.Ignore())
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Username, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.Salary, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Contacts, opt => opt.Ignore())
+                .ForMember(dest => dest.Deals, opt => opt.Ignore());
 
-            CreateMap<PersonUpdateRequest, PersonDomain>();
-            CreateMap<LeadUpdateRequest, LeadDomain>()
-                .ForMember(dest => dest.personDomain, opt => opt.MapFrom(src => src.Person));
-
-            CreateMap<PersonDomain, PersonResponse>();
-
-            CreateMap<LeadDomain, LeadResponse>()
-                .ForMember(dest => dest.personResponse, opt => opt.MapFrom(src => src.personDomain));
+            // LeadUpdateRequest -> Person
+            CreateMap<LeadUpdateRequest, Person>()
+                .ForMember(dest => dest.Fullname, opt => opt.MapFrom(src => src.Fullname))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.Resource, opt => opt.MapFrom(src => src.Resource));
         }
     }
 }

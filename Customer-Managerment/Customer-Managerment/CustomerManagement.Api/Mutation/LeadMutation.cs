@@ -1,6 +1,8 @@
 ﻿using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
@@ -8,10 +10,12 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
     public class LeadMutation
     {
         private readonly LeadHandler _leadHandler;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LeadMutation(LeadHandler leadHandler)
+        public LeadMutation(LeadHandler leadHandler, IHttpContextAccessor httpContextAccessor)
         {
             _leadHandler = leadHandler;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest leadCreationRequest)
@@ -32,6 +36,12 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         public async Task<string> ImportLeadExcelAsync(IFile file)
         {
             return await _leadHandler.ImportLeadExcelAsync(file);
+        }
+
+        private string GetCurrentUserId()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            return user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "system";
         }
     }
 }

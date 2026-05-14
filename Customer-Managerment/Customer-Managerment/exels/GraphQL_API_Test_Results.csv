@@ -1,0 +1,36 @@
+﻿STT,Name,Description,Status,Message
+1,login,Login to system,ERROR,The remote server returned an error: (400) Bad Request.
+2,register,Register new account,ERROR,The remote server returned an error: (400) Bad Request.
+3,sendOTPForgotPassword,Send OTP for forgot password,FAIL,Email không tồn tại!
+4,staffs,Get list of staff,FAIL,Lỗi hệ thống không xác định.
+5,staffById,Get staff by ID,FAIL,Lỗi hệ thống không xác định.
+6,leads,Get list of leads,FAIL,Lỗi hệ thống không xác định.
+7,leadById,Get lead by ID,FAIL,Lỗi hệ thống không xác định.
+8,createLead,Create new lead,FAIL,Lỗi hệ thống không xác định.
+9,updateLead,Update lead,ERROR,The remote server returned an error: (400) Bad Request.
+10,deleteLead,Delete lead,FAIL,Không tìm thấy khách hàng tiềm năng!
+11,customers,Get list of customers,FAIL,Lỗi hệ thống không xác định.
+12,customerById,Get customer by ID,FAIL,Lỗi hệ thống không xác định.
+13,createCustomer,Create new customer,ERROR,The remote server returned an error: (400) Bad Request.
+14,updateCustomer,Update customer,ERROR,The remote server returned an error: (400) Bad Request.
+15,deleteCustomer,Delete customer,FAIL,Không tìm thấy khách hàng!
+16,contacts,Get list of contacts,FAIL,Lỗi hệ thống không xác định.
+17,contactById,Get contact by ID,FAIL,Lỗi hệ thống không xác định.
+18,createContact,Create new contact,ERROR,The remote server returned an error: (400) Bad Request.
+19,updateContact,Update contact,ERROR,The remote server returned an error: (400) Bad Request.
+20,deleteContact,Delete contact,FAIL,Không tìm thấy hoạt động!
+21,deals,Get list of deals,FAIL,Lỗi hệ thống không xác định.
+22,dealById,Get deal by ID,FAIL,Lỗi hệ thống không xác định.
+23,createDeal,Create new deal,ERROR,The remote server returned an error: (400) Bad Request.
+24,updateDeal,Update deal,ERROR,The remote server returned an error: (400) Bad Request.
+25,deleteDeal,Delete deal,FAIL,Không tìm thấy deal!
+26,statistics,Get dashboard statistics,ERROR,The remote server returned an error: (400) Bad Request.
+27,chartDeal,Get chart deal data,ERROR,The remote server returned an error: (400) Bad Request.
+28,searchLeads,Search leads,ERROR,The request was aborted: The operation has timed out.
+29,searchCustomers,Search customers,ERROR,The request was aborted: The operation has timed out.
+30,restoreStaff,Restore deleted staff,FAIL,Không tìm thấy nhân viên hoặc không thể khôi phục!
+31,restoreLead,Restore deleted lead,ERROR,The remote server returned an error: (400) Bad Request.
+32,restoreCustomer,Restore deleted customer,FAIL,Không tìm thấy khách hàng!
+33,getChatWelcomeMessage,Get chat welcome message,ERROR,The remote server returned an error: (400) Bad Request.
+34,historyMessage,Get chat history,ERROR,The remote server returned an error: (400) Bad Request.
+35,sendChatMessage,Send chat message,ERROR,The remote server returned an error: (400) Bad Request.

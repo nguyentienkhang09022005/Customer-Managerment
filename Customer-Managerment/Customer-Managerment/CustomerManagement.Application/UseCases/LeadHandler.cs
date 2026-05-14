@@ -1,10 +1,11 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 using OfficeOpenXml;
+using System.Text.RegularExpressions;
 
 namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
@@ -14,8 +15,8 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IElasticsearchService _elasticsearchService;
         private readonly IMapper _mapper;
 
-        public LeadHandler(ILeadRepository leadRepository, 
-                           IMapper mapper, 
+        public LeadHandler(ILeadRepository leadRepository,
+                           IMapper mapper,
                            IElasticsearchService elasticsearchService)
         {
             _leadRepository = leadRepository;
@@ -23,90 +24,168 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             _elasticsearchService = elasticsearchService;
         }
 
-        public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest leadCreationRequest)
+        public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest request)
         {
-            var checkEmail = await _leadRepository.checkPersonByEmailAsync(leadCreationRequest.Person.Email);
-            if (checkEmail){
-                throw new DomainException("Email đã tồn tại!", 409);
+            ValidateLeadCreation(request);
+
+            var checkEmail = await _leadRepository.CheckPersonByEmailAsync(request.Email);
+            if (checkEmail)
+            {
+                throw new EmailAlreadyExistsException();
             }
 
-            var leadDomain = _mapper.Map<LeadDomain>(leadCreationRequest);
+            var lead = _mapper.Map<Person>(request);
+            lead.Discriminator = PersonType.Lead;
 
-            var createdLead = await _leadRepository.AddLeadAsync(leadDomain);
+            var createdLead = await _leadRepository.AddLeadAsync(lead);
+            var response = _mapper.Map<LeadResponse>(createdLead);
 
-            var leadResponse = _mapper.Map<LeadResponse>(createdLead);
-            leadResponse.personResponse = _mapper.Map<PersonResponse>(createdLead.personDomain);
-            //await _elasticsearchService.IndexAsync(leadResponse, "leads");
+            await _elasticsearchService.IndexAsync(response, "leads");
 
-            return leadResponse;
+            return response;
         }
 
         public async Task<string> DeleteLeadAsync(Guid idLead)
         {
-            await _leadRepository.DeleteLeadAsync(idLead);
-            await _elasticsearchService.DeleteAsync<LeadResponse>(idLead.ToString(), "leads"); // Xóa khỏi Elasticsearch
-
-            return "Xóa khách hàng tiềm năng thành công!";
-        }
-
-        public async Task<LeadResponse> UpdateLeadAsync(LeadUpdateRequest leadUpdateRequest, Guid idLead)
-        {
-            var existLead = await _leadRepository.GetLeadByIdAsync(idLead);
-            if (existLead == null){
-                throw new DomainException("Khách hàng tiềm năng không tồn tại!", 404);
+            var result = await _leadRepository.SoftDeleteLeadAsync(idLead);
+            if (!result)
+            {
+                throw new LeadNotFoundException();
             }
 
-            _mapper.Map(leadUpdateRequest, existLead);
-
-            var updatedLead = await _leadRepository.UpdateLeadAsync(existLead);
-
-            var leadResponse = _mapper.Map<LeadResponse>(updatedLead);
-            leadResponse.personResponse = _mapper.Map<PersonResponse>(updatedLead.personDomain);
-            return leadResponse;
+            await _elasticsearchService.DeleteAsync<LeadResponse>(idLead.ToString(), "leads");
+            return "Xóa khách hàng tiềm năng thành công!";
         }
 
         public async Task<string> ImportLeadExcelAsync(IFile file)
         {
             if (file == null || file.Length == 0)
-                throw new DomainException("File không hợp lệ!", 400);
+                throw new ValidationException("File không được để trống!");
 
-            using var stream = new MemoryStream();
-            await file.CopyToAsync(stream);
-
+            using var stream = file.OpenReadStream();
             using var package = new ExcelPackage(stream);
             var worksheet = package.Workbook.Worksheets[0];
             var rowCount = worksheet.Dimension.Rows;
+
+            if (rowCount < 2)
+                throw new ValidationException("File Excel không có dữ liệu!");
 
             var importedCount = 0;
 
             for (int row = 2; row <= rowCount; row++)
             {
-                var leadRequest = new LeadCreationRequest
+                var email = worksheet.Cells[row, 1].Value?.ToString()?.Trim();
+                var fullname = worksheet.Cells[row, 2].Value?.ToString()?.Trim();
+                var phone = worksheet.Cells[row, 3].Value?.ToString()?.Trim();
+                var location = worksheet.Cells[row, 4].Value?.ToString()?.Trim();
+                var resource = worksheet.Cells[row, 5].Value?.ToString()?.Trim();
+
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(fullname))
+                    continue;
+
+                if (!IsValidEmail(email))
+                    continue;
+
+                var existingEmail = await _leadRepository.CheckPersonByEmailAsync(email);
+                if (existingEmail)
+                    continue;
+
+                var lead = new Person
                 {
-                    Resource = worksheet.Cells[row, 1].Text,
-                    Person = new PersonCreationRequest
-                    {
-                        Fullname = worksheet.Cells[row, 2].Text,
-                        Email = worksheet.Cells[row, 3].Text,
-                        Phone = worksheet.Cells[row, 4].Text,
-                        Salary = decimal.TryParse(worksheet.Cells[row, 5].Text, out var salary) ? salary : 0,
-                        Location = worksheet.Cells[row, 6].Text
-                    }
+                    Email = email,
+                    Fullname = fullname,
+                    Phone = phone,
+                    Location = location,
+                    Resource = resource,
+                    Discriminator = PersonType.Lead
                 };
 
-                try
-                {
-                    await CreateLeadAsync(leadRequest);
-                    importedCount++;
-                }
-                catch (DomainException ex)
-                {
-                    if (ex.StatusCode == 409) continue;
-                    throw;
-                }
+                await _leadRepository.AddLeadAsync(lead);
+                importedCount++;
             }
 
-            return "Tải lên file excel thành công!";
+            return $"Đã import thành công {importedCount} leads!";
+        }
+
+        public async Task<LeadResponse> RestoreLeadAsync(Guid idLead)
+        {
+            var result = await _leadRepository.RestoreLeadAsync(idLead);
+            if (!result)
+            {
+                throw new LeadNotFoundException();
+            }
+
+            var lead = await _leadRepository.GetLeadByIdAsync(idLead);
+            var response = _mapper.Map<LeadResponse>(lead);
+
+            await _elasticsearchService.IndexAsync(response, "leads");
+            return response;
+        }
+
+        public async Task<LeadResponse> UpdateLeadAsync(LeadUpdateRequest request, Guid idLead)
+        {
+            ValidateLeadUpdate(request);
+
+            var existingLead = await _leadRepository.GetLeadByIdAsync(idLead);
+            if (existingLead == null)
+            {
+                throw new LeadNotFoundException();
+            }
+
+            var checkEmail = await _leadRepository.CheckPersonByEmailAsync(request.Email);
+            if (checkEmail && existingLead.Email != request.Email)
+            {
+                throw new EmailAlreadyExistsException();
+            }
+
+            existingLead.Fullname = request.Fullname;
+            existingLead.Email = request.Email;
+            existingLead.Phone = request.Phone;
+            existingLead.Location = request.Location;
+            existingLead.Resource = request.Resource;
+            existingLead.UpdatedAt = DateTime.UtcNow;
+
+            var updatedLead = await _leadRepository.UpdateLeadAsync(existingLead);
+            var response = _mapper.Map<LeadResponse>(updatedLead);
+
+            await _elasticsearchService.IndexAsync(response, "leads");
+            return response;
+        }
+
+        public async Task<LeadResponse> GetLeadByIdAsync(Guid idLead)
+        {
+            var lead = await _leadRepository.GetLeadByIdAsync(idLead);
+            return _mapper.Map<LeadResponse>(lead);
+        }
+
+        private void ValidateLeadCreation(LeadCreationRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Fullname))
+                throw new RequiredFieldException("Fullname");
+
+            if (string.IsNullOrWhiteSpace(request.Email))
+                throw new RequiredFieldException("Email");
+
+            if (!IsValidEmail(request.Email))
+                throw new InvalidEmailException();
+        }
+
+        private void ValidateLeadUpdate(LeadUpdateRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Fullname))
+                throw new RequiredFieldException("Fullname");
+
+            if (string.IsNullOrWhiteSpace(request.Email))
+                throw new RequiredFieldException("Email");
+
+            if (!IsValidEmail(request.Email))
+                throw new InvalidEmailException();
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            return emailRegex.IsMatch(email);
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
-using Customer_Managerment.CustomerManagement.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using SendGrid.Helpers.Errors.Model;
 
@@ -20,130 +19,132 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<LeadDomain> AddLeadAsync(LeadDomain leadDomain)
+        public async Task<Person> AddLeadAsync(Person lead)
         {
             await using var context = _contextFactory.CreateDbContext();
 
-            if (leadDomain.personDomain == null)
-                throw new BadRequestException("Thông tin Person không hợp lệ!");
+            lead.Id = Guid.NewGuid();
+            lead.Discriminator = PersonType.Lead;
+            lead.CreatedAt = DateTime.UtcNow;
+            lead.IsDeleted = false;
 
-            var sharedId = Guid.NewGuid();
-
-            var personEntity = _mapper.Map<Person>(leadDomain.personDomain);
-            personEntity.IdPerson = sharedId;
-            await context.Person.AddAsync(personEntity);
+            await context.Persons.AddAsync(lead);
             await context.SaveChangesAsync();
-
-            var leadEntity = new Lead
-            {
-                IdLead = sharedId,
-                Resource = leadDomain.Resource,
-                CreatedAt = DateTime.Now,
-                IdLeadNavigation = personEntity
-            };
-
-            await context.Leads.AddAsync(leadEntity);
-            await context.SaveChangesAsync();
-
-            return _mapper.Map<LeadDomain>(leadEntity);
+            return lead;
         }
 
-        public async Task<LeadDomain?> GetLeadByIdAsync(Guid idLead)
+        public async Task<Person?> GetLeadByIdAsync(Guid idLead)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var lead = await context.Leads
-                .Include(l => l.IdLeadNavigation)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(l => l.IdLead == idLead);
+            var lead = await context.Persons
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == idLead && p.Discriminator == PersonType.Lead);
 
-            if (lead == null) throw new NotFoundException("Không tìm thấy Lead!");
-            return _mapper.Map<LeadDomain>(lead);
+            if (lead == null)
+                throw new NotFoundException("Không tìm thấy Lead!");
+
+            return lead;
         }
 
-        public IQueryable<LeadDomain> GetListLead()
+        public IQueryable<Person> GetListLead()
         {
             var context = _contextFactory.CreateDbContext();
-            return context.Leads
-                .Include(l => l.IdLeadNavigation)
-                .ProjectTo<LeadDomain>(_mapper.ConfigurationProvider)
+            return context.Persons
+                .Where(p => p.Discriminator == PersonType.Lead)
                 .AsNoTracking();
         }
 
-        public async Task<List<LeadDomain>> GetListLeadAsync()
+        public async Task<List<Person>> GetListLeadAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
-
-            return await context.Leads
-                .Include(l => l.IdLeadNavigation)
-                .ProjectTo<LeadDomain>(_mapper.ConfigurationProvider)
+            return await context.Persons
+                .Where(p => p.Discriminator == PersonType.Lead)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public IQueryable<LeadDomain> GetLeadById(Guid idLead)
+        public IQueryable<Person> GetLeadById(Guid idLead)
         {
             var context = _contextFactory.CreateDbContext();
-            return context.Leads
-                .Where(l => l.IdLead == idLead)
-                .Include(l => l.IdLeadNavigation)
-                .ProjectTo<LeadDomain>(_mapper.ConfigurationProvider)
+            return context.Persons
+                .Where(p => p.Id == idLead && p.Discriminator == PersonType.Lead)
                 .AsNoTracking();
         }
 
-        public async Task<LeadDomain?> UpdateLeadAsync(LeadDomain leadDomain)
+        public async Task<Person?> UpdateLeadAsync(Person lead)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var existingLead = await context.Leads
-                .Include(l => l.IdLeadNavigation)
-                .FirstOrDefaultAsync(l => l.IdLead == leadDomain.IdLead);
+            var existingLead = await context.Persons
+                .FirstOrDefaultAsync(p => p.Id == lead.Id && p.Discriminator == PersonType.Lead);
 
-            if (existingLead == null) return null;
+            if (existingLead == null)
+                return null;
 
-            _mapper.Map(leadDomain, existingLead);
-
-            if (leadDomain.personDomain != null && existingLead.IdLeadNavigation != null)
-            {
-                _mapper.Map(leadDomain.personDomain, existingLead.IdLeadNavigation);
-            }
+            existingLead.Fullname = lead.Fullname;
+            existingLead.Email = lead.Email;
+            existingLead.Phone = lead.Phone;
+            existingLead.Location = lead.Location;
+            existingLead.Resource = lead.Resource;
+            existingLead.Discriminator = lead.Discriminator;
+            existingLead.UpdatedAt = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
-            return _mapper.Map<LeadDomain>(existingLead);
-        }
-
-        public async Task DeleteLeadAsync(Guid idLead)
-        {
-            await using var context = _contextFactory.CreateDbContext();
-            var lead = await context.Leads
-                .Include(l => l.IdLeadNavigation)
-                .FirstOrDefaultAsync(l => l.IdLead == idLead);
-
-            if (lead == null) throw new NotFoundException("Không tìm thấy Lead!");
-
-            context.Person.Remove(lead.IdLeadNavigation);
-            context.Leads.Remove(lead);
-            await context.SaveChangesAsync();
+            return existingLead;
         }
 
         public async Task<bool> CheckLeadExistsAsync(Guid idLead)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return await context.Leads.AnyAsync(l => l.IdLead == idLead);
+            return await context.Persons
+                .AnyAsync(p => p.Id == idLead && p.Discriminator == PersonType.Lead);
         }
 
-        public async Task<bool> checkPersonByEmailAsync(string email)
+        public async Task<bool> CheckPersonByEmailAsync(string email)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var checkPerson = await context.Person
-                .IgnoreAutoIncludes()
-                .AsNoTracking()
-                .AnyAsync(l => l.Email == email);
-            return checkPerson;
+            return await context.Persons
+                .IgnoreQueryFilters()
+                .AnyAsync(p => p.Email == email);
         }
 
-        public async Task<int> getTotalLeadsAsync()
+        public async Task<int> GetTotalLeadsAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
-            return await context.Leads.CountAsync();
+            return await context.Persons
+                .CountAsync(p => p.Discriminator == PersonType.Lead);
+        }
+
+        public async Task<bool> SoftDeleteLeadAsync(Guid idLead)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var lead = await context.Persons
+                .FirstOrDefaultAsync(p => p.Id == idLead && p.Discriminator == PersonType.Lead);
+
+            if (lead == null)
+                return false;
+
+            lead.IsDeleted = true;
+            lead.DeletedAt = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreLeadAsync(Guid idLead)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var lead = await context.Persons
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == idLead && p.Discriminator == PersonType.Lead);
+
+            if (lead == null || !lead.IsDeleted)
+                return false;
+
+            lead.IsDeleted = false;
+            lead.DeletedAt = null;
+
+            await context.SaveChangesAsync();
+            return true;
         }
     }
 }
