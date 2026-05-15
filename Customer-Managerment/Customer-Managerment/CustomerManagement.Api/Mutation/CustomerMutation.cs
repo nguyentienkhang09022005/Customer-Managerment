@@ -40,10 +40,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             return await _customerHandler.RestoreCustomerAsync(idCustomer);
         }
 
-        public async Task<string> ImportCustomerExcelAsync(IFile file)
-        {
-            return await _customerHandler.ImportCustomerExcelAsync(file);
-        }
+        // File upload moved to /api/fileupload/customer
 
         private string GetCurrentUserId()
         {

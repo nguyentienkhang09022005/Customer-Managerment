@@ -24,51 +24,56 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e => e.IdEvent == idEvent);
         }
 
-        public async Task<IQueryable<CalendarEvent>> GetAllAsync()
+        public async Task<List<CalendarEvent>> GetAllAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.CalendarEvents
+            return await context.CalendarEvents
                 .Where(e => !e.IsDeleted)
                 .OrderBy(e => e.StartTime)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<CalendarEvent>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate)
+        public async Task<List<CalendarEvent>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.CalendarEvents
+            return await context.CalendarEvents
                 .Where(e => !e.IsDeleted && e.StartTime >= fromDate && e.EndTime <= toDate)
                 .OrderBy(e => e.StartTime)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<CalendarEvent>> GetByStaffAsync(Guid idStaff)
+        public async Task<List<CalendarEvent>> GetByStaffAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.CalendarEvents
+            return await context.CalendarEvents
                 .Where(e => !e.IsDeleted && e.IdStaff == idStaff)
                 .OrderBy(e => e.StartTime)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<CalendarEvent>> GetByEntityAsync(string entityType, Guid entityId)
+        public async Task<List<CalendarEvent>> GetByEntityAsync(string entityType, Guid entityId)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.CalendarEvents
+            return await context.CalendarEvents
                 .Where(e => !e.IsDeleted && e.RelatedEntityType == entityType && e.RelatedEntityId == entityId)
                 .OrderBy(e => e.StartTime)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<CalendarEvent>> GetUpcomingEventsAsync(Guid idStaff, int days)
+        public async Task<List<CalendarEvent>> GetUpcomingEventsAsync(Guid idStaff, int days)
         {
             await using var context = _contextFactory.CreateDbContext();
             var now = DateTime.UtcNow;
             var future = now.AddDays(days);
-            return context.CalendarEvents
+            return await context.CalendarEvents
                 .Where(e => !e.IsDeleted && e.IdStaff == idStaff && e.StartTime >= now && e.StartTime <= future)
                 .OrderBy(e => e.StartTime)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<CalendarEvent> AddAsync(CalendarEvent calendarEvent)

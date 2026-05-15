@@ -11,18 +11,18 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     public class StaffHandler
     {
         private readonly IStaffRepository _staffRepository;
-        private readonly IElasticsearchService _elasticsearchService;
         private readonly IMapper _mapper;
+        // private readonly IElasticsearchService _elasticsearchService;
 
-        public StaffHandler(
-            IStaffRepository staffRepository,
-            IElasticsearchService elasticsearchService,
-            IMapper mapper)
-        {
-            _staffRepository = staffRepository;
-            _elasticsearchService = elasticsearchService;
-            _mapper = mapper;
-        }
+        // public StaffHandler(
+        //     IStaffRepository staffRepository,
+        //     IElasticsearchService elasticsearchService,
+        //     IMapper mapper)
+        // {
+        //     _staffRepository = staffRepository;
+        //     _elasticsearchService = elasticsearchService;
+        //     _mapper = mapper;
+        // }
 
         public async Task<StaffResponse> CreateStaffAsync(StaffCreationRequest request)
         {
@@ -53,7 +53,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<StaffResponse>(createdStaff);
 
             // Index to Elasticsearch
-            await _elasticsearchService.IndexAsync(response, "staffs");
+            // await _elasticsearchService.IndexAsync(response, "staffs");
 
             return response;
         }
@@ -67,7 +67,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             }
 
             // Remove from Elasticsearch
-            await _elasticsearchService.DeleteAsync<StaffResponse>(idStaff.ToString(), "staffs");
+            // await _elasticsearchService.DeleteAsync<StaffResponse>(idStaff.ToString(), "staffs");
 
             return "Xóa nhân viên thành công!";
         }
@@ -84,7 +84,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<StaffResponse>(staff);
 
             // Re-index to Elasticsearch
-            await _elasticsearchService.IndexAsync(response, "staffs");
+            // await _elasticsearchService.IndexAsync(response, "staffs");
 
             return response;
         }
@@ -118,7 +118,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<StaffResponse>(updatedStaff);
 
             // Re-index to Elasticsearch
-            await _elasticsearchService.IndexAsync(response, "staffs");
+            // await _elasticsearchService.IndexAsync(response, "staffs");
 
             return response;
         }

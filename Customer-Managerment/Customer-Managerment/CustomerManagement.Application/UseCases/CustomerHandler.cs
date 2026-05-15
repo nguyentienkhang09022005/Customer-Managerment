@@ -4,6 +4,7 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
 
@@ -14,18 +15,18 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly ICustomerRepository _customerRepository;
         private readonly ILeadRepository _leadRepository;
         private readonly IMapper _mapper;
-        private readonly IElasticsearchService _elasticsearchService;
+        // private readonly IElasticsearchService _elasticsearchService;
 
-        public CustomerHandler(ICustomerRepository customerRepository,
-                              ILeadRepository leadRepository,
-                              IMapper mapper,
-                              IElasticsearchService elasticsearchService)
-        {
-            _customerRepository = customerRepository;
-            _leadRepository = leadRepository;
-            _mapper = mapper;
-            _elasticsearchService = elasticsearchService;
-        }
+        // public CustomerHandler(ICustomerRepository customerRepository,
+        //                       ILeadRepository leadRepository,
+        //                       IMapper mapper,
+        //                       IElasticsearchService elasticsearchService)
+        // {
+        //     _customerRepository = customerRepository;
+        //     _leadRepository = leadRepository;
+        //     _mapper = mapper;
+        //     _elasticsearchService = elasticsearchService;
+        // }
 
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerCreationRequest request)
         {
@@ -43,7 +44,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var createdCustomer = await _customerRepository.AddCustomerAsync(customer);
             var response = _mapper.Map<CustomerResponse>(createdCustomer);
 
-            await _elasticsearchService.IndexAsync(response, "customers");
+            // await _elasticsearchService.IndexAsync(response, "customers");
 
             return response;
         }
@@ -56,11 +57,11 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new CustomerNotFoundException();
             }
 
-            await _elasticsearchService.DeleteAsync<CustomerResponse>(idCustomer.ToString(), "customers");
+            // await _elasticsearchService.DeleteAsync<CustomerResponse>(idCustomer.ToString(), "customers");
             return "Xóa khách hàng thành công!";
         }
 
-        public async Task<string> ImportCustomerExcelAsync(IFile file)
+        public async Task<string> ImportCustomerExcelAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 throw new ValidationException("File không được để trống!");
@@ -119,7 +120,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var customer = await _customerRepository.GetCustomerByIdAsync(idCustomer);
             var response = _mapper.Map<CustomerResponse>(customer);
 
-            await _elasticsearchService.IndexAsync(response, "customers");
+            // await _elasticsearchService.IndexAsync(response, "customers");
             return response;
         }
 
@@ -148,7 +149,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var updatedCustomer = await _customerRepository.UpdateCustomerAsync(existingCustomer);
             var response = _mapper.Map<CustomerResponse>(updatedCustomer);
 
-            await _elasticsearchService.IndexAsync(response, "customers");
+            // await _elasticsearchService.IndexAsync(response, "customers");
             return response;
         }
 

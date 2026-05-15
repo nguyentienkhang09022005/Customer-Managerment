@@ -86,7 +86,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new StaffNotFoundException();
             }
 
-            IQueryable<StaffActivityLog> logs;
+            List<StaffActivityLog> logs;
             if (fromDate.HasValue && toDate.HasValue)
             {
                 logs = await _activityLogRepository.GetLogsByStaffAndDateRangeAsync(idStaff, fromDate.Value, toDate.Value);

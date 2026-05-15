@@ -654,5 +654,298 @@ DomainException (base)
 
 ---
 
-*Document updated: 2026-05-15*
+## 18. File Upload Changes (2026-05-15)
+
+### Issue
+HotChocolate 15 does not support `IFormFile`/`IFile` as GraphQL schema types. GraphQL mutations using file upload parameters caused schema initialization to fail with:
+```
+HotChocolate.SchemaException: Unable to infer or resolve a schema type from the type reference `IFormFile (Input)`.
+```
+
+### Solution
+File upload functionality was moved from GraphQL mutations to REST API endpoints.
+
+**Removed from GraphQL:**
+- `LeadMutation.importLeadExcelAsync(IFormFile file)` - REMOVED
+- `CustomerMutation.importCustomerExcelAsync(IFormFile file)` - REMOVED
+
+**New REST Endpoints:**
+- `POST /api/fileupload/lead` - Import Lead từ Excel file
+- `POST /api/fileupload/customer` - Import Customer từ Excel file
+
+### New Files
+- `CustomerManagement.Api/Controllers/FileUploadController.cs` - REST controller for file uploads
+
+### Files Modified
+- `CustomerManagement.Api/Mutation/LeadMutation.cs` - Removed file upload method
+- `CustomerManagement.Api/Mutation/CustomerMutation.cs` - Removed file upload method
+- `CustomerManagement.Application/UseCases/LeadHandler.cs` - Changed `IFile` to `IFormFile`
+- `CustomerManagement.Application/UseCases/CustomerHandler.cs` - Changed `IFile` to `IFormFile`
+
+---
+
+---
+
+## 19. SignalR Realtime Implementation (2026-05-15)
+
+### Overview
+Two separate SignalR hubs implemented for real-time communications.
+
+### Hubs
+
+#### NotificationHub (`/hubs/notifications`)
+- `JoinStaffGroup(Guid idStaff)` - Subscribe to personal notifications
+- `LeaveStaffGroup(Guid idStaff)` - Unsubscribe from personal notifications
+
+#### NoteHub (`/hubs/notes`)
+- `JoinEntityGroup(string entityType, Guid entityId)` - Subscribe to entity notes (Lead/Customer/Deal)
+- `LeaveEntityGroup(string entityType, Guid entityId)` - Unsubscribe
+- `JoinStaffGroup(Guid idStaff)` - Subscribe to personal notes
+
+### Services
+
+| Interface | Implementation | Purpose |
+|-----------|----------------|---------|
+| `IRealtimeNotificationService` | `RealtimeNotificationService` | Send notifications to staff |
+| `IRealtimeNoteService` | `RealtimeNoteService` | Send notes to entities/staff |
+| `IRealtimeNotificationSender` | `RealtimeNotificationSenderAdapter` | Application layer adapter |
+| `IRealtimeNoteSender` | `RealtimeNoteSenderAdapter` | Application layer adapter |
+
+### GraphQL Integration
+
+**NotificationMutation:**
+- `createNotificationAsync` - Creates notification + sends via SignalR
+- All other methods (markAsRead, markAllAsRead, pin, delete) trigger notifications via `IRealtimeNotificationService`
+
+**NoteMutation:**
+- `CreateNoteAsync` - Creates note + sends realtime via `IRealtimeNoteService`
+- `UpdateNoteAsync` - Updates note + sends realtime
+- `ReplyNoteAsync` - Creates reply + sends realtime
+
+**CalendarMutation:**
+- Event creation/participant changes send notifications to participants via `IRealtimeNotificationService`
+
+### Background Service
+
+**CalendarReminderService** (`CustomerManagement.Infrastructure/Services/`)
+- Runs every 5 minutes
+- Finds events starting in 5-10 minutes
+- Sends `NotificationReminder` type notifications to organizer and participants
+
+---
+
+## 20. CalendarReminderService Background Job
+
+### Functionality
+- Runs every 5 minutes (via `IHostedService`)
+- Queries events with `StartTime` in next 5-10 minutes
+- Creates notifications for organizer and all accepted participants
+- Notification type: `NotificationReminder`
+
+### Notification Content
+- Title: "Event Reminder"
+- Message: "{EventTitle} starts at {StartTime}"
+- RelatedEntityType: "CalendarEvent"
+- RelatedEntityId: Event ID
+
+---
+
+## 21. Elasticsearch Status
+
+Elasticsearch code has been **commented out** (not deleted) for future implementation.
+
+**Commented in Program.cs:**
+- `builder.Configuration["Elasticsearch:Uri"]` line
+- `IElasticsearchService` registration
+- 5 Query type extensions (StaffElasticSearchQuery, CustomersElasticSearchQuery, etc.)
+
+**Commented in Handler files:**
+- `CustomerHandler.cs`, `LeadHandler.cs`, `ContactHandler.cs`, `DealHandler.cs`, `StaffHandler.cs`, `TaskHandler.cs`, `NoteHandler.cs`
+
+**Commented Query files:**
+- `CustomersElasticSearchQuery.cs`, `LeadsElasticSearchQuery.cs`, `ContactsElasticSearchQuery.cs`, `DealsElasticSearchQuery.cs`, `StaffElasticSearchQuery.cs`
+
+---
+
+## 22. Bug Fixes (2026-05-16)
+
+### NoteHandler NullReferenceException
+
+**Issue:** `CreateNoteAsync` threw `NullReferenceException` at line 41.
+
+**Root Cause:** Constructor was commented out, `_staffRepository` was null.
+
+**Fix:** Uncommented constructor in `NoteHandler.cs`.
+
+---
+
+### GetCalendarEvents 500 Error (NullReference)
+
+**Issue:** `GetCalendarEvents` query returned 500 error.
+
+**Root Cause:** `MapStaffToResponse` assigned database null values to non-nullable DTO properties (`Fullname`, `Email`).
+
+**Fix:** Added null-coalescing operators in `CalendarQuery.cs` and `CalendarHandler.cs`:
+```csharp
+Fullname = staff.Fullname ?? "",
+Email = staff.Email ?? "",
+```
+
+---
+
+### GetCalendarEvents ObjectDisposedException
+
+**Issue:** `GetCalendarEvents` threw `ObjectDisposedException: Cannot access a disposed context instance`.
+
+**Root Cause:** Repository methods returned `IQueryable<T>` with `await using var context` pattern. The `IQueryable` was lazy-evaluated after the DbContext was disposed.
+
+**Fix:** Changed repository methods to return `Task<List<T>>` with `.ToListAsync()` before context disposal. Updated all callers in `CalendarQuery.cs` and `CalendarHandler.cs`.
+
+---
+
+### TeamAssignmentHandler ObjectDisposedException
+
+**Issue:** `GetMyTeamsAsync` query threw `ObjectDisposedException` at line 62.
+
+**Root Cause:** `TeamMemberRepository.GetByEntityAsync` and `GetByStaffAsync` returned `IQueryable<TeamMember>` with `await using var context`. The `IQueryable` was lazy-evaluated in `foreach` loop after context was disposed.
+
+**Fix:** Changed interface and implementation from `Task<IQueryable<TeamMember>>` to `Task<List<TeamMember>>` with `.ToListAsync()` before context disposal.
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\ITeamMemberRepository.cs` (lines 8-9)
+- `CustomerManagement.Infrastructure\Repositories\TeamMemberRepository.cs` (lines 26-39)
+
+---
+
+### AutoMapper Missing TeamMember -> TeamMemberResponse Mapping
+
+**Issue:** `UpdateTeamMemberAsync` and `TransferOwnershipAsync` threw `AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping`.
+
+**Root Cause:** `_mapper.Map<TeamMemberResponse>(updated)` was called but no mapping profile existed for `TeamMember -> TeamMemberResponse`.
+
+**Fix:** Created `TeamMemberMapper.cs` in `CustomerManagement.Infrastructure\Mapping\`.
+
+**Files Created:**
+- `CustomerManagement.Infrastructure\Mapping\TeamMemberMapper.cs`
+
+---
+
+### AuditLogRepository ObjectDisposedException
+
+**Issue:** Multiple AuditLog queries threw `ObjectDisposedException` in `GetAuditLogsAsync`, `GetAuditLogsByStaffAsync`, `GetAuditLogsByActionAsync`, `GetEntityHistoryAsync`.
+
+**Root Cause:** `IAuditLogRepository` methods (`GetAllAsync`, `GetByEntityAsync`, `GetByStaffAsync`, `GetByActionAsync`, `GetByDateRangeAsync`, `GetEntityHistoryAsync`) all returned `Task<IQueryable<AuditLog>>` with `await using var context` pattern.
+
+**Fix:** Changed all 6 methods from `Task<IQueryable<AuditLog>>` to `Task<List<AuditLog>>` with `.ToListAsync()` before context disposal. Updated callers in `AuditLogQuery.cs` and `AuditLogHandler.cs` to use `List<AuditLog>` instead of `IQueryable<AuditLog>`.
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\IAuditLogRepository.cs`
+- `CustomerManagement.Infrastructure\Repositories\AuditLogRepository.cs`
+- `CustomerManagement.Api\Query\AuditLogQuery.cs`
+- `CustomerManagement.Application\UseCases\AuditLogHandler.cs`
+
+---
+
+### AuditStatisticsResponse Missing Fields
+
+**Issue:** `getAuditStatistics` query returned GraphQL error: "The field `totalActions` does not exist on the type `AuditStatisticsResponse`", etc.
+
+**Root Cause:** `AuditStatisticsResponse` DTO was missing fields that client query required: `totalActions`, `totalEntities`, `topActions`, `topEntities`.
+
+**Fix:** Added computed properties and new DTO classes (`TopActionItem`, `TopEntityItem`) to `AuditStatisticsResponse.cs`.
+
+**File Modified:**
+- `CustomerManagement.Application\DTOs\Response\AuditStatisticsResponse.cs`
+
+---
+
+## 23. AI Chat Feature - Commented Out for Future Development (2026-05-16)
+
+### Overview
+AI Chat feature (Google Gemini integration) has been **commented out** but **NOT deleted** for future development. All code is preserved and can be re-enabled by uncommenting.
+
+### Files Commented Out
+
+**Application Layer:**
+- `CustomerManagement.Application\UseCases\ChatHandler.cs`
+- `CustomerManagement.Application\Interfaces\IGeminiService.cs`
+- `CustomerManagement.Application\Interfaces\IChatHistoryService.cs`
+- `CustomerManagement.Application\DTOs\Chat\ChatRequest.cs`
+- `CustomerManagement.Application\DTOs\Chat\ChatResponse.cs`
+- `CustomerManagement.Application\DTOs\Chat\GeminiRequest.cs`
+- `CustomerManagement.Application\DTOs\Chat\GeminiApiResponse.cs`
+- `CustomerManagement.Application\DTOs\Response\MessageHistoryItem.cs`
+
+**Infrastructure Layer:**
+- `CustomerManagement.Infrastructure\Services\GeminiService.cs`
+- `CustomerManagement.Infrastructure\Services\ChatHistoryService.cs`
+
+**API Layer:**
+- `CustomerManagement.Api\Query\ChatQuery.cs`
+- `CustomerManagement.Api\Mutation\ChatMutation.cs`
+
+**Program.cs Changes:**
+- ChatHandler registration: commented out
+- ChatQuery/ChatMutation GraphQL extensions: commented out
+- IGeminiService HttpClient registration: commented out
+- IChatHistoryService registration: commented out
+
+### Re-enabling AI Chat
+To re-enable AI Chat feature, uncomment the following in `Program.cs`:
+1. `builder.Services.AddHttpClient<IGeminiService, GeminiService>()`
+2. `builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>()`
+3. `builder.Services.AddScoped<ChatHandler>()`
+4. `.AddTypeExtension<ChatQuery>()`
+5. `.AddTypeExtension<ChatMutation>()`
+
+---
+
+## 24. Elasticsearch Feature - Commented Out for Future Development (2026-05-16)
+
+### Overview
+Elasticsearch search feature has been **commented out** but **NOT deleted** for future development. All code is preserved and can be re-enabled by uncommenting.
+
+### Files Commented Out
+
+**Application Layer:**
+- `CustomerManagement.Application\Interfaces\IElasticsearchService.cs`
+
+**Infrastructure Layer:**
+- `CustomerManagement.Infrastructure\Services\ElasticsearchService.cs`
+
+**API Layer (GraphQL Query Extensions):**
+- `CustomerManagement.Api\Query\StaffElasticSearchQuery.cs`
+- `CustomerManagement.Api\Query\CustomersElasticSearchQuery.cs`
+- `CustomerManagement.Api\Query\LeadsElasticSearchQuery.cs`
+- `CustomerManagement.Api\Query\ContactsElasticSearchQuery.cs`
+- `CustomerManagement.Api\Query\DealsElasticSearchQuery.cs`
+
+**Handler Files (Already commented out in constructors):**
+- `CustomerManagement.Application\UseCases\LeadHandler.cs`
+- `CustomerManagement.Application\UseCases\CustomerHandler.cs`
+- `CustomerManagement.Application\UseCases\ContactHandler.cs`
+- `CustomerManagement.Application\UseCases\DealHandler.cs`
+- `CustomerManagement.Application\UseCases\StaffHandler.cs`
+- `CustomerManagement.Application\UseCases\TaskHandler.cs`
+- `CustomerManagement.Application\UseCases\NoteHandler.cs`
+
+**Program.cs Changes:**
+- Elasticsearch service registration: commented out
+- Elasticsearch Query type extensions: commented out
+
+### Re-enabling Elasticsearch
+To re-enable Elasticsearch feature, uncomment the following in `Program.cs`:
+1. `builder.Configuration["Elasticsearch:Uri"]` line
+2. `builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>()`
+3. All 5 `.AddTypeExtension<*ElasticSearchQuery>()` lines
+
+Then uncomment constructor parameters and service usage in handler files.
+
+---
+
+*Document updated: 2026-05-16*
 *All Features Status: NHÓM 1-8 COMPLETED - Build passing, all migrations applied*
+*SignalR: 2 hubs (NotificationHub, NoteHub) with realtime services*
+*File Upload: REST API endpoints implemented (not GraphQL)*
+*Bug Fixes: NoteHandler constructor fixed, CalendarQuery null handling added, CalendarEventRepository disposed context fixed, TeamMemberRepository disposed context fixed, TeamMemberMapper created, AuditLogRepository disposed context fixed, StaffActivityLogRepository disposed context fixed, AuditStatisticsResponse fields added*
+*AI Chat & Elasticsearch: Commented out for future development (2026-05-16)*

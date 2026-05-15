@@ -30,18 +30,18 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         [UseSorting]
         public async Task<List<CalendarEventResponse>> GetCalendarEventsAsync(DateTime fromDate, DateTime toDate, Guid? idStaff = null)
         {
-            IQueryable<CalendarEvent> events;
+            List<CalendarEvent> eventList;
             if (idStaff.HasValue)
             {
-                events = await _calendarRepository.GetByStaffAsync(idStaff.Value);
-                events = events.Where(e => e.StartTime >= fromDate && e.EndTime <= toDate);
+                eventList = await _calendarRepository.GetByStaffAsync(idStaff.Value);
+                eventList = eventList.Where(e => e.StartTime >= fromDate && e.EndTime <= toDate).ToList();
             }
             else
             {
-                events = await _calendarRepository.GetByDateRangeAsync(fromDate, toDate);
+                eventList = await _calendarRepository.GetByDateRangeAsync(fromDate, toDate);
             }
 
-            var eventList = events.OrderBy(e => e.StartTime).ToList();
+            eventList = eventList.OrderBy(e => e.StartTime).ToList();
             var responses = new List<CalendarEventResponse>();
 
             foreach (var evt in eventList)
@@ -75,13 +75,13 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         [UseSorting]
         public async Task<List<CalendarEventResponse>> GetMyEventsAsync(Guid idStaff, DateTime fromDate, DateTime toDate)
         {
-            var myEvents = await _calendarRepository.GetByStaffAsync(idStaff);
-            var events = myEvents.Where(e => e.StartTime >= fromDate && e.EndTime <= toDate)
+            var eventList = await _calendarRepository.GetByStaffAsync(idStaff);
+            eventList = eventList.Where(e => e.StartTime >= fromDate && e.EndTime <= toDate)
                 .OrderBy(e => e.StartTime)
                 .ToList();
 
             var responses = new List<CalendarEventResponse>();
-            foreach (var evt in events)
+            foreach (var evt in eventList)
             {
                 var staff = await _staffRepository.GetStaffByIdAsync(evt.IdStaff);
                 var response = MapToResponse(evt, staff);
@@ -95,8 +95,8 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
 
         public async Task<List<CalendarEventResponse>> GetUpcomingEventsAsync(Guid idStaff, int days)
         {
-            var events = await _calendarRepository.GetUpcomingEventsAsync(idStaff, days);
-            var eventList = events.OrderBy(e => e.StartTime).Take(20).ToList();
+            var eventList = await _calendarRepository.GetUpcomingEventsAsync(idStaff, days);
+            eventList = eventList.OrderBy(e => e.StartTime).Take(20).ToList();
 
             var responses = new List<CalendarEventResponse>();
             foreach (var evt in eventList)
@@ -115,6 +115,24 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         {
             var participants = await _participantRepository.GetByEventAsync(idEvent);
             return await GetParticipantResponsesAsync(participants.ToList());
+        }
+
+        public async Task<List<CalendarEventResponse>> GetEventsByEntityAsync(string entityType, Guid entityId)
+        {
+            var eventList = await _calendarRepository.GetByEntityAsync(entityType, entityId);
+            eventList = eventList.OrderBy(e => e.StartTime).ToList();
+
+            var responses = new List<CalendarEventResponse>();
+            foreach (var evt in eventList)
+            {
+                var staff = await _staffRepository.GetStaffByIdAsync(evt.IdStaff);
+                var response = MapToResponse(evt, staff);
+                var participants = await _participantRepository.GetByEventAsync(evt.IdEvent);
+                response.Participants = await GetParticipantResponsesAsync(participants.ToList());
+                responses.Add(response);
+            }
+
+            return responses;
         }
 
         private CalendarEventResponse MapToResponse(CalendarEvent evt, Person? staff)
@@ -152,8 +170,8 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
                 UpdatedAt = staff.UpdatedAt,
                 Person = new PersonResponse
                 {
-                    Fullname = staff.Fullname,
-                    Email = staff.Email,
+                    Fullname = staff.Fullname ?? "",
+                    Email = staff.Email ?? "",
                     Phone = staff.Phone,
                     Location = staff.Location
                 }

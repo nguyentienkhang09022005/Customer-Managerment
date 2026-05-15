@@ -13,7 +13,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IStaffRepository _staffRepository;
-        private readonly IElasticsearchService _elasticsearchService;
+        // private readonly IElasticsearchService _elasticsearchService;
         private readonly INotificationRepository _notificationRepository;
         private readonly IMapper _mapper;
 
@@ -21,13 +21,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             ITaskRepository taskRepository,
             IStaffRepository staffRepository,
             INotificationRepository notificationRepository,
-            IElasticsearchService elasticsearchService,
+            // IElasticsearchService elasticsearchService,
             IMapper mapper)
         {
             _taskRepository = taskRepository;
             _staffRepository = staffRepository;
             _notificationRepository = notificationRepository;
-            _elasticsearchService = elasticsearchService;
+            // _elasticsearchService = elasticsearchService;
             _mapper = mapper;
         }
 
@@ -48,7 +48,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<TaskResponse>(createdTask);
             response.StaffAssigned = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "tasks");
+            // await _elasticsearchService.IndexAsync(response, "tasks");
 
             return response;
         }
@@ -61,7 +61,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new TaskNotFoundException();
             }
 
-            await _elasticsearchService.DeleteAsync<TaskResponse>(idTask.ToString(), "tasks");
+            // await _elasticsearchService.DeleteAsync<TaskResponse>(idTask.ToString(), "tasks");
             return "Xóa công việc thành công!";
         }
 
@@ -76,7 +76,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var task = await _taskRepository.GetTaskByIdAsync(idTask);
             var response = _mapper.Map<TaskResponse>(task);
 
-            await _elasticsearchService.IndexAsync(response, "tasks");
+            // await _elasticsearchService.IndexAsync(response, "tasks");
             return response;
         }
 
@@ -114,7 +114,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<TaskResponse>(updatedTask);
             response.StaffAssigned = staff != null ? _mapper.Map<StaffResponse>(staff) : null;
 
-            await _elasticsearchService.IndexAsync(response, "tasks");
+            // await _elasticsearchService.IndexAsync(response, "tasks");
             return response;
         }
 
@@ -139,7 +139,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<TaskResponse>(updatedTask);
             response.StaffAssigned = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "tasks");
+            // await _elasticsearchService.IndexAsync(response, "tasks");
 
             // Create notification for staff
             var notification = new Notification
@@ -177,7 +177,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<TaskResponse>(updatedTask);
             response.StaffAssigned = staff != null ? _mapper.Map<StaffResponse>(staff) : null;
 
-            await _elasticsearchService.IndexAsync(response, "tasks");
+            // await _elasticsearchService.IndexAsync(response, "tasks");
 
             // Notify admin when task is completed
             if (status == 2) // COMPLETED

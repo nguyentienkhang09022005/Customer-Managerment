@@ -2,6 +2,7 @@ using Customer_Managerment.CustomerManagement.Api.Input.Type;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
+using Customer_Managerment.CustomerManagement.Api.Services;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
@@ -9,10 +10,14 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
     public class CalendarMutation
     {
         private readonly CalendarHandler _calendarHandler;
+        private readonly IRealtimeNotificationService _realtimeNotificationService;
 
-        public CalendarMutation(CalendarHandler calendarHandler)
+        public CalendarMutation(
+            CalendarHandler calendarHandler,
+            IRealtimeNotificationService realtimeNotificationService)
         {
             _calendarHandler = calendarHandler;
+            _realtimeNotificationService = realtimeNotificationService;
         }
 
         public async Task<CalendarEventResponse> CreateCalendarEventAsync(CalendarEventInput input)
@@ -69,7 +74,21 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
 
         public async Task<CalendarEventResponse> AddParticipantAsync(EventParticipantInput input)
         {
-            return await _calendarHandler.AddParticipantAsync(input.IdEvent, input.IdStaff);
+            var result = await _calendarHandler.AddParticipantAsync(input.IdEvent, input.IdStaff);
+
+            // Send realtime notification when participant is added
+            var notification = new NotificationResponse
+            {
+                Title = "Bạn được thêm vào sự kiện mới",
+                Message = $"Bạn được thêm vào sự kiện: {result.Title}",
+                Type = "SYSTEM",
+                IdStaff = input.IdStaff,
+                RelatedEntityType = "CalendarEvent",
+                RelatedEntityId = result.IdEvent
+            };
+            await _realtimeNotificationService.SendNotificationToStaffAsync(input.IdStaff, notification);
+
+            return result;
         }
 
         public async Task<EventParticipantResponse> UpdateParticipantStatusAsync(Guid idParticipant, int status)

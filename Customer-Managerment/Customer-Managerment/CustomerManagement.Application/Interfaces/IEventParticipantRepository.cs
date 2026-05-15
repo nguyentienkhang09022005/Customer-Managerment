@@ -5,7 +5,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
     public interface IEventParticipantRepository
     {
         Task<EventParticipant?> GetByIdAsync(Guid id);
-        Task<IQueryable<EventParticipant>> GetByEventAsync(Guid idEvent);
+        Task<List<EventParticipant>> GetByEventAsync(Guid idEvent);
         Task<EventParticipant?> GetParticipantAsync(Guid idEvent, Guid idStaff);
         Task<EventParticipant> AddAsync(EventParticipant participant);
         Task<EventParticipant> UpdateAsync(EventParticipant participant);

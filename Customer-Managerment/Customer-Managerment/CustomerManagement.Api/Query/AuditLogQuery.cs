@@ -28,7 +28,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             int page = 1,
             int pageSize = 50)
         {
-            IQueryable<AuditLog> logs;
+            List<AuditLog> logs;
 
             if (!string.IsNullOrEmpty(entityType) && entityId.HasValue)
             {
@@ -59,7 +59,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             var logs = await _auditLogRepository.GetByStaffAsync(idStaff);
             if (fromDate.HasValue && toDate.HasValue)
             {
-                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value);
+                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value).ToList();
             }
 
             var logList = logs.OrderByDescending(l => l.Timestamp).Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -78,7 +78,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             var logs = await _auditLogRepository.GetByActionAsync(action);
             if (fromDate.HasValue && toDate.HasValue)
             {
-                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value);
+                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value).ToList();
             }
 
             var logList = logs.OrderByDescending(l => l.Timestamp).Skip((page - 1) * pageSize).Take(pageSize).ToList();

@@ -76,7 +76,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
                 return new List<StaffActivityLogResponse>();
             }
 
-            IQueryable<StaffActivityLog> logs;
+            List<StaffActivityLog> logs;
             if (fromDate.HasValue && toDate.HasValue)
             {
                 logs = await _activityLogRepository.GetLogsByStaffAndDateRangeAsync(idStaff, fromDate.Value, toDate.Value);

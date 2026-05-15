@@ -23,12 +23,13 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return await context.EventParticipants.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IQueryable<EventParticipant>> GetByEventAsync(Guid idEvent)
+        public async Task<List<EventParticipant>> GetByEventAsync(Guid idEvent)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.EventParticipants
+            return await context.EventParticipants
                 .Where(p => p.IdEvent == idEvent)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<EventParticipant?> GetParticipantAsync(Guid idEvent, Guid idStaff)

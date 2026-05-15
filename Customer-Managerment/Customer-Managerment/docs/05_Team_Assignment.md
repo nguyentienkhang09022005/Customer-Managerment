@@ -115,3 +115,71 @@ Cần thêm:
 4. GraphQL types + Query + Mutation
 5. Cập nhật LeadHandler/DealHandler để kiểm tra permissions
 6. Đăng ký services + Migration
+
+---
+
+## 7. Bug Fixes
+
+### 2026-05-16: ObjectDisposedException in GetMyTeamsAsync
+
+**Issue:** `GetMyTeamsAsync` threw `ObjectDisposedException: Cannot access a disposed context instance` at line 62.
+
+**Root Cause:** `TeamMemberRepository.GetByEntityAsync` and `GetByStaffAsync` returned `IQueryable<TeamMember>` with `await using var context` pattern. The `IQueryable` was lazy-evaluated in `foreach` loop after context was disposed.
+
+**Fix:** Changed interface and implementation from `Task<IQueryable<TeamMember>>` to `Task<List<TeamMember>>` with `.ToListAsync()` before context disposal.
+
+```csharp
+// Before
+public async Task<IQueryable<TeamMember>> GetByStaffAsync(Guid idStaff)
+{
+    await using var context = _contextFactory.CreateDbContext();
+    return context.TeamMembers.Where(t => t.IdStaff == idStaff).AsNoTracking();
+}
+
+// After
+public async Task<List<TeamMember>> GetByStaffAsync(Guid idStaff)
+{
+    await using var context = _contextFactory.CreateDbContext();
+    return await context.TeamMembers
+        .Where(t => t.IdStaff == idStaff)
+        .AsNoTracking()
+        .ToListAsync();
+}
+```
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\ITeamMemberRepository.cs` (lines 8-9)
+- `CustomerManagement.Infrastructure\Repositories\TeamMemberRepository.cs` (lines 26-39)
+
+---
+
+### 2026-05-16: AutoMapper Missing TeamMember -> TeamMemberResponse Mapping
+
+**Issue:** `UpdateTeamMemberAsync` and `TransferOwnershipAsync` threw `AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping`.
+
+**Root Cause:** `_mapper.Map<TeamMemberResponse>(updated)` was called but no mapping profile existed for `TeamMember -> TeamMemberResponse`.
+
+**Fix:** Created `TeamMemberMapper.cs` in `CustomerManagement.Infrastructure\Mapping\`:
+
+```csharp
+public class TeamMemberMapper : Profile
+{
+    public TeamMemberMapper()
+    {
+        CreateMap<TeamMember, TeamMemberResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.EntityType, opt => opt.MapFrom(src => src.EntityType))
+            .ForMember(dest => dest.EntityId, opt => opt.MapFrom(src => src.EntityId))
+            .ForMember(dest => dest.IdStaff, opt => opt.MapFrom(src => src.IdStaff))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => TeamRoleConstant.ToString(src.Role)))
+            .ForMember(dest => dest.AssignedAt, opt => opt.MapFrom(src => src.AssignedAt))
+            .ForMember(dest => dest.AssignedBy, opt => opt.MapFrom(src => src.AssignedBy))
+            .ForMember(dest => dest.CanEdit, opt => opt.MapFrom(src => src.CanEdit))
+            .ForMember(dest => dest.CanDelete, opt => opt.MapFrom(src => src.CanDelete))
+            .ForMember(dest => dest.Staff, opt => opt.Ignore());
+    }
+}
+```
+
+**Files Created:**
+- `CustomerManagement.Infrastructure\Mapping\TeamMemberMapper.cs`

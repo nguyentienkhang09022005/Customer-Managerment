@@ -13,22 +13,22 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IStaffRepository _staffRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
-        private readonly IElasticsearchService _elasticsearchService;
+        // private readonly IElasticsearchService _elasticsearchService;
 
         private static readonly string[] ValidDealStatuses = { "OPEN", "NEGOTIATING", "WON", "LOST" };
 
-        public DealHandler(IDealRepository dealRepository,
-                           IStaffRepository staffRepository,
-                           ICustomerRepository customerRepository,
-                           IMapper mapper,
-                           IElasticsearchService elasticsearchService)
-        {
-            _dealRepository = dealRepository;
-            _staffRepository = staffRepository;
-            _customerRepository = customerRepository;
-            _mapper = mapper;
-            _elasticsearchService = elasticsearchService;
-        }
+        // public DealHandler(IDealRepository dealRepository,
+        //                    IStaffRepository staffRepository,
+        //                    ICustomerRepository customerRepository,
+        //                    IMapper mapper,
+        //                    IElasticsearchService elasticsearchService)
+        // {
+        //     _dealRepository = dealRepository;
+        //     _staffRepository = staffRepository;
+        //     _customerRepository = customerRepository;
+        //     _mapper = mapper;
+        //     _elasticsearchService = elasticsearchService;
+        // }
 
         public async Task<DealResponse> CreateDealAsync(DealCreationRequest request)
         {
@@ -56,7 +56,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             response.Customer = _mapper.Map<CustomerResponse>(customer);
             response.Staff = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "deals");
+            // await _elasticsearchService.IndexAsync(response, "deals");
 
             return response;
         }
@@ -69,7 +69,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new DealNotFoundException();
             }
 
-            await _elasticsearchService.DeleteAsync<DealResponse>(idDeal.ToString(), "deals");
+            // await _elasticsearchService.DeleteAsync<DealResponse>(idDeal.ToString(), "deals");
             return "Xóa deal thành công!";
         }
 
@@ -107,7 +107,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             response.Customer = _mapper.Map<CustomerResponse>(customer);
             response.Staff = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "deals");
+            // await _elasticsearchService.IndexAsync(response, "deals");
 
             return response;
         }

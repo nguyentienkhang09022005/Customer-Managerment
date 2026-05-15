@@ -16,24 +16,24 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly ILeadRepository _leadRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
-        private readonly IElasticsearchService _elasticsearchService;
+        // private readonly IElasticsearchService _elasticsearchService;
 
         private static readonly string[] ValidContactStatuses = { "NEW", "IN_PROGRESS", "SUCCESS", "FAILED", "CLOSED", "CANCELED" };
 
-        public ContactHandler(IContactRepository contactRepository,
-                              IStaffRepository staffRepository,
-                              ILeadRepository leadRepository,
-                              ICustomerRepository customerRepository,
-                              IElasticsearchService elasticsearchService,
-                              IMapper mapper)
-        {
-            _contactRepository = contactRepository;
-            _staffRepository = staffRepository;
-            _leadRepository = leadRepository;
-            _customerRepository = customerRepository;
-            _elasticsearchService = elasticsearchService;
-            _mapper = mapper;
-        }
+        // public ContactHandler(IContactRepository contactRepository,
+        //                       IStaffRepository staffRepository,
+        //                       ILeadRepository leadRepository,
+        //                       ICustomerRepository customerRepository,
+        //                       IElasticsearchService elasticsearchService,
+        //                       IMapper mapper)
+        // {
+        //     _contactRepository = contactRepository;
+        //     _staffRepository = staffRepository;
+        //     _leadRepository = leadRepository;
+        //     _customerRepository = customerRepository;
+        //     _elasticsearchService = elasticsearchService;
+        //     _mapper = mapper;
+        // }
 
         public async Task<ContactResponse> CreateContactAsync(ContactCreationRequest request)
         {
@@ -61,7 +61,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             response.Lead = _mapper.Map<LeadResponse>(lead);
             response.Staff = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "contacts");
+            // await _elasticsearchService.IndexAsync(response, "contacts");
 
             return response;
         }
@@ -74,7 +74,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new ContactNotFoundException();
             }
 
-            await _elasticsearchService.DeleteAsync<ContactResponse>(idContact.ToString(), "contacts");
+            // await _elasticsearchService.DeleteAsync<ContactResponse>(idContact.ToString(), "contacts");
             return "Xóa hoạt động thành công!";
         }
 
@@ -148,7 +148,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             response.Lead = lead != null ? _mapper.Map<LeadResponse>(lead) : null;
             response.Staff = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "contacts");
+            // await _elasticsearchService.IndexAsync(response, "contacts");
 
             return response;
         }

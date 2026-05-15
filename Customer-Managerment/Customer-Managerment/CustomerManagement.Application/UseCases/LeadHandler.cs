@@ -4,6 +4,7 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
 
@@ -12,17 +13,17 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     public class LeadHandler
     {
         private readonly ILeadRepository _leadRepository;
-        private readonly IElasticsearchService _elasticsearchService;
         private readonly IMapper _mapper;
+        // private readonly IElasticsearchService _elasticsearchService;
 
-        public LeadHandler(ILeadRepository leadRepository,
-                           IMapper mapper,
-                           IElasticsearchService elasticsearchService)
-        {
-            _leadRepository = leadRepository;
-            _mapper = mapper;
-            _elasticsearchService = elasticsearchService;
-        }
+        // public LeadHandler(ILeadRepository leadRepository,
+        //                    IMapper mapper,
+        //                    IElasticsearchService elasticsearchService)
+        // {
+        //     _leadRepository = leadRepository;
+        //     _mapper = mapper;
+        //     _elasticsearchService = elasticsearchService;
+        // }
 
         public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest request)
         {
@@ -40,7 +41,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var createdLead = await _leadRepository.AddLeadAsync(lead);
             var response = _mapper.Map<LeadResponse>(createdLead);
 
-            await _elasticsearchService.IndexAsync(response, "leads");
+            // await _elasticsearchService.IndexAsync(response, "leads");
 
             return response;
         }
@@ -53,11 +54,11 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new LeadNotFoundException();
             }
 
-            await _elasticsearchService.DeleteAsync<LeadResponse>(idLead.ToString(), "leads");
+            // await _elasticsearchService.DeleteAsync<LeadResponse>(idLead.ToString(), "leads");
             return "Xóa khách hàng tiềm năng thành công!";
         }
 
-        public async Task<string> ImportLeadExcelAsync(IFile file)
+        public async Task<string> ImportLeadExcelAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 throw new ValidationException("File không được để trống!");
@@ -118,7 +119,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var lead = await _leadRepository.GetLeadByIdAsync(idLead);
             var response = _mapper.Map<LeadResponse>(lead);
 
-            await _elasticsearchService.IndexAsync(response, "leads");
+            // await _elasticsearchService.IndexAsync(response, "leads");
             return response;
         }
 
@@ -148,7 +149,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var updatedLead = await _leadRepository.UpdateLeadAsync(existingLead);
             var response = _mapper.Map<LeadResponse>(updatedLead);
 
-            await _elasticsearchService.IndexAsync(response, "leads");
+            // await _elasticsearchService.IndexAsync(response, "leads");
             return response;
         }
 

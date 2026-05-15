@@ -1,4 +1,6 @@
-﻿using Customer_Managerment.CustomerManagement.Api.Input.Type;
+﻿using Customer_Managerment.CustomerManagement.Api.Hubs;
+using Customer_Managerment.CustomerManagement.Api.Services;
+using Customer_Managerment.CustomerManagement.Api.Input.Type;
 using Customer_Managerment.CustomerManagement.Api.MiddleWare;
 using Customer_Managerment.CustomerManagement.Api.Mutation;
 using Customer_Managerment.CustomerManagement.Api.Query;
@@ -11,6 +13,7 @@ using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Customer_Managerment.CustomerManagement.Infrastructure.Repositories;
 using Customer_Managerment.CustomerManagement.Infrastructure.Services;
 using HotChocolate.AspNetCore.Voyager;
+using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,7 +38,7 @@ builder.Configuration["RedisSettings:Password"] = Environment.GetEnvironmentVari
 builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("SENDER_APIKEY");
 builder.Configuration["SendGrid:Email"] = Environment.GetEnvironmentVariable("SENDER_EMAIL");
 builder.Configuration["SendGrid:Name"] = Environment.GetEnvironmentVariable("SENDER_NAME");
-builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
+// builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
 builder.Configuration["GeminiSettings:ApiKey"] = Environment.GetEnvironmentVariable("APIKEY__GEMINI");
 builder.Configuration["GeminiSettings:BaseUrl"] = Environment.GetEnvironmentVariable("GEMINI__APIURL");
 
@@ -74,16 +77,25 @@ builder.Services.AddScoped<IEventParticipantRepository, EventParticipantReposito
 // Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>();
-builder.Services.AddHttpClient<IGeminiService, GeminiService>();
-builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>();
+// // AI Chat Services (Commented out for future development)
+// // builder.Services.AddHttpClient<IGeminiService, GeminiService>();
+// // builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>();
+
+// Background Services
+builder.Services.AddHostedService<CalendarReminderService>();
+
+// SignalR Services
+builder.Services.AddSignalR();
+builder.Services.AddScoped<IRealtimeNotificationService, RealtimeNotificationService>();
+builder.Services.AddScoped<IRealtimeNoteService, RealtimeNoteService>();
+builder.Services.AddScoped<IRealtimeNotificationSender, RealtimeNotificationSenderAdapter>();
 
 
 
 // Handlers
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
-builder.Services.AddScoped<ChatHandler>();
+// builder.Services.AddScoped<ChatHandler>(); // AI Chat Handler - Commented out for future development
 builder.Services.AddScoped<StaffHandler>();
 builder.Services.AddScoped<ContactHandler>();
 builder.Services.AddScoped<LeadHandler>();
@@ -133,17 +145,17 @@ builder.Services
     .AddType<DashboardResponseType>()
     .AddType<RevenueChartResponseType>()
     .AddQueryType(d => d.Name("Query"))
-        .AddTypeExtension<ChatQuery>()
+        // .AddTypeExtension<ChatQuery>() // AI Chat Query - Commented out for future development
         .AddTypeExtension<StaffQuery>()
         .AddTypeExtension<ContactQuery>()
         .AddTypeExtension<LeadQuery>()
         .AddTypeExtension<CustomerQuery>()
         .AddTypeExtension<DealQuery>()
-        .AddTypeExtension<StaffElasticSearchQuery>()
-        .AddTypeExtension<CustomersElasticSearchQuery>()
-        .AddTypeExtension<LeadsElasticSearchQuery>()
-        .AddTypeExtension<DealsElasticSearchQuery>()
-        .AddTypeExtension<ContactsElasticSearchQuery>()
+        // .AddTypeExtension<StaffElasticSearchQuery>()
+        // .AddTypeExtension<CustomersElasticSearchQuery>()
+        // .AddTypeExtension<LeadsElasticSearchQuery>()
+        // .AddTypeExtension<DealsElasticSearchQuery>()
+        // .AddTypeExtension<ContactsElasticSearchQuery>()
         .AddTypeExtension<StatisticsQuery>()
         .AddTypeExtension<TaskQuery>()
         .AddTypeExtension<NoteQuery>()
@@ -157,7 +169,7 @@ builder.Services
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
-        .AddTypeExtension<ChatMutation>()
+        // .AddTypeExtension<ChatMutation>() // AI Chat Mutation - Commented out for future development
         .AddTypeExtension<StaffMutation>()
         .AddTypeExtension<LeadMutation>()
         .AddTypeExtension<ContactMutation>()
@@ -232,6 +244,10 @@ app.UseAuthorization();
 
 // Endpoint GraphQL
 app.MapGraphQL("/graphql");
+
+// SignalR Hubs
+app.MapHub<NotificationHub>("/hubs/notifications");
+app.MapHub<NoteHub>("/hubs/notes");
 
 // Voyager UI
 app.UseVoyager(

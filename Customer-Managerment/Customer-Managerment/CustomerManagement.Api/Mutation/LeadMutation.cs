@@ -33,10 +33,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             return await _leadHandler.UpdateLeadAsync(leadUpdateRequest, idLead);
         }
 
-        public async Task<string> ImportLeadExcelAsync(IFile file)
-        {
-            return await _leadHandler.ImportLeadExcelAsync(file);
-        }
+        // File upload moved to /api/fileupload/lead
 
         private string GetCurrentUserId()
         {

@@ -24,31 +24,34 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(l => l.IdLog == idLog);
         }
 
-        public async Task<IQueryable<StaffActivityLog>> GetLogsByStaffAsync(Guid idStaff)
+        public async Task<List<StaffActivityLog>> GetLogsByStaffAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.StaffActivityLogs
+            return await context.StaffActivityLogs
                 .Where(l => l.IdStaff == idStaff)
                 .OrderByDescending(l => l.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<StaffActivityLog>> GetLogsByStaffAndDateRangeAsync(Guid idStaff, DateTime fromDate, DateTime toDate)
+        public async Task<List<StaffActivityLog>> GetLogsByStaffAndDateRangeAsync(Guid idStaff, DateTime fromDate, DateTime toDate)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.StaffActivityLogs
+            return await context.StaffActivityLogs
                 .Where(l => l.IdStaff == idStaff && l.Timestamp >= fromDate && l.Timestamp <= toDate)
                 .OrderByDescending(l => l.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<StaffActivityLog>> GetRecentLogsAsync(int count)
+        public async Task<List<StaffActivityLog>> GetRecentLogsAsync(int count)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.StaffActivityLogs
+            return await context.StaffActivityLogs
                 .OrderByDescending(l => l.Timestamp)
                 .Take(count)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<StaffActivityLog> AddAsync(StaffActivityLog log)

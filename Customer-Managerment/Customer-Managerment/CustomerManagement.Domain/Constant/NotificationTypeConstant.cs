@@ -8,6 +8,7 @@ namespace Customer_Managerment.CustomerManagement.Domain.Constant
         public const string NotificationContactStatusChanged = "CONTACT_STATUS_CHANGED";
         public const string NotificationMention = "MENTION";
         public const string NotificationSystem = "SYSTEM";
+        public const string NotificationReminder = "REMINDER";
 
         public static readonly string[] NotificationTypes = {
             NotificationTaskAssigned,
@@ -15,7 +16,8 @@ namespace Customer_Managerment.CustomerManagement.Domain.Constant
             NotificationDealUpdated,
             NotificationContactStatusChanged,
             NotificationMention,
-            NotificationSystem
+            NotificationSystem,
+            NotificationReminder
         };
     }
 }

@@ -24,55 +24,63 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return await context.AuditLogs.FirstOrDefaultAsync(a => a.IdLog == idLog);
         }
 
-        public async Task<IQueryable<AuditLog>> GetAllAsync()
+        public async Task<List<AuditLog>> GetAllAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.AuditLogs.OrderByDescending(a => a.Timestamp).AsNoTracking();
+            return await context.AuditLogs
+                .OrderByDescending(a => a.Timestamp)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<AuditLog>> GetByEntityAsync(string entityType, Guid entityId)
+        public async Task<List<AuditLog>> GetByEntityAsync(string entityType, Guid entityId)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.AuditLogs
+            return await context.AuditLogs
                 .Where(a => a.EntityType == entityType && a.EntityId == entityId)
                 .OrderByDescending(a => a.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<AuditLog>> GetByStaffAsync(Guid idStaff)
+        public async Task<List<AuditLog>> GetByStaffAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.AuditLogs
+            return await context.AuditLogs
                 .Where(a => a.IdStaff == idStaff)
                 .OrderByDescending(a => a.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<AuditLog>> GetByActionAsync(string action)
+        public async Task<List<AuditLog>> GetByActionAsync(string action)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.AuditLogs
+            return await context.AuditLogs
                 .Where(a => a.Action == action.ToUpper())
                 .OrderByDescending(a => a.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<AuditLog>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate)
+        public async Task<List<AuditLog>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.AuditLogs
+            return await context.AuditLogs
                 .Where(a => a.Timestamp >= fromDate && a.Timestamp <= toDate)
                 .OrderByDescending(a => a.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<AuditLog>> GetEntityHistoryAsync(string entityType, Guid entityId)
+        public async Task<List<AuditLog>> GetEntityHistoryAsync(string entityType, Guid entityId)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.AuditLogs
+            return await context.AuditLogs
                 .Where(a => a.EntityType == entityType && a.EntityId == entityId)
                 .OrderByDescending(a => a.Timestamp)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<AuditLog> AddAsync(AuditLog auditLog)

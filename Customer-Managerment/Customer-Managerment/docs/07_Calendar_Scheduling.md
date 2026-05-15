@@ -144,6 +144,13 @@ EventParticipant:
 
 ## 7. Background Jobs
 
+### CalendarReminderService (IMPLEMENTED)
+- Chạy mỗi 5 phút
+- Tìm events có reminder trong vòng 5-10 phút tới
+- Tạo notification cho organizer và participants
+- Notification type: `NotificationReminder`
+- Service: `IRealtimeNotificationService.SendNotificationToStaffAsync`
+
 ### Reminder Job
 - Chạy mỗi 5 phút
 - Tìm events có reminder trong vòng 5-10 phút tới
@@ -163,3 +170,90 @@ EventParticipant:
 4. GraphQL types + Query + Mutation
 5. Background job cho reminders
 6. Đăng ký services + Migration
+
+---
+
+## 9. Bug Fixes
+
+### 2026-05-16: 500 Error in GetCalendarEvents Query
+
+**Issue:** `GetCalendarEvents` query returned 500 error ("Lỗi hệ thống không xác định").
+
+**Root Cause:** `MapStaffToResponse` method assigned database null values to non-nullable DTO properties (`Fullname`, `Email`), causing `NullReferenceException` during Hot Chocolate serialization.
+
+**Fix:** Added null-coalescing operators in both `CalendarQuery.cs` and `CalendarHandler.cs`:
+
+```csharp
+// Before
+Fullname = staff.Fullname,
+Email = staff.Email,
+
+// After
+Fullname = staff.Fullname ?? "",
+Email = staff.Email ?? "",
+```
+
+**Files Modified:**
+- `CustomerManagement.Api\Query\CalendarQuery.cs` (lines 173-176)
+- `CustomerManagement.Application\UseCases\CalendarHandler.cs` (lines 383-386)
+
+---
+
+### 2026-05-16: ObjectDisposedException in GetCalendarEvents Query
+
+**Issue:** `GetCalendarEvents` threw `ObjectDisposedException: Cannot access a disposed context instance`.
+
+**Root Cause:** Repository methods returned `IQueryable<CalendarEvent>` with `await using var context` pattern. The `IQueryable` was lazy-evaluated after the DbContext was disposed when the async method completed.
+
+**Fix:** Changed repository methods to return `Task<List<CalendarEvent>>` with `.ToListAsync()` before the context is disposed:
+
+```csharp
+// Before
+public async Task<IQueryable<CalendarEvent>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate)
+{
+    await using var context = _contextFactory.CreateDbContext();
+    return context.CalendarEvents...
+}
+
+// After
+public async Task<List<CalendarEvent>> GetByDateRangeAsync(DateTime fromDate, DateTime toDate)
+{
+    await using var context = _contextFactory.CreateDbContext();
+    return await context.CalendarEvents...
+        .ToListAsync();
+}
+```
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\ICalendarEventRepository.cs`
+- `CustomerManagement.Infrastructure\Repositories\CalendarEventRepository.cs`
+- `CustomerManagement.Api\Query\CalendarQuery.cs`
+- `CustomerManagement.Application\UseCases\CalendarHandler.cs`
+
+---
+
+### 2026-05-16: ObjectDisposedException in EventParticipantRepository
+
+**Issue:** `GetCalendarEventById`, `GetMyEvents`, `GetUpcomingEvents` threw `ObjectDisposedException` because `EventParticipantRepository.GetByEventAsync` returned `IQueryable<EventParticipant>` with `await using var context` pattern.
+
+**Root Cause:** Same IQueryable disposal pattern in `EventParticipantRepository.GetByEventAsync`.
+
+**Fix:** Changed return type from `Task<IQueryable<EventParticipant>>` to `Task<List<EventParticipant>>` with `.ToListAsync()`.
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\IEventParticipantRepository.cs` (line 8)
+- `CustomerManagement.Infrastructure\Repositories\EventParticipantRepository.cs` (lines 26-32)
+
+---
+
+### 2026-05-16: CalendarReminderService Query Exception
+
+**Issue:** CalendarReminderService threw `ObjectDisposedException` when querying events due to same IQueryable disposal pattern.
+
+**Root Cause:** `GetUpcomingEventsAsync` method returned `IQueryable<CalendarEvent>` that was evaluated after context disposal.
+
+**Fix:** Changed `GetUpcomingEventsAsync` to return `Task<List<CalendarEvent>>` with `.ToListAsync()`.
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\ICalendarEventRepository.cs`
+- `CustomerManagement.Infrastructure\Repositories\CalendarEventRepository.cs`

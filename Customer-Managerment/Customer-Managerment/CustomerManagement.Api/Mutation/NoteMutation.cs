@@ -2,6 +2,7 @@ using Customer_Managerment.CustomerManagement.Api.Input.Type;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
+using Customer_Managerment.CustomerManagement.Api.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -11,11 +12,16 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
     public class NoteMutation
     {
         private readonly NoteHandler _noteHandler;
+        private readonly IRealtimeNoteService _realtimeNoteService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public NoteMutation(NoteHandler noteHandler, IHttpContextAccessor httpContextAccessor)
+        public NoteMutation(
+            NoteHandler noteHandler,
+            IRealtimeNoteService realtimeNoteService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _noteHandler = noteHandler;
+            _realtimeNoteService = realtimeNoteService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -31,7 +37,18 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
                 ParentNoteId = input.ParentNoteId
             };
 
-            return await _noteHandler.CreateNoteAsync(request);
+            var result = await _noteHandler.CreateNoteAsync(request);
+
+            // Send realtime notification for new note
+            if (!string.IsNullOrEmpty(result.LinkedEntityType))
+            {
+                await _realtimeNoteService.SendNoteToEntityAsync(
+                    result.LinkedEntityType,
+                    result.LinkedEntityId,
+                    result);
+            }
+
+            return result;
         }
 
         public async Task<NoteResponse> UpdateNoteAsync(NoteUpdateInput input, Guid idNote)
@@ -42,7 +59,18 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
                 IsPinned = input.IsPinned
             };
 
-            return await _noteHandler.UpdateNoteAsync(request, idNote);
+            var result = await _noteHandler.UpdateNoteAsync(request, idNote);
+
+            // Send realtime notification for updated note
+            if (!string.IsNullOrEmpty(result.LinkedEntityType))
+            {
+                await _realtimeNoteService.SendNoteToEntityAsync(
+                    result.LinkedEntityType,
+                    result.LinkedEntityId,
+                    result);
+            }
+
+            return result;
         }
 
         public async Task<bool> DeleteNoteAsync(Guid idNote)
@@ -63,7 +91,18 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
 
         public async Task<NoteResponse> ReplyNoteAsync(Guid idNote, Guid parentId)
         {
-            return await _noteHandler.ReplyNoteAsync(idNote, parentId);
+            var result = await _noteHandler.ReplyNoteAsync(idNote, parentId);
+
+            // Send realtime for reply
+            if (!string.IsNullOrEmpty(result.LinkedEntityType))
+            {
+                await _realtimeNoteService.SendNoteToEntityAsync(
+                    result.LinkedEntityType,
+                    result.LinkedEntityId,
+                    result);
+            }
+
+            return result;
         }
 
         private string GetCurrentUserId()

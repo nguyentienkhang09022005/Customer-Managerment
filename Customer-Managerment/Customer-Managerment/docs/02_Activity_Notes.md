@@ -114,7 +114,57 @@ NoteMention:
 
 ---
 
-## 6. Implementation Order
+### Real-time via SignalR
+
+**SignalR Hub:** `NoteHub` at `/hubs/notes`
+
+**Methods:**
+- `JoinEntityGroup(string entityType, Guid entityId)` - Subscribe to entity notes (Lead/Customer/Deal)
+- `LeaveEntityGroup(string entityType, Guid entityId)` - Unsubscribe
+- `JoinStaffGroup(Guid idStaff)` - Subscribe to personal notes
+
+**Service:** `IRealtimeNoteService` → `RealtimeNoteService`
+- `SendNoteToEntityAsync(string entityType, Guid entityId, NoteResponse note)` - Send to entity group
+- `SendNoteToStaffAsync(Guid idStaff, NoteResponse note)` - Send to staff
+- `BroadcastNoteUpdateAsync(NoteResponse note)` - Broadcast to all
+
+**Integration:**
+- NoteMutation uses `IRealtimeNoteService` to send real-time notes on create/update/reply
+- All notes linked to Lead/Customer/Deal are broadcast to subscribed clients
+
+---
+
+## 6. Bug Fixes
+
+### 2026-05-16: NullReferenceException in CreateNoteAsync
+
+**Issue:** `CreateNoteAsync` threw `NullReferenceException` at line 41 when calling `_staffRepository.GetStaffByIdAsync()`.
+
+**Root Cause:** Constructor of `NoteHandler` was commented out, causing `_staffRepository` to be null.
+
+**Fix:** Uncommented constructor to enable proper dependency injection:
+
+```csharp
+public NoteHandler(
+    INoteRepository noteRepository,
+    INoteMentionRepository noteMentionRepository,
+    IStaffRepository staffRepository,
+    INotificationRepository notificationRepository,
+    IMapper mapper)
+{
+    _noteRepository = noteRepository;
+    _noteMentionRepository = noteMentionRepository;
+    _staffRepository = staffRepository;
+    _notificationRepository = notificationRepository;
+    _mapper = mapper;
+}
+```
+
+**File:** `CustomerManagement.Application\UseCases\NoteHandler.cs`
+
+---
+
+## 7. Implementation Order
 
 1. Entity + Constants + Exceptions
 2. Repository Interface + Implementation

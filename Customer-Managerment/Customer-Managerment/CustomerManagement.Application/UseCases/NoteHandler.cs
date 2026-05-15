@@ -15,7 +15,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly INoteMentionRepository _noteMentionRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly INotificationRepository _notificationRepository;
-        private readonly IElasticsearchService _elasticsearchService;
+        // private readonly IElasticsearchService _elasticsearchService;
         private readonly IMapper _mapper;
 
         public NoteHandler(
@@ -23,14 +23,12 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             INoteMentionRepository noteMentionRepository,
             IStaffRepository staffRepository,
             INotificationRepository notificationRepository,
-            IElasticsearchService elasticsearchService,
             IMapper mapper)
         {
             _noteRepository = noteRepository;
             _noteMentionRepository = noteMentionRepository;
             _staffRepository = staffRepository;
             _notificationRepository = notificationRepository;
-            _elasticsearchService = elasticsearchService;
             _mapper = mapper;
         }
 
@@ -54,7 +52,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<NoteResponse>(createdNote);
             response.Staff = _mapper.Map<StaffResponse>(staff);
 
-            await _elasticsearchService.IndexAsync(response, "notes");
+            // await _elasticsearchService.IndexAsync(response, "notes");
 
             return response;
         }
@@ -67,7 +65,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
                 throw new NoteNotFoundException();
             }
 
-            await _elasticsearchService.DeleteAsync<NoteResponse>(idNote.ToString(), "notes");
+            // await _elasticsearchService.DeleteAsync<NoteResponse>(idNote.ToString(), "notes");
             return "Xóa bình luận thành công!";
         }
 
@@ -93,7 +91,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<NoteResponse>(updatedNote);
             response.Staff = staff != null ? _mapper.Map<StaffResponse>(staff) : null;
 
-            await _elasticsearchService.IndexAsync(response, "notes");
+            // await _elasticsearchService.IndexAsync(response, "notes");
             return response;
         }
 
@@ -113,7 +111,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<NoteResponse>(updatedNote);
             response.Staff = staff != null ? _mapper.Map<StaffResponse>(staff) : null;
 
-            await _elasticsearchService.IndexAsync(response, "notes");
+            // await _elasticsearchService.IndexAsync(response, "notes");
             return response;
         }
 
@@ -133,7 +131,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<NoteResponse>(updatedNote);
             response.Staff = staff != null ? _mapper.Map<StaffResponse>(staff) : null;
 
-            await _elasticsearchService.IndexAsync(response, "notes");
+            // await _elasticsearchService.IndexAsync(response, "notes");
             return response;
         }
 
@@ -161,7 +159,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<NoteResponse>(updatedNote);
             response.Staff = staff != null ? _mapper.Map<StaffResponse>(staff) : null;
 
-            await _elasticsearchService.IndexAsync(response, "notes");
+            // await _elasticsearchService.IndexAsync(response, "notes");
             return response;
         }
 

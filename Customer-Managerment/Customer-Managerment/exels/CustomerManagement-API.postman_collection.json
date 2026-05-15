@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "Customer Management GraphQL API",
-		"description": "Full collection of Customer Management GraphQL APIs with sample requests. Environment: http://localhost:7109/graphql. Updated: 2026-05-15 with Calendar/Scheduling and Analytics Dashboard APIs.",
+		"description": "Full collection of Customer Management GraphQL APIs. Environment: http://localhost:7109/graphql. Updated: 2026-05-15 - Added SignalR hubs documentation (NotificationHub: /hubs/notifications, NoteHub: /hubs/notes), CalendarReminderService background job.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
@@ -1779,6 +1779,25 @@
 							"graphql": {
 								"query": "mutation DeleteCalendarEvent($idEvent: UUID!) {\n  deleteCalendarEvent(idEvent: $idEvent)\n}",
 								"variables": "{\n  \"idEvent\": \"{{calendarEventId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Events By Entity",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetEventsByEntity($entityType: String!, $entityId: UUID!) {\n  eventsByEntity(entityType: $entityType, entityId: $entityId) {\n    idEvent\n    title\n    description\n    eventType\n    startTime\n    endTime\n    location\n    isAllDay\n    reminderMinutes\n    status\n    idStaff\n    relatedEntityType\n    relatedEntityId\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n    participants {\n      id\n      idStaff\n      status\n      staff {\n        username\n        person {\n          fullname\n        }\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"entityType\": \"Lead\",\n  \"entityId\": \"{{leadId}}\"\n}"
 							}
 						},
 						"url": {

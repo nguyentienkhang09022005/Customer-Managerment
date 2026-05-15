@@ -23,20 +23,22 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return await context.TeamMembers.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<IQueryable<TeamMember>> GetByEntityAsync(string entityType, Guid entityId)
+        public async Task<List<TeamMember>> GetByEntityAsync(string entityType, Guid entityId)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.TeamMembers
+            return await context.TeamMembers
                 .Where(t => t.EntityType == entityType && t.EntityId == entityId)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<IQueryable<TeamMember>> GetByStaffAsync(Guid idStaff)
+        public async Task<List<TeamMember>> GetByStaffAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            return context.TeamMembers
+            return await context.TeamMembers
                 .Where(t => t.IdStaff == idStaff)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<TeamMember?> GetTeamMemberAsync(string entityType, Guid entityId, Guid idStaff)

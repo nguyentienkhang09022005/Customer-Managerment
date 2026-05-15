@@ -107,6 +107,25 @@ NotificationSettings:
 - Khi click vào notification -> mark as read
 - Có thể cấu hình tự động đọc sau X ngày
 
+### Real-time via SignalR
+
+**SignalR Hub:** `NotificationHub` at `/hubs/notifications`
+
+**Methods:**
+- `JoinStaffGroup(Guid idStaff)` - Subscribe to personal notifications
+- `LeaveStaffGroup(Guid idStaff)` - Unsubscribe
+
+**Service:** `IRealtimeNotificationService` → `RealtimeNotificationService`
+- `SendNotificationToStaffAsync(Guid idStaff, NotificationResponse notification)` - Send to specific staff
+- `BroadcastNotificationAsync(NotificationResponse notification)` - Broadcast to all
+
+**Integration:**
+- NotificationMutation uses `IRealtimeNotificationService` to send real-time notifications
+- CalendarMutation sends notification to participants when events are created/updated
+- CalendarReminderService sends reminder notifications via SignalR
+
+---
+
 ### Real-time (tương lai)
 - Dùng SignalR cho real-time notification
 - Hoặc polling mỗi 30 giây

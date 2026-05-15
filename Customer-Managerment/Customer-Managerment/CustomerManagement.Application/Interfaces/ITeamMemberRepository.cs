@@ -5,8 +5,8 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
     public interface ITeamMemberRepository
     {
         Task<TeamMember?> GetByIdAsync(Guid id);
-        Task<IQueryable<TeamMember>> GetByEntityAsync(string entityType, Guid entityId);
-        Task<IQueryable<TeamMember>> GetByStaffAsync(Guid idStaff);
+        Task<List<TeamMember>> GetByEntityAsync(string entityType, Guid entityId);
+        Task<List<TeamMember>> GetByStaffAsync(Guid idStaff);
         Task<TeamMember?> GetTeamMemberAsync(string entityType, Guid entityId, Guid idStaff);
         Task<bool> HasOwnerAsync(string entityType, Guid entityId);
         Task<TeamMember> AddAsync(TeamMember teamMember);

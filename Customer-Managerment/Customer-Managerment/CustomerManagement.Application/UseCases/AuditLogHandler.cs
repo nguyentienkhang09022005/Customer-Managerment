@@ -48,7 +48,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
         public async Task<AuditLogListResponse> GetAuditLogsAsync(string? entityType, Guid? entityId, DateTime? fromDate, DateTime? toDate, int page = 1, int pageSize = 50)
         {
-            IQueryable<AuditLog> logs;
+            List<AuditLog> logs;
 
             if (entityType != null && entityId.HasValue)
             {
@@ -78,11 +78,11 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var logs = await _auditLogRepository.GetByStaffAsync(idStaff);
             if (fromDate.HasValue && toDate.HasValue)
             {
-                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value);
+                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value).ToList();
             }
 
             var logList = logs.OrderByDescending(l => l.Timestamp).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            var totalCount = logs.Count();
+            var totalCount = logs.Count;
 
             return new AuditLogListResponse
             {
@@ -96,11 +96,11 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var logs = await _auditLogRepository.GetByActionAsync(action);
             if (fromDate.HasValue && toDate.HasValue)
             {
-                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value);
+                logs = logs.Where(l => l.Timestamp >= fromDate.Value && l.Timestamp <= toDate.Value).ToList();
             }
 
             var logList = logs.OrderByDescending(l => l.Timestamp).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            var totalCount = logs.Count();
+            var totalCount = logs.Count;
 
             return new AuditLogListResponse
             {
