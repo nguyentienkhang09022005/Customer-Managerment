@@ -14,15 +14,14 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IMapper _mapper;
         // private readonly IElasticsearchService _elasticsearchService;
 
-        // public StaffHandler(
-        //     IStaffRepository staffRepository,
-        //     IElasticsearchService elasticsearchService,
-        //     IMapper mapper)
-        // {
-        //     _staffRepository = staffRepository;
-        //     _elasticsearchService = elasticsearchService;
-        //     _mapper = mapper;
-        // }
+        public StaffHandler(
+            IStaffRepository staffRepository,
+            IMapper mapper)
+        {
+            _staffRepository = staffRepository;
+            _mapper = mapper;
+            // _elasticsearchService = elasticsearchService;
+        }
 
         public async Task<StaffResponse> CreateStaffAsync(StaffCreationRequest request)
         {

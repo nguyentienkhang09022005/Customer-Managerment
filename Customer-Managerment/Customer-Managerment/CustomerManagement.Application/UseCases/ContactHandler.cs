@@ -20,20 +20,19 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
         private static readonly string[] ValidContactStatuses = { "NEW", "IN_PROGRESS", "SUCCESS", "FAILED", "CLOSED", "CANCELED" };
 
-        // public ContactHandler(IContactRepository contactRepository,
-        //                       IStaffRepository staffRepository,
-        //                       ILeadRepository leadRepository,
-        //                       ICustomerRepository customerRepository,
-        //                       IElasticsearchService elasticsearchService,
-        //                       IMapper mapper)
-        // {
-        //     _contactRepository = contactRepository;
-        //     _staffRepository = staffRepository;
-        //     _leadRepository = leadRepository;
-        //     _customerRepository = customerRepository;
-        //     _elasticsearchService = elasticsearchService;
-        //     _mapper = mapper;
-        // }
+        public ContactHandler(IContactRepository contactRepository,
+                             IStaffRepository staffRepository,
+                             ILeadRepository leadRepository,
+                             ICustomerRepository customerRepository,
+                             IMapper mapper)
+        {
+            _contactRepository = contactRepository;
+            _staffRepository = staffRepository;
+            _leadRepository = leadRepository;
+            _customerRepository = customerRepository;
+            _mapper = mapper;
+            // _elasticsearchService = elasticsearchService;
+        }
 
         public async Task<ContactResponse> CreateContactAsync(ContactCreationRequest request)
         {

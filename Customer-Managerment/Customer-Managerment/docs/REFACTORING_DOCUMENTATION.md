@@ -949,3 +949,166 @@ Then uncomment constructor parameters and service usage in handler files.
 *File Upload: REST API endpoints implemented (not GraphQL)*
 *Bug Fixes: NoteHandler constructor fixed, CalendarQuery null handling added, CalendarEventRepository disposed context fixed, TeamMemberRepository disposed context fixed, TeamMemberMapper created, AuditLogRepository disposed context fixed, StaffActivityLogRepository disposed context fixed, AuditStatisticsResponse fields added*
 *AI Chat & Elasticsearch: Commented out for future development (2026-05-16)*
+*Handler Constructors: All 5 main handlers constructors uncommented (2026-05-16)*
+*TaskInput: DueDate changed from DateTime? to string?, parse in mutation (2026-05-16)*
+*TaskPriority: Client must use enum names (LOW, MEDIUM) not numbers (0, 1) (2026-05-16)*
+
+---
+
+## 25. Handler Constructor Fix - NullReferenceException (2026-05-16)
+
+### Overview
+
+All 5 main handler constructors were commented out when Elasticsearch code was commented, causing `_leadRepository`, `_staffRepository`, and other dependencies to be `null`. This resulted in `NullReferenceException` at line 32 when calling `CreateLeadAsync`.
+
+### Root Cause
+
+When Elasticsearch code was commented out in handlers (to disable Elasticsearch feature), the constructors that accepted `IElasticsearchService` were also commented. This left the private readonly fields (`_leadRepository`, `_staffRepository`, etc.) uninitialized.
+
+### Fix Applied
+
+Uncommented and adapted constructors for all 5 handlers:
+
+**StaffHandler.cs:**
+```csharp
+public StaffHandler(
+    IStaffRepository staffRepository,
+    IMapper mapper)
+{
+    _staffRepository = staffRepository;
+    _mapper = mapper;
+}
+```
+
+**LeadHandler.cs:**
+```csharp
+public LeadHandler(ILeadRepository leadRepository,
+                   IMapper mapper)
+{
+    _leadRepository = leadRepository;
+    _mapper = mapper;
+}
+```
+
+**DealHandler.cs:**
+```csharp
+public DealHandler(IDealRepository dealRepository,
+                   IStaffRepository staffRepository,
+                   ICustomerRepository customerRepository,
+                   IMapper mapper)
+{
+    _dealRepository = dealRepository;
+    _staffRepository = staffRepository;
+    _customerRepository = customerRepository;
+    _mapper = mapper;
+}
+```
+
+**CustomerHandler.cs:**
+```csharp
+public CustomerHandler(ICustomerRepository customerRepository,
+                        ILeadRepository leadRepository,
+                        IMapper mapper)
+{
+    _customerRepository = customerRepository;
+    _leadRepository = leadRepository;
+    _mapper = mapper;
+}
+```
+
+**ContactHandler.cs:**
+```csharp
+public ContactHandler(IContactRepository contactRepository,
+                      IStaffRepository staffRepository,
+                      ILeadRepository leadRepository,
+                      ICustomerRepository customerRepository,
+                      IMapper mapper)
+{
+    _contactRepository = contactRepository;
+    _staffRepository = staffRepository;
+    _leadRepository = leadRepository;
+    _customerRepository = customerRepository;
+    _mapper = mapper;
+}
+```
+
+### Files Modified
+- `CustomerManagement.Application\UseCases\StaffHandler.cs`
+- `CustomerManagement.Application\UseCases\LeadHandler.cs`
+- `CustomerManagement.Application\UseCases\DealHandler.cs`
+- `CustomerManagement.Application\UseCases\CustomerHandler.cs`
+- `CustomerManagement.Application\UseCases\ContactHandler.cs`
+
+### Build Status
+- **Build: SUCCESS** (0 errors, 15 warnings)
+- Warnings are pre-existing (CS8602 dereference null, CS1998 async without await)
+
+---
+
+## 26. TaskInput DateTime Parsing Fix (2026-05-16)
+
+### Overview
+
+`updateTask` mutation threw `DateTime cannot parse the given literal of type StringValueNode` when `dueDate` field was provided in the input.
+
+### Root Cause
+
+`TaskInputType.cs` defined `DueDate` as `DateTime?` which Hot Chocolate cannot parse from GraphQL string literal `StringValueNode`.
+
+### Fix Applied
+
+Changed `DueDate` from `DateTime?` to `string?` in both `TaskInput` and `TaskUpdateInput`:
+
+```csharp
+// TaskInputType.cs - Before
+public DateTime? DueDate { get; set; }
+
+// TaskInputType.cs - After
+public string? DueDate { get; set; }
+```
+
+Parse string to DateTime in mutation handlers:
+
+```csharp
+// TaskMutation.cs
+DateTime? dueDate = null;
+if (!string.IsNullOrEmpty(input.DueDate) && DateTime.TryParse(input.DueDate, out var parsed))
+{
+    dueDate = parsed;
+}
+```
+
+### Files Modified
+- `CustomerManagement.Api\Input\Type\TaskInputType.cs`
+- `CustomerManagement.Api\Mutation\TaskMutation.cs`
+
+---
+
+## 27. TaskPriority Enum Value Format (2026-05-16)
+
+### Issue
+
+Client sent `priority: "0"` (string number) but Hot Chocolate enum expects enum name like `LOW`, `MEDIUM`, `HIGH`, `URGENT`.
+
+### Root Cause
+
+GraphQL enum input requires exact enum member names, not integer values.
+
+### Valid Enum Values
+
+| TaskPriority | TaskItemStatus |
+|--------------|----------------|
+| LOW | PENDING |
+| MEDIUM | IN_PROGRESS |
+| HIGH | COMPLETED |
+| URGENT | CANCELLED |
+
+### Client-Side Fix Required
+
+```json
+// Incorrect - causes error
+{ "priority": "0", "status": "0" }
+
+// Correct
+{ "priority": "LOW", "status": "PENDING" }
+```

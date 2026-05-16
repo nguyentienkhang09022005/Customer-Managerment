@@ -116,3 +116,58 @@ TaskLinkedEntityConstant: Lead, Customer, Deal
 
 - `CustomerManagement.Api/Program.cs` - đăng ký TaskHandler, TaskRepository, GraphQL types
 - `CustomerManagement.Infrastructure/Data/CustomerManagementDbContext.cs` - thêm DbSet<Task>
+
+---
+
+## 7. Bug Fixes
+
+### 2026-05-16: DateTime Parsing Error in TaskInput
+
+**Issue:** `updateTask` mutation threw `DateTime cannot parse the given literal of type StringValueNode` when `dueDate` was provided.
+
+**Root Cause:** `TaskInputType.cs` defined `DueDate` as `DateTime?` which Hot Chocolate cannot parse from GraphQL string literal.
+
+**Fix:** Changed `DueDate` from `DateTime?` to `string?` in both `TaskInput` and `TaskUpdateInput`, then parse in mutation handlers:
+
+```csharp
+// TaskInputType.cs
+public string? DueDate { get; set; }
+
+// TaskMutation.cs
+DateTime? dueDate = null;
+if (!string.IsNullOrEmpty(input.DueDate) && DateTime.TryParse(input.DueDate, out var parsed))
+{
+    dueDate = parsed;
+}
+```
+
+**Files Modified:**
+- `CustomerManagement.Api\Input\Type\TaskInputType.cs`
+- `CustomerManagement.Api\Mutation\TaskMutation.cs`
+
+---
+
+### 2026-05-16: Enum Value Format Requirement
+
+**Issue:** Client sent `priority: "0"` (string number) but Hot Chocolate enum expects enum name like `LOW`, `MEDIUM`, `HIGH`, `URGENT`.
+
+**Root Cause:** GraphQL enum input requires exact enum member names, not integer values.
+
+**Fix (Client-side):** Change the variable format from number string to enum name:
+
+```json
+// Incorrect - will cause error
+{ "priority": "0", "status": "0" }
+
+// Correct
+{ "priority": "LOW", "status": "PENDING" }
+```
+
+**Valid enum values:**
+
+| TaskPriority | TaskItemStatus |
+|--------------|----------------|
+| LOW | PENDING |
+| MEDIUM | IN_PROGRESS |
+| HIGH | COMPLETED |
+| URGENT | CANCELLED |

@@ -3,7 +3,9 @@
     "allow": [
       "Bash(dotnet build *)",
       "Bash(dotnet ef *)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm run *)",
+      "Bash(ng build *)"
     ]
   }
 }

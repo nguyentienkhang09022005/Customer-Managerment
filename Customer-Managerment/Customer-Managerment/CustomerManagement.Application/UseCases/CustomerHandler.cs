@@ -17,16 +17,15 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IMapper _mapper;
         // private readonly IElasticsearchService _elasticsearchService;
 
-        // public CustomerHandler(ICustomerRepository customerRepository,
-        //                       ILeadRepository leadRepository,
-        //                       IMapper mapper,
-        //                       IElasticsearchService elasticsearchService)
-        // {
-        //     _customerRepository = customerRepository;
-        //     _leadRepository = leadRepository;
-        //     _mapper = mapper;
-        //     _elasticsearchService = elasticsearchService;
-        // }
+        public CustomerHandler(ICustomerRepository customerRepository,
+                                ILeadRepository leadRepository,
+                                IMapper mapper)
+        {
+            _customerRepository = customerRepository;
+            _leadRepository = leadRepository;
+            _mapper = mapper;
+            // _elasticsearchService = elasticsearchService;
+        }
 
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerCreationRequest request)
         {

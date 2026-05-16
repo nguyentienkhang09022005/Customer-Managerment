@@ -16,14 +16,13 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IMapper _mapper;
         // private readonly IElasticsearchService _elasticsearchService;
 
-        // public LeadHandler(ILeadRepository leadRepository,
-        //                    IMapper mapper,
-        //                    IElasticsearchService elasticsearchService)
-        // {
-        //     _leadRepository = leadRepository;
-        //     _mapper = mapper;
-        //     _elasticsearchService = elasticsearchService;
-        // }
+        public LeadHandler(ILeadRepository leadRepository,
+                           IMapper mapper)
+        {
+            _leadRepository = leadRepository;
+            _mapper = mapper;
+            // _elasticsearchService = elasticsearchService;
+        }
 
         public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest request)
         {

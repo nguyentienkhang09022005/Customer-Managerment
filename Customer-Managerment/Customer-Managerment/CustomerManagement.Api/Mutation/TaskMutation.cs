@@ -21,11 +21,17 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
 
         public async Task<TaskResponse> CreateTaskAsync(TaskInput input)
         {
+            DateTime? dueDate = null;
+            if (!string.IsNullOrEmpty(input.DueDate) && DateTime.TryParse(input.DueDate, out var parsed))
+            {
+                dueDate = parsed;
+            }
+
             var request = new TaskCreationRequest
             {
                 Title = input.Title,
                 Description = input.Description,
-                DueDate = input.DueDate,
+                DueDate = dueDate,
                 Priority = (int)input.Priority,
                 Status = (int)input.Status,
                 IdStaffAssigned = input.IdStaffAssigned,
@@ -38,11 +44,17 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
 
         public async Task<TaskResponse> UpdateTaskAsync(TaskUpdateInput input, Guid idTask)
         {
+            DateTime? dueDate = null;
+            if (!string.IsNullOrEmpty(input.DueDate) && DateTime.TryParse(input.DueDate, out var parsed))
+            {
+                dueDate = parsed;
+            }
+
             var request = new TaskUpdateRequest
             {
                 Title = input.Title,
                 Description = input.Description,
-                DueDate = input.DueDate,
+                DueDate = dueDate,
                 Priority = (int?)input.Priority,
                 Status = (int?)input.Status,
                 IdStaffAssigned = input.IdStaffAssigned,

@@ -17,18 +17,17 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
         private static readonly string[] ValidDealStatuses = { "OPEN", "NEGOTIATING", "WON", "LOST" };
 
-        // public DealHandler(IDealRepository dealRepository,
-        //                    IStaffRepository staffRepository,
-        //                    ICustomerRepository customerRepository,
-        //                    IMapper mapper,
-        //                    IElasticsearchService elasticsearchService)
-        // {
-        //     _dealRepository = dealRepository;
-        //     _staffRepository = staffRepository;
-        //     _customerRepository = customerRepository;
-        //     _mapper = mapper;
-        //     _elasticsearchService = elasticsearchService;
-        // }
+        public DealHandler(IDealRepository dealRepository,
+                           IStaffRepository staffRepository,
+                           ICustomerRepository customerRepository,
+                           IMapper mapper)
+        {
+            _dealRepository = dealRepository;
+            _staffRepository = staffRepository;
+            _customerRepository = customerRepository;
+            _mapper = mapper;
+            // _elasticsearchService = elasticsearchService;
+        }
 
         public async Task<DealResponse> CreateDealAsync(DealCreationRequest request)
         {
