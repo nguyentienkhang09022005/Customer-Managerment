@@ -48,6 +48,18 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var response = _mapper.Map<TaskResponse>(createdTask);
             response.StaffAssigned = _mapper.Map<StaffResponse>(staff);
 
+            // Create notification for assigned staff
+            var notification = new Notification
+            {
+                Title = "Bạn được giao công việc mới",
+                Message = $"Bạn được giao công việc: {createdTask.Title}",
+                Type = NotificationTypeConstant.NotificationTaskAssigned,
+                IdStaff = request.IdStaffAssigned,
+                RelatedEntityType = "Task",
+                RelatedEntityId = createdTask.IdTask
+            };
+            await _notificationRepository.AddNotificationAsync(notification);
+
             // await _elasticsearchService.IndexAsync(response, "tasks");
 
             return response;

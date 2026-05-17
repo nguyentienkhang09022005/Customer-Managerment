@@ -2,6 +2,7 @@ using AutoMapper;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -13,15 +14,16 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
     public class LeadHandler
     {
         private readonly ILeadRepository _leadRepository;
+        private readonly ITeamMemberRepository _teamMemberRepository;
         private readonly IMapper _mapper;
-        // private readonly IElasticsearchService _elasticsearchService;
 
         public LeadHandler(ILeadRepository leadRepository,
+                           ITeamMemberRepository teamMemberRepository,
                            IMapper mapper)
         {
             _leadRepository = leadRepository;
+            _teamMemberRepository = teamMemberRepository;
             _mapper = mapper;
-            // _elasticsearchService = elasticsearchService;
         }
 
         public async Task<LeadResponse> CreateLeadAsync(LeadCreationRequest request)
@@ -52,6 +54,9 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             {
                 throw new LeadNotFoundException();
             }
+
+            // Cleanup team_members when lead is deleted
+            await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeLead, idLead);
 
             // await _elasticsearchService.DeleteAsync<LeadResponse>(idLead.ToString(), "leads");
             return "Xóa khách hàng tiềm năng thành công!";

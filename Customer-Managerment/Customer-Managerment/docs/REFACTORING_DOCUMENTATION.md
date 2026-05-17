@@ -1112,3 +1112,408 @@ GraphQL enum input requires exact enum member names, not integer values.
 // Correct
 { "priority": "LOW", "status": "PENDING" }
 ```
+
+---
+
+## 28. Team Assignment - Auto-Create OWNER on Deal/Lead Creation (2026-05-17)
+
+### Overview
+
+When a Deal is created, the creator was NOT automatically added to `team_members` table. This caused `isOwner()` to always return false for deals, and team members list was empty.
+
+### Root Cause
+
+`DealHandler.CreateDealAsync` and `LeadHandler.CreateLeadAsync` did NOT create a corresponding `TeamMember` record with role OWNER.
+
+### Fix Applied
+
+**DealHandler.cs - Added ITeamMemberRepository:**
+```csharp
+public DealHandler(IDealRepository dealRepository,
+                   IStaffRepository staffRepository,
+                   ICustomerRepository customerRepository,
+                   ITeamMemberRepository teamMemberRepository,
+                   IMapper mapper)
+{
+    _dealRepository = dealRepository;
+    _staffRepository = staffRepository;
+    _customerRepository = customerRepository;
+    _teamMemberRepository = teamMemberRepository;
+    _mapper = mapper;
+}
+```
+
+**In CreateDealAsync - Auto-add creator as OWNER:**
+```csharp
+var createdDeal = await _dealRepository.AddDealAsync(deal);
+
+// Auto-add creator as OWNER in team_members
+var teamMember = new TeamMember
+{
+    Id = Guid.NewGuid(),
+    EntityType = TeamEntityTypeConstant.EntityTypeDeal,
+    EntityId = createdDeal.IdDeal,
+    IdStaff = request.IdStaff,
+    Role = TeamRoleConstant.FromString(TeamRoleConstant.RoleOwner),
+    AssignedAt = DateTime.UtcNow,
+    AssignedBy = "system",
+    CanEdit = true,
+    CanDelete = true
+};
+await _teamMemberRepository.AddAsync(teamMember);
+```
+
+**LeadHandler.cs - Added ITeamMemberRepository (preparation for future):**
+```csharp
+public LeadHandler(ILeadRepository leadRepository,
+                   ITeamMemberRepository teamMemberRepository,
+                   IMapper mapper)
+{
+    _leadRepository = leadRepository;
+    _teamMemberRepository = teamMemberRepository;
+    _mapper = mapper;
+}
+```
+
+### Files Modified
+- `CustomerManagement.Application/UseCases/DealHandler.cs`
+- `CustomerManagement.Application/UseCases/LeadHandler.cs`
+
+---
+
+## 29. Team Members Cleanup on Deal/Lead Delete (2026-05-17)
+
+### Overview
+
+When a Deal or Lead was soft-deleted, the corresponding `team_members` records were NOT cleaned up, causing orphaned records.
+
+### Fix Applied
+
+**1. Added `RemoveByEntityAsync` to ITeamMemberRepository:**
+```csharp
+Task<bool> RemoveByEntityAsync(string entityType, Guid entityId);
+```
+
+**2. Implemented in TeamMemberRepository.cs:**
+```csharp
+public async Task<bool> RemoveByEntityAsync(string entityType, Guid entityId)
+{
+    await using var context = _contextFactory.CreateDbContext();
+    var members = await context.TeamMembers
+        .Where(t => t.EntityType == entityType && t.EntityId == entityId)
+        .ToListAsync();
+
+    if (members.Count == 0)
+        return true;
+
+    context.TeamMembers.RemoveRange(members);
+    await context.SaveChangesAsync();
+    return true;
+}
+```
+
+**3. Updated DealHandler.DeleteDealAsync:**
+```csharp
+public async Task<string> DeleteDealAsync(Guid idDeal)
+{
+    var result = await _dealRepository.SoftDeleteDealAsync(idDeal);
+    if (!result)
+    {
+        throw new DealNotFoundException();
+    }
+
+    // Cleanup team_members when deal is deleted
+    await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeDeal, idDeal);
+
+    return "Xóa deal thành công!";
+}
+```
+
+**4. Updated LeadHandler.DeleteLeadAsync:**
+```csharp
+public async Task<string> DeleteLeadAsync(Guid idLead)
+{
+    var result = await _leadRepository.SoftDeleteLeadAsync(idLead);
+    if (!result)
+    {
+        throw new LeadNotFoundException();
+    }
+
+    // Cleanup team_members when lead is deleted
+    await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeLead, idLead);
+
+    return "Xóa khách hàng tiềm năng thành công!";
+}
+```
+
+### Files Modified
+- `CustomerManagement.Application/Interfaces/ITeamMemberRepository.cs`
+- `CustomerManagement.Infrastructure/Repositories/TeamMemberRepository.cs`
+- `CustomerManagement.Application/UseCases/DealHandler.cs`
+- `CustomerManagement.Application/UseCases/LeadHandler.cs`
+
+---
+
+## 30. Deal Permission - ADMIN vs STAFF (2026-05-17)
+
+### Overview
+
+Implemented role-based permission for Deal operations:
+- **ADMIN**: Can see ALL deals, can assign any staff/customer to deal
+- **STAFF**: Can only see their OWN deals, can only create deal for themselves
+
+### Changes in DealQuery.cs
+
+```csharp
+[UseFiltering]
+[UseSorting]
+public IQueryable<DealResponse> GetDeals([Service] IHttpContextAccessor httpContextAccessor)
+{
+    var currentUserId = GetCurrentUserId(httpContextAccessor);
+    var currentUserRole = GetCurrentUserRole(httpContextAccessor);
+
+    var deals = _dealRepository.GetListDeal();
+
+    // STAFF chỉ thấy deals của mình, ADMIN thấy tất cả
+    if (currentUserRole != "ADMIN")
+    {
+        deals = deals.Where(d => d.IdStaff == currentUserId);
+    }
+
+    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+}
+
+public IQueryable<DealResponse> GetDealById(Guid idDeal, [Service] IHttpContextAccessor httpContextAccessor)
+{
+    var currentUserId = GetCurrentUserId(httpContextAccessor);
+    var currentUserRole = GetCurrentUserRole(httpContextAccessor);
+
+    var deals = _dealRepository.GetListDeal();
+
+    // STAFF chỉ thấy deal của mình
+    if (currentUserRole != "ADMIN")
+    {
+        deals = deals.Where(d => d.IdStaff == currentUserId && d.IdDeal == idDeal);
+    }
+    else
+    {
+        deals = deals.Where(d => d.IdDeal == idDeal);
+    }
+
+    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+}
+```
+
+### Changes in DealMutation.cs
+
+```csharp
+public async Task<DealResponse> CreateDealAsync(DealCreationRequest dealCreationRequest)
+{
+    var currentUserId = GetCurrentUserId();
+    var currentUserRole = GetCurrentUserRole();
+
+    // STAFF chỉ được tạo deal cho bản thân
+    if (currentUserRole == "STAFF")
+    {
+        dealCreationRequest.IdStaff = currentUserId;
+    }
+    // ADMIN có thể gán bất kỳ staff nào (giữ nguyên request)
+
+    return await _dealHandler.CreateDealAsync(dealCreationRequest);
+}
+```
+
+### Permission Matrix
+
+| Action | ADMIN | STAFF |
+|--------|:-----:|:-----:|
+| View ALL deals | ✅ | ❌ |
+| View OWN deals only | ✅ | ✅ |
+| Create deal (assign any staff) | ✅ | ❌ |
+| Create deal (assign self only) | ✅ | ✅ |
+| Update any deal | ✅ | ✅ |
+| Delete any deal | ✅ | ✅ |
+
+### Files Modified
+- `CustomerManagement.Api/Query/DealQuery.cs`
+- `CustomerManagement.Api/Mutation/DealMutation.cs`
+
+---
+
+---
+
+## 31. JWT Claim Fix - "sub" vs ClaimTypes.NameIdentifier (2026-05-17)
+
+### Overview
+
+JWT tokens use `"sub"` claim for user ID, but code was using `ClaimTypes.NameIdentifier` which maps to a different URI. This caused `currentUserId` to always return `Guid.Empty`.
+
+### Root Cause
+
+`ClaimTypes.NameIdentifier` = `"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"` - different from `"sub"`.
+
+JWT middleware does NOT automatically map "sub" to `ClaimTypes.NameIdentifier` in ASP.NET Core.
+
+### Fix Applied
+
+Changed `GetCurrentUserId` to check both `"sub"` and `ClaimTypes.NameIdentifier`:
+
+```csharp
+// DealQuery.cs and DealMutation.cs
+private Guid GetCurrentUserId(...)
+{
+    var user = httpContextAccessor.HttpContext?.User;
+    var userIdClaim = user?.FindFirst("sub")?.Value
+        ?? user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    return Guid.TryParse(userIdClaim, out var id) ? id : Guid.Empty;
+}
+```
+
+### Files Modified
+- `CustomerManagement.Api/Query/DealQuery.cs`
+- `CustomerManagement.Api/Mutation/DealMutation.cs`
+- (Also updated TaskMutation.cs, CustomerMutation.cs, StaffPresenceMutation.cs)
+
+---
+
+## 32. getMyDeals API for STAFF (2026-05-17)
+
+### Overview
+
+Created separate API for STAFF to view deals where they are OWNER or TEAM MEMBER.
+
+### Implementation
+
+**New query `getMyDeals`:**
+```csharp
+public async Task<IQueryable<DealResponse>> GetMyDeals([Service] IHttpContextAccessor httpContextAccessor)
+{
+    var currentUserId = GetCurrentUserId(httpContextAccessor);
+
+    // Get deals where user is OWNER and where user is TEAM MEMBER
+    var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
+    var dealIdsWhereUserIsMember = teamMemberships
+        .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
+        .Select(tm => tm.EntityId)
+        .ToList();
+
+    var deals = _dealRepository.GetListDeal()
+        .Where(d => d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal));
+
+    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+}
+```
+
+**Updated getDeals for ADMIN only:**
+- `getDeals` - ADMIN sees all deals, STAFF gets error "STAFF nên dùng getMyDeals"
+- `getMyDeals` - STAFF sees OWNER deals + TEAM MEMBER deals
+
+### Files Modified
+- `CustomerManagement.Api/Query/DealQuery.cs`
+
+---
+
+## 33. GetDealById Fix - STAFF Team Member Access (2026-05-17)
+
+### Overview
+
+STAFF could not view details of deals where they were a TEAM MEMBER (only OWNER deals were accessible).
+
+### Fix Applied
+
+```csharp
+public async Task<IQueryable<DealResponse>> GetDealById(Guid idDeal, [Service] IHttpContextAccessor httpContextAccessor)
+{
+    var currentUserId = GetCurrentUserId(httpContextAccessor);
+    var currentUserRole = GetCurrentUserRole(httpContextAccessor);
+
+    if (currentUserRole == "ADMIN")
+    {
+        return _dealRepository.GetListDeal()
+            .Where(d => d.IdDeal == idDeal)
+            .ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+    }
+
+    // STAFF: check if they are creator OR team member
+    var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
+    var dealIdsWhereUserIsMember = teamMemberships
+        .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
+        .Select(tm => tm.EntityId)
+        .ToList();
+
+    return _dealRepository.GetListDeal()
+        .Where(d => d.IdDeal == idDeal && (d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal)))
+        .ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+}
+```
+
+### Files Modified
+- `CustomerManagement.Api/Query/DealQuery.cs`
+
+---
+
+## 34. TaskHandler CreateTaskAsync Notification (2026-05-17)
+
+### Overview
+
+When ADMIN creates a task and assigns to a staff member, no notification was sent. Fixed by adding notification creation.
+
+### Fix Applied
+
+```csharp
+public async Task<TaskResponse> CreateTaskAsync(TaskCreationRequest request)
+{
+    // ... existing code ...
+
+    var createdTask = await _taskRepository.AddTaskAsync(task);
+    var response = _mapper.Map<TaskResponse>(createdTask);
+    response.StaffAssigned = _mapper.Map<StaffResponse>(staff);
+
+    // Create notification for assigned staff
+    var notification = new Notification
+    {
+        Title = "Bạn được giao công việc mới",
+        Message = $"Bạn được giao công việc: {createdTask.Title}",
+        Type = NotificationTypeConstant.NotificationTaskAssigned,
+        IdStaff = request.IdStaffAssigned,
+        RelatedEntityType = "Task",
+        RelatedEntityId = createdTask.IdTask
+    };
+    await _notificationRepository.AddNotificationAsync(notification);
+
+    return response;
+}
+```
+
+### Files Modified
+- `CustomerManagement.Application/UseCases/TaskHandler.cs`
+
+---
+
+## 35. RefreshToken Bypass Authentication (2026-05-17)
+
+### Overview
+
+When access token expires, user cannot call `refreshToken` mutation because request is rejected at authentication middleware BEFORE GraphQL resolver runs.
+
+### Fix Applied
+
+Added `[AllowAnonymous]` attribute to `RefreshTokenAsync`:
+
+```csharp
+// AuthenticationMutation.cs
+[AllowAnonymous]
+public async Task<AuthenticationResponse> RefreshTokenAsync()
+{
+    return await _authenticationHandler.RefreshTokenHandleAsync();
+}
+```
+
+### Files Modified
+- `CustomerManagement.Api/Mutation/AuthenticationMutation.cs`
+
+---
+
+*Document updated: 2026-05-17*
+*Build: SUCCESS*
+*Changes: JWT claim fix, getMyDeals API, GetDealById team member fix, TaskHandler notification, RefreshToken bypass*

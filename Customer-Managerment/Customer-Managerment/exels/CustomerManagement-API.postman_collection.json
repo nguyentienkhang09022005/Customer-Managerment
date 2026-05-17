@@ -745,7 +745,7 @@
 			"name": "Deals",
 			"item": [
 				{
-					"name": "Get All Deals",
+					"name": "Get All Deals (ADMIN Only)",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -753,6 +753,25 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "query GetDeals {\n  deals {\n    idDeal\n    title\n    content\n    price\n    status\n    createdAt\n    updatedAt\n    customer {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Deals (STAFF - Owner + Team Member)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetMyDeals {\n  myDeals {\n    idDeal\n    title\n    content\n    price\n    status\n    createdAt\n    updatedAt\n    customer {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n      person {\n        fullname\n      }\n    }\n  }\n}",
 								"variables": "{}"
 							}
 						},
@@ -773,6 +792,25 @@
 							"graphql": {
 								"query": "query GetDealById($idDeal: UUID!) {\n  dealById(idDeal: $idDeal) {\n    idDeal\n    title\n    content\n    price\n    status\n    createdAt\n    customer {\n      id\n      person {\n        fullname\n        email\n      }\n    }\n    staff {\n      id\n      username\n    }\n  }\n}",
 								"variables": "{\n  \"idDeal\": \"{{dealId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}",
+							"host": ["{{baseUrl}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team Members (Deal)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTeamMembersByDeal($entityId: UUID!) {\n  teamMembers(entityType: \"Deal\", entityId: $entityId) {\n    id\n    entityType\n    entityId\n    idStaff\n    role\n    assignedAt\n    assignedBy\n    canEdit\n    canDelete\n    staff {\n      id\n      username\n      person {\n        fullname\n        email\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"entityId\": \"{{dealId}}\"\n}"
 							}
 						},
 						"url": {

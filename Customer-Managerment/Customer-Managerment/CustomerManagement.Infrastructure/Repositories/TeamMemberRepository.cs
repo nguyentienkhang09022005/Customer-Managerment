@@ -83,6 +83,21 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             return true;
         }
 
+        public async Task<bool> RemoveByEntityAsync(string entityType, Guid entityId)
+        {
+            await using var context = _contextFactory.CreateDbContext();
+            var members = await context.TeamMembers
+                .Where(t => t.EntityType == entityType && t.EntityId == entityId)
+                .ToListAsync();
+
+            if (members.Count == 0)
+                return true;
+
+            context.TeamMembers.RemoveRange(members);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<int> CountByEntityAsync(string entityType, Guid entityId)
         {
             await using var context = _contextFactory.CreateDbContext();

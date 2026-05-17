@@ -153,6 +153,65 @@ public async Task<List<TeamMember>> GetByStaffAsync(Guid idStaff)
 
 ---
 
+### 2026-05-17: Auto-Create OWNER on Deal/Lead Creation
+
+**Issue:** When creating a Deal, no record was created in `team_members` table. The creator's `IdStaff` was only stored in `deals.IdStaff` but not in `team_members`, causing `isOwner()` to always return false.
+
+**Root Cause:** `DealHandler.CreateDealAsync` did not automatically add creator as OWNER in `team_members` table.
+
+**Fix:** Added logic to auto-create TeamMember with OWNER role when Deal is created:
+
+```csharp
+// In CreateDealAsync
+var createdDeal = await _dealRepository.AddDealAsync(deal);
+
+// Auto-add creator as OWNER in team_members
+var teamMember = new TeamMember
+{
+    Id = Guid.NewGuid(),
+    EntityType = TeamEntityTypeConstant.EntityTypeDeal,
+    EntityId = createdDeal.IdDeal,
+    IdStaff = request.IdStaff,
+    Role = TeamRoleConstant.FromString(TeamRoleConstant.RoleOwner),
+    AssignedAt = DateTime.UtcNow,
+    AssignedBy = "system",
+    CanEdit = true,
+    CanDelete = true
+};
+await _teamMemberRepository.AddAsync(teamMember);
+```
+
+**Files Modified:**
+- `CustomerManagement.Application\UseCases\DealHandler.cs` (added ITeamMemberRepository)
+- `CustomerManagement.Application\UseCases\LeadHandler.cs` (added ITeamMemberRepository for future)
+
+---
+
+### 2026-05-17: Team Members Cleanup on Entity Delete
+
+**Issue:** When Deal/Lead was soft-deleted, `team_members` records were NOT cleaned up, causing orphaned records.
+
+**Fix:** Added `RemoveByEntityAsync` method and call it in Delete handlers:
+
+```csharp
+// ITeamMemberRepository
+Task<bool> RemoveByEntityAsync(string entityType, Guid entityId);
+
+// In DeleteDealAsync
+await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeDeal, idDeal);
+
+// In DeleteLeadAsync
+await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeLead, idLead);
+```
+
+**Files Modified:**
+- `CustomerManagement.Application\Interfaces\ITeamMemberRepository.cs`
+- `CustomerManagement.Infrastructure\Repositories\TeamMemberRepository.cs`
+- `CustomerManagement.Application\UseCases\DealHandler.cs`
+- `CustomerManagement.Application\UseCases\LeadHandler.cs`
+
+---
+
 ### 2026-05-16: AutoMapper Missing TeamMember -> TeamMemberResponse Mapping
 
 **Issue:** `UpdateTeamMemberAsync` and `TransferOwnershipAsync` threw `AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping`.
@@ -183,3 +242,81 @@ public class TeamMemberMapper : Profile
 
 **Files Created:**
 - `CustomerManagement.Infrastructure\Mapping\TeamMemberMapper.cs`
+
+---
+
+### 2026-05-17: JWT Claim "sub" vs ClaimTypes.NameIdentifier
+
+**Issue:** `GetCurrentUserId()` always returned `Guid.Empty` because code was using `ClaimTypes.NameIdentifier` but JWT uses `"sub"` claim for user ID.
+
+**Root Cause:** `ClaimTypes.NameIdentifier` = `"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"` - different from `"sub"`. JWT middleware does NOT automatically map "sub" to `ClaimTypes.NameIdentifier` in ASP.NET Core.
+
+**Fix:** Changed all files to check both `"sub"` and `ClaimTypes.NameIdentifier`:
+
+```csharp
+var userIdClaim = user?.FindFirst("sub")?.Value
+    ?? user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+```
+
+**Files Modified:**
+- `CustomerManagement.Api/Query/DealQuery.cs`
+- `CustomerManagement.Api/Mutation/DealMutation.cs`
+- `CustomerManagement.Api/Mutation/TaskMutation.cs`
+- `CustomerManagement.Api/Mutation/CustomerMutation.cs`
+- `CustomerManagement.Api/Mutation/StaffPresenceMutation.cs`
+
+---
+
+### 2026-05-17: getMyDeals API - STAFF Sees OWNER + TEAM MEMBER Deals
+
+**Issue:** STAFF could only see deals they created (OWNER via deals.IdStaff), not deals where they were added as TEAM MEMBER.
+
+**Fix:** Created `getMyDeals` query that returns both OWNER deals and TEAM MEMBER deals:
+
+```csharp
+public async Task<IQueryable<DealResponse>> GetMyDeals([Service] IHttpContextAccessor httpContextAccessor)
+{
+    var currentUserId = GetCurrentUserId(httpContextAccessor);
+
+    var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
+    var dealIdsWhereUserIsMember = teamMemberships
+        .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
+        .Select(tm => tm.EntityId)
+        .ToList();
+
+    var deals = _dealRepository.GetListDeal()
+        .Where(d => d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal));
+
+    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+}
+```
+
+**API Changes:**
+- `getDeals` - ADMIN only (STAFF gets error)
+- `getMyDeals` - STAFF sees OWNER + TEAM MEMBER deals
+
+**Files Modified:**
+- `CustomerManagement.Api/Query/DealQuery.cs`
+
+---
+
+### 2026-05-17: GetDealById Fix - STAFF Team Member Access
+
+**Issue:** STAFF could not view deal details if they were a TEAM MEMBER (not OWNER).
+
+**Fix:** Updated `GetDealById` to check team membership:
+
+```csharp
+// STAFF: check if they are creator OR team member
+var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
+var dealIdsWhereUserIsMember = teamMemberships
+    .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
+    .Select(tm => tm.EntityId)
+    .ToList();
+
+return _dealRepository.GetListDeal()
+    .Where(d => d.IdDeal == idDeal && (d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal)))
+```
+
+**Files Modified:**
+- `CustomerManagement.Api/Query/DealQuery.cs`

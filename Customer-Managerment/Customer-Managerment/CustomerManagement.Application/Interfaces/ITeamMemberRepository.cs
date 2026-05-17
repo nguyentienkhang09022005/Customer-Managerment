@@ -12,6 +12,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<TeamMember> AddAsync(TeamMember teamMember);
         Task<TeamMember> UpdateAsync(TeamMember teamMember);
         Task<bool> RemoveAsync(Guid id);
+        Task<bool> RemoveByEntityAsync(string entityType, Guid entityId);
         Task<int> CountByEntityAsync(string entityType, Guid entityId);
     }
 }

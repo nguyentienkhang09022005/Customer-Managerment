@@ -2,6 +2,7 @@
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases.Authen;
 using Customer_Managerment.CustomerManagement.Application.Handlers.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
@@ -26,6 +27,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
             return await _authenticationHandler.LogoutHandleAsync();
         }
 
+        [AllowAnonymous]
         public async Task<AuthenticationResponse> RefreshTokenAsync()
         {
             return await _authenticationHandler.RefreshTokenHandleAsync();

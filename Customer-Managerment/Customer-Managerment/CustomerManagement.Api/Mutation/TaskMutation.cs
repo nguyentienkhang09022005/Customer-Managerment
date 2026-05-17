@@ -91,7 +91,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         private string GetCurrentUserId()
         {
             var user = _httpContextAccessor.HttpContext?.User;
-            return user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "system";
+            return user?.FindFirst("sub")?.Value ?? "system";
         }
     }
 }

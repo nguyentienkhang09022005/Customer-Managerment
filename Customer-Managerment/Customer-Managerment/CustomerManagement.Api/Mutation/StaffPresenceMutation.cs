@@ -38,7 +38,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Mutation
         private Guid GetCurrentUserId()
         {
             var user = _httpContextAccessor.HttpContext?.User;
-            var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = user?.FindFirst("sub")?.Value;
             return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;
         }
 

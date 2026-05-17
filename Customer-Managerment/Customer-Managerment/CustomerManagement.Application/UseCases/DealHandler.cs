@@ -2,6 +2,7 @@ using AutoMapper;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
 
@@ -12,21 +13,22 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
         private readonly IDealRepository _dealRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly ITeamMemberRepository _teamMemberRepository;
         private readonly IMapper _mapper;
-        // private readonly IElasticsearchService _elasticsearchService;
 
         private static readonly string[] ValidDealStatuses = { "OPEN", "NEGOTIATING", "WON", "LOST" };
 
         public DealHandler(IDealRepository dealRepository,
                            IStaffRepository staffRepository,
                            ICustomerRepository customerRepository,
+                           ITeamMemberRepository teamMemberRepository,
                            IMapper mapper)
         {
             _dealRepository = dealRepository;
             _staffRepository = staffRepository;
             _customerRepository = customerRepository;
+            _teamMemberRepository = teamMemberRepository;
             _mapper = mapper;
-            // _elasticsearchService = elasticsearchService;
         }
 
         public async Task<DealResponse> CreateDealAsync(DealCreationRequest request)
@@ -51,6 +53,21 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
             var createdDeal = await _dealRepository.AddDealAsync(deal);
 
+            // Auto-add creator as OWNER in team_members
+            var teamMember = new TeamMember
+            {
+                Id = Guid.NewGuid(),
+                EntityType = TeamEntityTypeConstant.EntityTypeDeal,
+                EntityId = createdDeal.IdDeal,
+                IdStaff = request.IdStaff,
+                Role = TeamRoleConstant.FromString(TeamRoleConstant.RoleOwner),
+                AssignedAt = DateTime.UtcNow,
+                AssignedBy = "system",
+                CanEdit = true,
+                CanDelete = true
+            };
+            await _teamMemberRepository.AddAsync(teamMember);
+
             var response = _mapper.Map<DealResponse>(createdDeal);
             response.Customer = _mapper.Map<CustomerResponse>(customer);
             response.Staff = _mapper.Map<StaffResponse>(staff);
@@ -67,6 +84,9 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             {
                 throw new DealNotFoundException();
             }
+
+            // Cleanup team_members when deal is deleted
+            await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeDeal, idDeal);
 
             // await _elasticsearchService.DeleteAsync<DealResponse>(idDeal.ToString(), "deals");
             return "Xóa deal thành công!";
