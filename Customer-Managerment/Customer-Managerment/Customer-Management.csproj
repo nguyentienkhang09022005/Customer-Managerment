@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Folder Include="CustomerManagement.Infrastructure\Data\Entities\" />
+    <Folder Include="docs\" />
   </ItemGroup>
 
 </Project>

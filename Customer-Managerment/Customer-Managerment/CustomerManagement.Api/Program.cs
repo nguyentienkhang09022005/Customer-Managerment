@@ -39,8 +39,8 @@ builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("S
 builder.Configuration["SendGrid:Email"] = Environment.GetEnvironmentVariable("SENDER_EMAIL");
 builder.Configuration["SendGrid:Name"] = Environment.GetEnvironmentVariable("SENDER_NAME");
 // builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
-builder.Configuration["GeminiSettings:ApiKey"] = Environment.GetEnvironmentVariable("APIKEY__GEMINI");
-builder.Configuration["GeminiSettings:BaseUrl"] = Environment.GetEnvironmentVariable("GEMINI__APIURL");
+builder.Configuration["GroqSettings:ApiKey"] = Environment.GetEnvironmentVariable("GROQ__APIKEY");
+builder.Configuration["GroqSettings:BaseUrl"] = Environment.GetEnvironmentVariable("GROQ__APIURL");
 
 
 // DbContext Registration
@@ -77,9 +77,9 @@ builder.Services.AddScoped<IEventParticipantRepository, EventParticipantReposito
 // Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-// // AI Chat Services (Commented out for future development)
-// // builder.Services.AddHttpClient<IGeminiService, GeminiService>();
-// // builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>();
+// AI Chat Services (Groq)
+builder.Services.AddHttpClient<IGroqService, GroqService>();
+builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>();
 
 // Background Services
 builder.Services.AddHostedService<CalendarReminderService>();
@@ -95,7 +95,7 @@ builder.Services.AddScoped<IRealtimeNotificationSender, RealtimeNotificationSend
 // Handlers
 builder.Services.AddScoped<AuthenticationHandler>();
 builder.Services.AddScoped<ForgotPasswordHandler>();
-// builder.Services.AddScoped<ChatHandler>(); // AI Chat Handler - Commented out for future development
+builder.Services.AddScoped<ChatHandler>();
 builder.Services.AddScoped<StaffHandler>();
 builder.Services.AddScoped<ContactHandler>();
 builder.Services.AddScoped<LeadHandler>();
@@ -145,7 +145,7 @@ builder.Services
     .AddType<DashboardResponseType>()
     .AddType<RevenueChartResponseType>()
     .AddQueryType(d => d.Name("Query"))
-        // .AddTypeExtension<ChatQuery>() // AI Chat Query - Commented out for future development
+        .AddTypeExtension<ChatQuery>()
         .AddTypeExtension<StaffQuery>()
         .AddTypeExtension<ContactQuery>()
         .AddTypeExtension<LeadQuery>()
@@ -169,7 +169,7 @@ builder.Services
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<AuthenticationMutation>()
         .AddTypeExtension<ForgotPasswordMutation>()
-        // .AddTypeExtension<ChatMutation>() // AI Chat Mutation - Commented out for future development
+        .AddTypeExtension<ChatMutation>()
         .AddTypeExtension<StaffMutation>()
         .AddTypeExtension<LeadMutation>()
         .AddTypeExtension<ContactMutation>()

@@ -27,6 +27,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         public IQueryable<DealResponse> GetDeals([Service] IHttpContextAccessor httpContextAccessor)
         {
             var currentUserRole = GetCurrentUserRole(httpContextAccessor);
+            var currentUserId = GetCurrentUserId(httpContextAccessor);
 
             // Chỉ ADMIN mới được xem toàn bộ deals
             if (currentUserRole == "ADMIN")
@@ -34,8 +35,8 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
                 return _dealRepository.GetListDeal().ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
             }
 
-            // STAFF không được dùng getDeals, dùng getMyDeals thay thế
-            throw new InvalidOperationException("STAFF nên dùng getMyDeals để lấy danh sách deals của mình");
+            // STAFF fallback: trả deals của mình (OWNER) + deals mình là MEMBER
+            return FilterDealsForStaffAsync(httpContextAccessor, currentUserId).Result;
         }
 
         [UseFiltering]
@@ -43,24 +44,22 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         public async Task<IQueryable<DealResponse>> GetMyDeals([Service] IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = GetCurrentUserId(httpContextAccessor);
+            return await FilterDealsForStaffAsync(httpContextAccessor, currentUserId);
+        }
 
-            // Lấy deals của mình (OWNER) và deals mình là MEMBER
+        private async Task<IQueryable<DealResponse>> FilterDealsForStaffAsync(
+            IHttpContextAccessor httpContextAccessor, Guid currentUserId)
+        {
             var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
-            Console.WriteLine($"[DEBUG GetMyDeals] currentUserId: {currentUserId}, teamMemberships count: {teamMemberships.Count}");
 
             var dealIdsWhereUserIsMember = teamMemberships
                 .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
                 .Select(tm => tm.EntityId)
                 .ToList();
 
-            Console.WriteLine($"[DEBUG GetMyDeals] dealIdsWhereUserIsMember count: {dealIdsWhereUserIsMember.Count}, IDs: {string.Join(", ", dealIdsWhereUserIsMember)}");
-
-            var deals = _dealRepository.GetListDeal()
-                .Where(d => d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal));
-
-            Console.WriteLine($"[DEBUG GetMyDeals] Total deals from DB: {deals.Count()}");
-
-            return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+            return _dealRepository.GetListDeal()
+                .Where(d => d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal))
+                .ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
         }
 
         public async Task<IQueryable<DealResponse>> GetDealById(Guid idDeal, [Service] IHttpContextAccessor httpContextAccessor)
@@ -94,8 +93,6 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             // JWT middleware maps "sub" to ClaimTypes.NameIdentifier
             var userIdClaim = user?.FindFirst("sub")?.Value
                 ?? user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            Console.WriteLine($"[DEBUG GetMyDeals] userIdClaim: {userIdClaim}");
 
             return Guid.TryParse(userIdClaim, out var id) ? id : Guid.Empty;
         }

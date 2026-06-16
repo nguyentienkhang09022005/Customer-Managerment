@@ -1,1519 +1,300 @@
-# CRM Backend Refactoring Documentation
+# TỔNG HỢP KIẾN TRÚC & TÀI LIỆU NGHIỆP VỤ BACKEND (Refactoring Documentation)
 
-## Overview
-This document describes the comprehensive refactoring of the CRM backend system from a Database-First approach to a Code-First approach with proper entity architecture, soft delete, and audit fields.
-
----
-
-## 1. Entity Architecture Changes
-
-### 1.1 New Entity Hierarchy (TPH - Table Per Hierarchy)
-
-**Before:**
-- `Person` entity (standalone)
-- `Staff` entity (separate table, duplicate fields with Person)
-- `Lead` entity (shares ID with Person via FK)
-- `Customer` entity (shares ID with Person via FK)
-
-**After:**
-```
-BaseEntity (Id, CreatedAt, UpdatedAt, IsDeleted, DeletedAt)
-└── Person (Fullname, Email, Phone, Location, Discriminator)
-    ├── Staff (Username, PasswordHash, Role, Salary) - Discriminator = 0
-    ├── Lead (Resource) - Discriminator = 1
-    └── Customer - Discriminator = 2
-```
-
-### 1.2 Role System (2 Roles)
-
-| Role | Value | Description |
-|------|-------|-------------|
-| ADMIN | 0 | Full system access, can create staff accounts |
-| STAFF | 1 | Standard user access, managed by Admin |
-
-**Note:** Registration feature has been removed. Admin creates staff accounts manually via `createStaff` mutation.
-
-### 1.3 Lead to Customer Conversion
-
-When Contact status is updated to `SUCCESS`:
-1. The associated Lead's `Discriminator` is changed from `Lead` (1) to `Customer` (2)
-2. Lead record is updated in place, not deleted and recreated
-3. Email uniqueness is checked against Staff only (Lead/Customer share table)
+> **Mục đích:** File tổng hợp này cung cấp cái nhìn toàn cảnh về kiến trúc hệ thống, stack công nghệ, phân quyền 3 role, các quyết định thiết kế chính và hướng dẫn mở rộng. Mỗi nhóm chức năng có file chi tiết riêng (`00_..` đến `14_..`).
 
 ---
 
-## 2. Status Enums & Constants
+## 1. Tổng quan hệ thống
 
-### 2.1 ContactStatus Enum
-```csharp
-public enum ContactStatus
-{
-    NEW,
-    IN_PROGRESS,
-    SUCCESS,
-    FAILED,
-    CLOSED,
-    CANCELLED
-}
+**Customer-Managerment** là hệ thống CRM (Customer Relationship Management) tập trung vào quản lý:
+- Khách hàng tiềm năng (Lead)
+- Khách hàng chính thức (Customer)
+- Giao dịch (Deal)
+- Hoạt động liên hệ (Contact)
+- Công việc (Task) & Ghi chú (Note) với mention realtime
+- Lịch hẹn (Calendar) với reminder tự động
+- Phân quyền nhóm (Team Assignment)
+- Nhật ký kiểm toán (Audit Log)
+- Trợ lý AI (CRMie) tích hợp Groq
+- Thống kê, báo cáo & xuất Excel
+
+---
+
+## 2. Tech Stack
+
+| Layer | Công nghệ |
+|-------|-----------|
+| Runtime | .NET 9 (ASP.NET Core) |
+| API | GraphQL (HotChocolate) + REST (Controller) cho File Upload |
+| ORM | Entity Framework Core (Code-First) + Npgsql (PostgreSQL) |
+| Cache | Redis (StackExchange.Redis + `IDistributedCache`) |
+| Realtime | SignalR (`/hubs/notifications`, `/hubs/notes`) |
+| Auth | JWT (HS256) + Cookie cho refresh token |
+| Email | FluentEmail + SendGrid |
+| AI | Groq API (Llama 4 Scout) |
+| Excel | EPPlus (NonCommercial) |
+| Object Mapping | AutoMapper |
+| Password | BCrypt.Net |
+| Validation | Custom `DomainException` |
+
+---
+
+## 3. Kiến trúc phân lớp (Clean Architecture)
+
 ```
-
-### 2.2 StatusContactConstant
-```csharp
-ContactNew = "NEW"
-ContactInProgress = "IN_PROGRESS"
-ContactSuccess = "SUCCESS"
-ContactFailed = "FAILED"
-ContactClosed = "CLOSED"
-ContactCanceled = "CANCELED"
-```
-
-### 2.3 DealStatus Enum
-```csharp
-public enum DealStatus
-{
-    OPEN,
-    NEGOTIATING,
-    WON,
-    LOST
-}
-```
-
-### 2.4 StatuDealConstant
-```csharp
-DealOpen = "OPEN"
-DealNegotiating = "NEGOTIATING"
-DealWon = "WON"
-DealLost = "LOST"
+┌─────────────────────────────────────────────────┐
+│  CustomerManagement.Api                         │
+│  - GraphQL Query / Mutation / Hub               │
+│  - Input Types / Response Types                 │
+│  - Middleware (GraphQLExceptionFilter)          │
+└─────────────────────────────────────────────────┘
+                       │ depends on
+┌─────────────────────────────────────────────────┐
+│  CustomerManagement.Application                 │
+│  - UseCases / Handlers                          │
+│  - DTOs (Requests / Responses)                  │
+│  - Interfaces (repositories, services)          │
+└─────────────────────────────────────────────────┘
+                       │ depends on
+┌─────────────────────────────────────────────────┐
+│  CustomerManagement.Domain                      │
+│  - Entities, Value Objects                      │
+│  - Constants (Status, Role, Type)               │
+│  - Exceptions (Domain, Validation, NotFound)    │
+└─────────────────────────────────────────────────┘
+                       │ implemented by
+┌─────────────────────────────────────────────────┐
+│  CustomerManagement.Infrastructure              │
+│  - Repositories (EF Core)                       │
+│  - Services (Token, RefreshToken, Chat)         │
+│  - BackgroundService (CalendarReminder)         │
+│  - DbContext + Migrations                       │
+└─────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. GraphQL Schema Changes
+## 4. Phân quyền 3 Role
 
-### 3.1 Input Types
+Xem chi tiết tại `00_Authentication_And_Authorization.md`.
 
-Created in `CustomerManagement.Api/Input.Type/`:
+| Role | Code value | Quyền |
+|------|-----------|-------|
+| **ADMIN** | `"ADMIN"` | Toàn quyền hệ thống: CRUD staff, xem toàn bộ deal/lead/customer, nhận notif khi task complete, xem audit log & dashboard. |
+| **MANAGER** | *(chưa trong enum)* | Quản lý nhóm, theo dõi hiệu suất, phân công task. (Hiện tại hệ thống CHƯA có enum value MANAGER — cần mở rộng.) |
+| **STAFF** | `"STAFF"` | Nhân viên kinh doanh: tạo deal/contact/note cho bản thân, nhận task, dùng chat AI, xem dữ liệu của mình. |
 
-| File | Description |
-|------|-------------|
-| `StaffInputType.cs` | `StaffInput`, `StaffUpdateInput` |
-| `PersonInputType.cs` | `PersonInput`, `PersonUpdateInput` |
-| `LeadInputType.cs` | `LeadInput`, `LeadUpdateInput` |
-| `CustomerInputType.cs` | `CustomerInput`, `CustomerUpdateInput` |
-| `ContactInputType.cs` | `ContactInput`, `ContactUpdateInput` |
-| `DealInputType.cs` | `DealInput`, `DealUpdateInput` |
-
-### 3.2 Enum Types
-
-| File | Values |
-|------|--------|
-| `StaffRoleType.cs` | ADMIN, STAFF |
-| `ContactStatusType.cs` | NEW, IN_PROGRESS, SUCCESS, FAILED, CLOSED, CANCELLED |
-| `DealStatusType.cs` | OPEN, NEGOTIATING, WON, LOST |
-
-### 3.3 Naming Standardization
-
-| Old Name | New Name |
-|----------|----------|
-| `infLeadResponse` | `lead` |
-| `infStaffResponse` | `staff` |
-| `infCustomerResponse` | `customer` |
-| `personResponse` | `person` |
+### Phân quyền theo GraphQL
+- `DealQuery.getDeals()` — chỉ ADMIN.
+- `DealQuery.getMyDeals()` — STAFF dùng thay thế.
+- `DealMutation.createDeal` — STAFF bị ép `IdStaff = currentUserId`.
+- `TaskHandler.UpdateTaskStatusAsync` — khi COMPLETED, gửi notif cho tất cả ADMIN.
+- `ReportHandler.GetTopPerformingStaffAsync` — lọc staff theo `Role = "Staff"`.
+- **Thiếu:** chưa có attribute `[Authorize(Roles = "ADMIN")]` ở GraphQL — phân quyền chủ yếu thực hiện trong code handler/mutation. Có thể bổ sung bằng HotChocolate filtering.
 
 ---
 
-## 4. Statistics & Chart Queries
+## 5. Cấu trúc Database (Tables)
 
-### 4.1 GetStatistics Response
-```csharp
-QuantityStatisticsResponse {
-    TotalProfit: decimal
-    QuantityCustomers: int
-    QuantityLeads: int
-    QuantityContacts: int
-    QuantityDeals: int
-    quantityStatisticsDetailContactResponse: {
-        QuantityContactsPending (NEW status)
-        QuantityContactsInProgress
-        QuantityContactsDone (SUCCESS status)
-        QuantityContactsCancel
-        QuantityContactsFailed
-    }
-    quantityStatisticsDetailDealResponse: {
-        QuantityDealsPending (OPEN status)
-        QuantityDealsWon
-        QuantityDealsLost
-    }
-}
-```
-
-### 4.2 GetChartDeal Response
-```csharp
-ChartDealResponse {
-    SuccessfullDealValue: decimal (sum of WON deals)
-    FailedDealValue: decimal (sum of LOST deals)
-    ListSuccessfullDeal: List<ListSuccessfullDealResponse>
-    ListFailedDeal: List<ListFailedDealResponse>
-}
-
-ListSuccessfullDealResponse {
-    IdDeal: Guid
-    Price: decimal?
-    Status: string?
-    CreatedAt: DateTime?
-}
-```
+| Table | Mục đích |
+|-------|----------|
+| `persons` | Bảng TPH (Table-per-Hierarchy) chứa Staff/Lead/Customer phân biệt bằng `Discriminator`. |
+| `contacts` | Hoạt động liên hệ giữa Staff và Lead/Customer. |
+| `deals` | Giao dịch bán hàng gắn với Customer. |
+| `tasks` | Công việc được giao cho Staff. |
+| `notes` | Bình luận gắn với entity nghiệp vụ. |
+| `note_mentions` | Quan hệ Note ↔ Staff được mention. |
+| `calendar_events` | Sự kiện lịch. |
+| `event_participants` | Quan hệ Event ↔ Staff tham gia. |
+| `notifications` | Thông báo cho từng Staff. |
+| `team_members` | Quan hệ Staff ↔ Lead/Deal (OWNER/MEMBER/VIEWER). |
+| `audit_logs` | Nhật ký kiểm toán. |
+| `staff_activity_logs` | Lịch sử LOGIN / STATUS_CHANGE. |
 
 ---
 
-## 5. Handler Changes
+## 6. Các module chức năng (chi tiết từng file)
 
-### 5.1 ContactHandler - Lead to Customer Conversion
-
-When `updateContact` changes status to `SUCCESS`:
-```csharp
-// Check if email already exists in Staff
-var staffWithEmail = await _staffRepository.GetStaffByEmailAsync(leadToConvert.Email);
-if (staffWithEmail != null)
-{
-    throw new DomainException("Email đã tồn tại trong hệ thống!", 409);
-}
-
-// Update Lead to Customer (change Discriminator)
-leadToConvert.Discriminator = PersonType.Customer;
-leadToConvert.UpdatedAt = DateTime.UtcNow;
-
-await _leadRepository.UpdateLeadAsync(leadToConvert);
-```
-
-### 5.2 Method Signature Changes
-
-| Handler | Method | Change |
-|---------|--------|--------|
-| StaffHandler | DeleteStaffAsync | Added `deletedBy` parameter |
-| StaffHandler | RestoreStaffAsync | NEW method |
-| LeadHandler | DeleteLeadAsync | No `deletedBy` parameter |
-| LeadHandler | RestoreLeadAsync | NEW method |
-| CustomerHandler | DeleteCustomerAsync | No `deletedBy` parameter |
-| CustomerHandler | RestoreCustomerAsync | NEW method |
-| ContactHandler | DeleteContactAsync | No `deletedBy` parameter |
-| DealHandler | DeleteDealAsync | No `deletedBy` parameter |
-| ContactHandler | UpdateContactAsync | Added Lead→Customer conversion on SUCCESS |
+| Nhóm | File | Mô tả |
+|------|------|-------|
+| 0 | `00_Authentication_And_Authorization.md` | Login, Refresh Token, Logout, Introspect, Forgot Password (OTP), phân quyền 3 role. |
+| 1 | `01_Staff_Management.md` | CRUD nhân viên. |
+| 2 | `02_Lead_Management.md` | CRUD Lead + Import Excel. |
+| 3 | `03_Customer_Management.md` | CRUD Customer + Import Excel + Conversion từ Lead. |
+| 4 | `04_Contact_Management.md` | Hoạt động liên hệ + auto conversion Lead→Customer khi Status=SUCCESS. |
+| 5 | `05_Deal_Management.md` | CRUD Deal + phân quyền ADMIN/STAFF + auto OWNER. |
+| 6 | `06_Task_Management.md` | CRUD Task + giao việc + đổi status + notif cho ADMIN khi complete. |
+| 7 | `07_Note_Management.md` | CRUD Note + pin/unpin + reply + mention `@username` + realtime SignalR. |
+| 8 | `08_Notification_Management.md` | Notification center + mark read + realtime push + Calendar reminder. |
+| 9 | `09_Calendar_Scheduling.md` | CRUD Event + participants + status phản hồi + background reminder. |
+| 10 | `10_Team_Assignment.md` | Quản lý team cho Lead/Deal + transfer OWNER + bảo vệ OWNER cuối. |
+| 11 | `11_Audit_Log.md` | Query nhật ký kiểm toán (lọc theo entity/staff/action/range). |
+| 12 | `12_Statistics_And_Reports.md` | Dashboard summary + Revenue chart + Pipeline funnel + Staff performance + Lead conversion + Export Excel. |
+| 13 | `13_AI_Chat.md` | CRMie chatbot với Groq + lịch sử Redis + system prompt bảo mật. |
+| 14 | `14_Staff_Presence.md` | Trạng thái online/offline/busy/away + activity log. |
 
 ---
 
-## 6. Repository Updates
+## 7. Luồng nghiệp vụ xuyên suốt (Cross-cutting)
 
-### 6.1 LeadRepository.UpdateLeadAsync
-Now updates `Discriminator` field:
-```csharp
-existingLead.Discriminator = lead.Discriminator;
-existingLead.UpdatedAt = DateTime.UtcNow;
+### 7.1. Authentication flow
+```
+Client → mutation login → AuthenticationHandler
+  → BCrypt verify → JWT access + refresh
+  → Redis save refreshToken (key: refresh_token:{idStaff})
+  → Set cookie refreshToken (HttpOnly, Secure, SameSite=None)
+  → Return { token, infStaff }
+
+Client → cookie tự động gửi kèm → mutation refreshToken
+  → Verify JWT → check Redis match → sinh access token mới (giữ refresh cũ)
+
+Client → mutation logout
+  → Verify cookie → xoá Redis key → clear cookie
 ```
 
-### 6.2 CustomerRepository
-Added `GetCustomerByEmailAsync(string email)` method.
-
-### 6.3 ContactRepository.AddContactAsync
-Default status changed to `StatusContactConstant.ContactNew` ("NEW")
-
-### 6.4 DealRepository.AddDealAsync
-Default status changed to `StatuDealConstant.DealOpen` ("OPEN")
-
----
-
-## 7. Database Schema
-
+### 7.2. Realtime flow (Note + Notification)
 ```
-persons (TPH table)
-├── id (PK, UUID)
-├── fullname (NVARCHAR200)
-├── email (NVARCHAR255, UNIQUE)
-├── phone (NVARCHAR20)
-├── location (NVARCHAR500)
-├── discriminator (INT) -- 0=Staff, 1=Lead, 2=Customer
-├── username (NVARCHAR100, UNIQUE) -- Staff only
-├── password_hash (NVARCHAR500) -- Staff only
-├── role (NVARCHAR50) -- Staff only (ADMIN, STAFF)
-├── salary (DECIMAL15,2) -- Staff only
-├── resource (NVARCHAR500) -- Lead only
-├── created_at (TIMESTAMP)
-├── updated_at (TIMESTAMP)
-├── is_deleted (BOOLEAN)
-└── deleted_at (TIMESTAMP)
+Mutation tạo Note / addParticipant / sendChatMessage
+  → Lưu DB
+  → NotificationHandler.CreateNotification (nếu có)
+  → IRealtimeNotificationService.SendNotificationToStaffAsync
+    → SignalR Clients.Group("staff_{idStaff}").SendAsync("ReceiveNotification", payload)
 
-contacts
-├── id_contact (PK, UUID)
-├── type (NVARCHAR50)
-├── title (NVARCHAR100)
-├── content (TEXT)
-├── status (NVARCHAR50) -- NEW, IN_PROGRESS, SUCCESS, FAILED, CLOSED, CANCELLED
-├── id_staff (FK -> persons.id)
-├── id_lead (FK -> persons.id)
-├── created_at (TIMESTAMP)
-├── updated_at (TIMESTAMP)
-├── is_deleted (BOOLEAN)
-└── deleted_at (TIMESTAMP)
+Client subscribe hub /hubs/notifications
+  → joinStaffGroup(idStaff)
+  → Lắng nghe event ReceiveNotification
+```
 
-deals
-├── id_deal (PK, UUID)
-├── title (NVARCHAR100)
-├── content (TEXT)
-├── price (DECIMAL15,2)
-├── status (NVARCHAR50) -- OPEN, NEGOTIATING, WON, LOST
-├── id_staff (FK -> persons.id)
-├── id_customer (FK -> persons.id)
-├── created_at (TIMESTAMP)
-├── updated_at (TIMESTAMP)
-├── is_deleted (BOOLEAN)
-└── deleted_at (TIMESTAMP)
+### 7.3. Lead → Customer conversion flow
+```
+ContactHandler.UpdateContactAsync (status = SUCCESS)
+  → Lấy Lead theo Contact.IdLead
+  → Check email không trùng Staff
+  → lead.Discriminator = PersonType.Customer
+  → UpdateLeadAsync (cùng bảng persons, cùng Id)
+  → Response.navigation chuyển từ Lead → Customer
+```
+
+### 7.4. Deal ownership & visibility flow
+```
+DealMutation.CreateDealAsync
+  → DealHandler.CreateDealAsync
+    → Auto-add TeamMember { Role=OWNER, CanEdit=true, CanDelete=true } cho IdStaff
+
+DealQuery.getDeals (ADMIN only)
+  → trả toàn bộ
+
+DealQuery.getMyDeals (STAFF)
+  → lấy teamMemberships của currentStaff
+  → lọc Deal WHERE IdStaff = currentUser OR IdDeal IN (team deal list)
 ```
 
 ---
 
-## 8. Removed Features
+## 8. Tích hợp & Background Jobs
 
-### Registration Flow - REMOVED
-- Registration feature completely removed
-- Admin creates staff accounts via `createStaff` mutation
-- No OTP verification needed for staff creation
+### 8.1. Calendar Reminder
+- `CalendarReminderService` chạy mỗi 5 phút.
+- Quét event `StartTime ∈ [now+5min, now+10min]`, `ReminderMinutes > 0`, `Status = SCHEDULED`.
+- Tạo Notification cho organizer + participants. Dedup 10 phút.
 
-### Removed Files
-- `CustomerManagement.Api/Mutation/RegisterMutation.cs`
-- `CustomerManagement.Application/Handlers/Auth/RegisterHandler.cs`
-- `CustomerManagement.Application/Handlers/Auth/RegisterCacheData.cs`
-- `CustomerManagement.Application/DTOs/Auth/RegisterRequest.cs`
+### 8.2. Elasticsearch (đã comment)
+- Tất cả handler đều có comment `// await _elasticsearchService.IndexAsync(response, "...")`.
+- Tính năng search bằng ES đang được tắt (xem `Program.cs` comment `// .AddTypeExtension<StaffElasticSearchQuery>()`).
+- Khi bật lại cần: cấu hình `ES__URL`, register `IElasticsearchService`, chạy migration index.
 
----
-
-## 9. Files Modified Summary
-
-### Domain Layer
-- `CustomerManagement.Domain/Entities/BaseEntity.cs` - NEW
-- `CustomerManagement.Domain/Entities/Person.cs` - NEW
-- `CustomerManagement.Domain/Entities/Contact.cs` - Moved from Infrastructure
-- `CustomerManagement.Domain/Entities/Deal.cs` - Moved from Infrastructure
-
-### Domain Layer - Exception
-- `CustomerManagement.Domain/Exception/DomainException.cs` - NEW
-- `CustomerManagement.Domain/Exception/Exceptions.cs` - NEW (all custom exceptions)
-
-### Domain Layer - Constants
-- `CustomerManagement.Domain/Constant/StatusContactConstant.cs` - Updated (SUCCESS, FAILED, CLOSED)
-- `CustomerManagement.Domain/Constant/StatuDealConstant.cs` - Updated (OPEN, NEGOTIATING)
-
-### Infrastructure Layer - Repositories
-- `CustomerManagement.Infrastructure/Repositories/StaffRepository.cs`
-- `CustomerManagement.Infrastructure/Repositories/LeadRepository.cs` - Updated Discriminator handling
-- `CustomerManagement.Infrastructure/Repositories/CustomerRepository.cs` - Added GetCustomerByEmailAsync
-- `CustomerManagement.Infrastructure/Repositories/ContactRepository.cs`
-- `CustomerManagement.Infrastructure/Repositories/DealRepository.cs`
-
-### Application Layer - Handlers
-- `CustomerManagement.Application/UseCases/StaffHandler.cs`
-- `CustomerManagement.Application/UseCases/LeadHandler.cs`
-- `CustomerManagement.Application/UseCases/CustomerHandler.cs`
-- `CustomerManagement.Application/UseCases/ContactHandler.cs` - Lead→Customer conversion on SUCCESS
-- `CustomerManagement.Application/UseCases/DealHandler.cs`
-- `CustomerManagement.Application/UseCases/StatisticsHandler.cs` - Includes detail statistics
-- `CustomerManagement.Application/UseCases/ChartDealHandler.cs`
-
-### Application Layer - Interfaces
-- `CustomerManagement.Application/Interfaces/ICustomerRepository.cs` - Added GetCustomerByEmailAsync
-
-### API Layer
-- `CustomerManagement.Api/Input.Type.Enums/StaffRoleType.cs`
-- `CustomerManagement.Api/Input.Type.Enums/ContactStatusType.cs`
-- `CustomerManagement.Api/Input.Type.Enums/DealStatusType.cs`
-- All Input Types (Staff, Lead, Customer, Contact, Deal, Person)
+### 8.3. SignalR Hubs
+- `/hubs/notifications` — group `staff_{idStaff}`.
+- `/hubs/notes` — group `{entityType}_{entityId}` hoặc `staff_{idStaff}`.
 
 ---
 
-## 10. Domain Exceptions
-
-All exceptions are located in `CustomerManagement.Domain/Exception/`.
-
-### 10.1 Exception Hierarchy
-
-```
-DomainException (base)
-├── ValidationException (400)
-│   ├── RequiredFieldException
-│   ├── InvalidEmailException
-│   ├── InvalidFormatException
-│   ├── InvalidGuidException
-│   ├── InvalidLengthException
-│   └── InvalidPasswordException
-├── NotFoundException (404)
-│   ├── StaffNotFoundException
-│   ├── LeadNotFoundException
-│   ├── CustomerNotFoundException
-│   ├── ContactNotFoundException
-│   └── DealNotFoundException
-├── ConflictException (409)
-│   ├── EmailAlreadyExistsException
-│   ├── UsernameAlreadyExistsException
-│   └── DuplicateEntryException
-├── UnauthorizedException (401)
-│   └── InvalidCredentialsException
-└── BusinessRuleException (422)
-    ├── InvalidStatusTransitionException
-    └── CannotConvertLeadException
-```
-
-### 10.2 Input Validation Rules
-
-**StaffHandler.CreateStaffAsync:**
-- Fullname: required, not empty
-- Email: required, valid email format
-- Username: required, not empty
-- Password: required, min 6 chars
-- Role: must be "ADMIN" or "STAFF"
-
-**StaffHandler.UpdateStaffAsync:**
-- Fullname: required, not empty
-- Email: required, valid email format
-- Role: if provided, must be "ADMIN" or "STAFF"
-
-**LeadHandler.CreateLeadAsync:**
-- Fullname: required, not empty
-- Email: required, valid email format
-
-**CustomerHandler.CreateCustomerAsync:**
-- Fullname: required, not empty
-- Email: required, valid email format
-
-**ContactHandler.CreateContactAsync:**
-- IdStaff: required, valid Guid
-- IdLead: required, valid Guid
-- Type: optional, max 50 chars
-- Title: optional, max 100 chars
-
-**ContactHandler.UpdateContactAsync:**
-- Status: if provided, must be valid ContactStatus enum value
-
-**DealHandler.CreateDealAsync:**
-- IdStaff: required, valid Guid
-- IdCustomer: required, valid Guid
-- Title: required, not empty, max 100 chars
-- Price: if provided, must be >= 0
-
-**DealHandler.UpdateDealAsync:**
-- Title: if provided, not empty, max 100 chars
-- Price: if provided, must be >= 0
-- Status: if provided, must be valid DealStatus enum value
-
----
-
-## 11. Build Status
-
-**Build:** SUCCESS (0 errors, 0 warnings)
-
----
-
-## 12. New Collaborative Features (2026-05-13)
-
-### NHÓM 1: QUẢN LÝ CÔNG VIỆC (Task Management)
-
-**Entities:**
-- `TaskEntity` - Quản lý công việc với Priority và Status
-
-**Tables Created:**
-- `tasks` - id_task, title, description, due_date, priority, status, id_staff_assigned, linked_entity_type, linked_entity_id
-
-**Constants:**
-- `TaskPriorityConstant` - LOW, MEDIUM, HIGH, URGENT
-- `TaskStatusConstant` - PENDING, IN_PROGRESS, COMPLETED, CANCELLED
-
-**API Endpoints:**
-- Mutations: createTask, updateTask, deleteTask, restoreTask, assignTask, updateTaskStatus
-- Queries: getTasks, getTasksByStaff, getTasksByStatus, getTaskById
-
-**Business Rules:**
-- ADMIN: Tạo, sửa, xóa, gán task cho bất kỳ staff nào
-- STAFF: Chỉ cập nhật status của task được gán cho mình
-- Khi gán task -> tạo Notification cho Staff
-- Khi COMPLETED -> thông báo cho Admin
-
----
-
-### NHÓM 2: BÌNH LUẬN & GHI CHÚ (Activity Notes)
-
-**Entities:**
-- `Note` - Bình luận trên Lead/Customer/Deal với @mention support
-- `NoteMention` - Theo dõi @mention trong bình luận
-
-**Tables Created:**
-- `notes` - id_note, content, type, is_pinned, id_staff, linked_entity_type, linked_entity_id, parent_note_id
-- `note_mentions` - id_mention, id_note, id_staff_mentioned
-
-**Constants:**
-- `NoteTypeConstant` - COMMENT, UPDATE, SYSTEM
-
-**API Endpoints:**
-- Mutations: createNote, updateNote, deleteNote, pinNote, unpinNote, replyNote
-- Queries: getNotesByEntity, getNoteById, getPinnedNotes
-
-**Business Rules:**
-- COMMENT: Bình luận thường của staff
-- UPDATE: Cập nhật trạng thái (tự động tạo khi Lead/Customer/Deal thay đổi)
-- SYSTEM: Thông báo hệ thống
-- @Mention: Khi content chứa `@username` -> tạo NoteMention + Notification
-
----
-
-### NHÓM 3: THÔNG BÁO (Notifications)
-
-**Entities:**
-- `Notification` - Hệ thống thông báo real-time
-
-**Tables Created:**
-- `notifications` - id_notification, title, message, type, is_read, is_pinned, id_staff, related_entity_type, related_entity_id
-
-**Constants:**
-- `NotificationTypeConstant` - TASK_ASSIGNED, TASK_COMPLETED, DEAL_UPDATED, CONTACT_STATUS_CHANGED, MENTION, SYSTEM
-
-**API Endpoints:**
-- Mutations: markAsRead, markAllAsRead, pinNotification, deleteNotification
-- Queries: getNotifications, getUnreadNotifications, getPinnedNotifications, getUnreadCount
-
-**Trigger Events:**
-- Task được gán -> TASK_ASSIGNED notification
-- Task hoàn thành -> TASK_COMPLETED notification cho Admin
-- @mention trong Note -> MENTION notification
-
----
-
-## 13. Implemented Features (NHÓM 1-8)
-
-### Completed Features
-
-| # | Feature Group | Status |
-|---|---------------|--------|
-| 1 | Task Management (NHÓM 1) | ✅ COMPLETED |
-| 2 | Activity Notes (NHÓM 2) | ✅ COMPLETED |
-| 3 | Notifications (NHÓM 3) | ✅ COMPLETED |
-| 4 | Staff Presence (NHÓM 4) | ✅ COMPLETED |
-| 5 | Team Assignment (NHÓM 5) | ✅ COMPLETED |
-| 6 | Audit Log (NHÓM 6) | ✅ COMPLETED |
-| 7 | Calendar/Scheduling (NHÓM 7) | ✅ COMPLETED |
-| 8 | Analytics Dashboard (NHÓM 8) | ✅ COMPLETED |
-
-### Feature Summary
-
-**NHÓM 1 - Task Management:**
-- `TaskEntity` with Priority and Status
-- CRUD operations with soft delete
-- Linked to Lead/Customer/Deal
-
-**NHÓM 2 - Activity Notes:**
-- `Note` entity with @mention support
-- Types: COMMENT, UPDATE, SYSTEM
-- Linked to Lead/Customer/Deal/Task
-
-**NHÓM 3 - Notifications:**
-- Real-time notification system
-- Types: TASK_ASSIGNED, TASK_COMPLETED, DEAL_UPDATED, MENTION, SYSTEM
-- Triggered by task assignment and @mentions
-
-**NHÓM 4 - Staff Presence:**
-- Status tracking (OFFLINE, ONLINE, BUSY, AWAY)
-- Activity logging
-- LastActiveAt tracking
-
-**NHÓM 5 - Team Assignment:**
-- Teams with members
-- Team lead functionality
-- Shared entity access
-
-**NHÓM 6 - Audit Log:**
-- System-wide change tracking
-- Entity history
-- Admin visibility
-
----
-
-## 14. Newly Implemented Features (NHÓM 4, 5, 6) - 2026-05-15
-
-### NHÓM 4: Staff Presence
-
-**Entities:**
-- `StaffActivityLog` - Activity logging
-- Person entity extended with `Status` and `LastActiveAt` fields
-
-**Tables Created:**
-- `staff_activity_logs` - id_log, id_staff, action, entity_type, entity_id, timestamp, ip_address, user_agent
-
-**Constants:**
-- `StaffStatusConstant` - OFFLINE (0), ONLINE (1), BUSY (2), AWAY (3)
-
-**API Endpoints:**
-- Queries: `getStaffStatuses`, `getOnlineStaffs`, `getStaffActivityLogs`
-- Mutations: `updateMyStatus`, `refreshLastActive`
-
-**Business Rules:**
-- Staff cannot manually set OFFLINE (must logout)
-- Auto LOGIN/STATUS_CHANGE activity logging
-
----
-
-### NHÓM 5: Team Assignment
-
-**Entities:**
-- `TeamMember` - Team membership with roles
-
-**Tables Created:**
-- `team_members` - id, entity_type, entity_id, id_staff, role, assigned_at, assigned_by, can_edit, can_delete
-
-**Constants:**
-- `TeamRoleConstant` - OWNER (0), MEMBER (1), VIEWER (2)
-- `TeamEntityTypeConstant` - Lead, Deal
-
-**API Endpoints:**
-- Queries: `getTeamMembers`, `getMyTeams`, `getTeamMemberPermissions`
-- Mutations: `addTeamMember`, `updateTeamMember`, `removeTeamMember`, `transferOwnership`
-
-**Business Rules:**
-- OWNER: full permissions (add/remove members, edit, delete entity)
-- MEMBER: view + update (if CanEdit=true)
-- VIEWER: view only
-- Cannot delete last OWNER
-
----
-
-### NHÓM 6: Audit Log
-
-**Entities:**
-- `AuditLog` - System-wide change tracking
-
-**Tables Created:**
-- `audit_logs` - id_log, action, entity_type, entity_id, old_values (jsonb), new_values (jsonb), id_staff, staff_name, ip_address, user_agent, timestamp, description
-
-**Constants:**
-- `AuditActionConstant` - CREATE, UPDATE, DELETE, RESTORE, ASSIGN, LOGIN, LOGOUT
-- `AuditEntityTypeConstant` - Staff, Lead, Customer, Contact, Deal, Task, Note, Notification, TeamMember
-
-**API Endpoints:**
-- Queries: `getAuditLogs`, `getAuditLogsByStaff`, `getAuditLogsByAction`, `getEntityHistory`, `getAuditStatistics`
-- Internal: `LogAsync` method for creating audit entries
-
-**Business Rules:**
-- Logs are immutable (no update/delete)
-- JSONB storage for OldValues/NewValues
-- Index on EntityType, EntityId, Timestamp, IdStaff
-
----
-
-## 15. Migration History
-
-| Migration | Date | Description |
-|-----------|------|-------------|
-| 20260513165737 | 2026-05-13 | AddTaskNoteNotificationEntities |
-| 20260514185433 | 2026-05-14 | AddStaffPresence |
-| 20260514190935 | 2026-05-14 | AddTeamAssignment |
-| 20260514191148 | 2026-05-14 | AddAuditLog |
-| 20260514192211 | 2026-05-14 | AddCalendarScheduling |
-| 20260514192716 | 2026-05-14 | AddAnalyticsDashboard |
-
----
-
-## 16. NHÓM 7: Calendar/Scheduling (2026-05-15)
-
-### Entities
-- `CalendarEvent` - Lịch sự kiện với participants
-- `EventParticipant` - Người tham gia sự kiện
-
-### Tables Created
-- `calendar_events` - id_event, title, description, event_type, start_time, end_time, location, is_all_day, reminder_minutes, status, id_staff, related_entity_type, related_entity_id
-- `event_participants` - id, id_event, id_staff, status, responded_at
-
-### Constants
-- `CalendarEventTypeConstant` - MEETING (0), CALL (1), TASK_DEADLINE (2), FOLLOW_UP (3)
-- `CalendarEventStatusConstant` - SCHEDULED (0), IN_PROGRESS (1), COMPLETED (2), CANCELLED (3)
-- `ParticipantStatusConstant` - PENDING (0), ACCEPTED (1), DECLINED (2), TENTATIVE (3)
-
-### API Endpoints
-- Queries: getCalendarEvents, getCalendarEventById, getMyEvents, getUpcomingEvents, getEventParticipants
-- Mutations: createCalendarEvent, updateCalendarEvent, deleteCalendarEvent, cancelCalendarEvent, addParticipant, updateParticipantStatus, removeParticipant
-
----
-
-## 17. NHÓM 8: Analytics Dashboard (2026-05-15)
-
-### Response DTOs
-- `DashboardResponse` - Tổng quan dashboard
-- `RevenueChartResponse` - Biểu đồ doanh thu theo ngày/tháng
-- `PipelineFunnelResponse` - Pipeline funnel (OPEN → NEGOTIATING → WON)
-- `StaffPerformanceResponse` - Hiệu suất nhân viên
-- `LeadConversionResponse` - Tỷ lệ chuyển đổi Lead → Customer
-- `ExportReportResponse` - Download URL cho export
-
-### API Endpoints
-- Queries: getDashboardSummary, getRevenueChart, getPipelineFunnel, getTopPerformingStaff, getStaffPerformanceReport, getLeadConversionReport
-- Export: exportDealsReport, exportLeadsReport, exportCustomersReport
-
----
-
-## 18. File Upload Changes (2026-05-15)
-
-### Issue
-HotChocolate 15 does not support `IFormFile`/`IFile` as GraphQL schema types. GraphQL mutations using file upload parameters caused schema initialization to fail with:
-```
-HotChocolate.SchemaException: Unable to infer or resolve a schema type from the type reference `IFormFile (Input)`.
-```
-
-### Solution
-File upload functionality was moved from GraphQL mutations to REST API endpoints.
-
-**Removed from GraphQL:**
-- `LeadMutation.importLeadExcelAsync(IFormFile file)` - REMOVED
-- `CustomerMutation.importCustomerExcelAsync(IFormFile file)` - REMOVED
-
-**New REST Endpoints:**
-- `POST /api/fileupload/lead` - Import Lead từ Excel file
-- `POST /api/fileupload/customer` - Import Customer từ Excel file
-
-### New Files
-- `CustomerManagement.Api/Controllers/FileUploadController.cs` - REST controller for file uploads
-
-### Files Modified
-- `CustomerManagement.Api/Mutation/LeadMutation.cs` - Removed file upload method
-- `CustomerManagement.Api/Mutation/CustomerMutation.cs` - Removed file upload method
-- `CustomerManagement.Application/UseCases/LeadHandler.cs` - Changed `IFile` to `IFormFile`
-- `CustomerManagement.Application/UseCases/CustomerHandler.cs` - Changed `IFile` to `IFormFile`
-
----
-
----
-
-## 19. SignalR Realtime Implementation (2026-05-15)
-
-### Overview
-Two separate SignalR hubs implemented for real-time communications.
-
-### Hubs
-
-#### NotificationHub (`/hubs/notifications`)
-- `JoinStaffGroup(Guid idStaff)` - Subscribe to personal notifications
-- `LeaveStaffGroup(Guid idStaff)` - Unsubscribe from personal notifications
-
-#### NoteHub (`/hubs/notes`)
-- `JoinEntityGroup(string entityType, Guid entityId)` - Subscribe to entity notes (Lead/Customer/Deal)
-- `LeaveEntityGroup(string entityType, Guid entityId)` - Unsubscribe
-- `JoinStaffGroup(Guid idStaff)` - Subscribe to personal notes
-
-### Services
-
-| Interface | Implementation | Purpose |
-|-----------|----------------|---------|
-| `IRealtimeNotificationService` | `RealtimeNotificationService` | Send notifications to staff |
-| `IRealtimeNoteService` | `RealtimeNoteService` | Send notes to entities/staff |
-| `IRealtimeNotificationSender` | `RealtimeNotificationSenderAdapter` | Application layer adapter |
-| `IRealtimeNoteSender` | `RealtimeNoteSenderAdapter` | Application layer adapter |
-
-### GraphQL Integration
-
-**NotificationMutation:**
-- `createNotificationAsync` - Creates notification + sends via SignalR
-- All other methods (markAsRead, markAllAsRead, pin, delete) trigger notifications via `IRealtimeNotificationService`
-
-**NoteMutation:**
-- `CreateNoteAsync` - Creates note + sends realtime via `IRealtimeNoteService`
-- `UpdateNoteAsync` - Updates note + sends realtime
-- `ReplyNoteAsync` - Creates reply + sends realtime
-
-**CalendarMutation:**
-- Event creation/participant changes send notifications to participants via `IRealtimeNotificationService`
-
-### Background Service
-
-**CalendarReminderService** (`CustomerManagement.Infrastructure/Services/`)
-- Runs every 5 minutes
-- Finds events starting in 5-10 minutes
-- Sends `NotificationReminder` type notifications to organizer and participants
-
----
-
-## 20. CalendarReminderService Background Job
-
-### Functionality
-- Runs every 5 minutes (via `IHostedService`)
-- Queries events with `StartTime` in next 5-10 minutes
-- Creates notifications for organizer and all accepted participants
-- Notification type: `NotificationReminder`
-
-### Notification Content
-- Title: "Event Reminder"
-- Message: "{EventTitle} starts at {StartTime}"
-- RelatedEntityType: "CalendarEvent"
-- RelatedEntityId: Event ID
-
----
-
-## 21. Elasticsearch Status
-
-Elasticsearch code has been **commented out** (not deleted) for future implementation.
-
-**Commented in Program.cs:**
-- `builder.Configuration["Elasticsearch:Uri"]` line
-- `IElasticsearchService` registration
-- 5 Query type extensions (StaffElasticSearchQuery, CustomersElasticSearchQuery, etc.)
-
-**Commented in Handler files:**
-- `CustomerHandler.cs`, `LeadHandler.cs`, `ContactHandler.cs`, `DealHandler.cs`, `StaffHandler.cs`, `TaskHandler.cs`, `NoteHandler.cs`
-
-**Commented Query files:**
-- `CustomersElasticSearchQuery.cs`, `LeadsElasticSearchQuery.cs`, `ContactsElasticSearchQuery.cs`, `DealsElasticSearchQuery.cs`, `StaffElasticSearchQuery.cs`
-
----
-
-## 22. Bug Fixes (2026-05-16)
-
-### NoteHandler NullReferenceException
-
-**Issue:** `CreateNoteAsync` threw `NullReferenceException` at line 41.
-
-**Root Cause:** Constructor was commented out, `_staffRepository` was null.
-
-**Fix:** Uncommented constructor in `NoteHandler.cs`.
-
----
-
-### GetCalendarEvents 500 Error (NullReference)
-
-**Issue:** `GetCalendarEvents` query returned 500 error.
-
-**Root Cause:** `MapStaffToResponse` assigned database null values to non-nullable DTO properties (`Fullname`, `Email`).
-
-**Fix:** Added null-coalescing operators in `CalendarQuery.cs` and `CalendarHandler.cs`:
-```csharp
-Fullname = staff.Fullname ?? "",
-Email = staff.Email ?? "",
+## 9. Cấu hình môi trường
+
+Tất cả secret được load qua `DotNetEnv.Env.Load()` trong `Program.cs`. Các biến chính:
+
+```bash
+CONNECTIONSTRINGS__PostgreSQLConnection
+APPSETTINGS__SECRETKEY          # JWT signing key
+APPSETTINGS__ISSUER
+APPSETTINGS__AUDIENCE
+APPSETTINGS__ACCESSTOKENEXP     # Phút
+APPSETTINGS__REFRESHTOKENEXP    # Ngày
+REDISSETTINGS__HOST
+REDISSETTINGS__PORT
+REDISSETTINGS__PASSWORD
+SENDER_APIKEY                   # SendGrid
+SENDER_EMAIL
+SENDER_NAME
+GROQ__APIKEY
+GROQ__APIURL
+# ES__URL                       # Elasticsearch (đang tắt)
 ```
 
 ---
 
-### GetCalendarEvents ObjectDisposedException
+## 10. Quyết định thiết kế quan trọng
 
-**Issue:** `GetCalendarEvents` threw `ObjectDisposedException: Cannot access a disposed context instance`.
-
-**Root Cause:** Repository methods returned `IQueryable<T>` with `await using var context` pattern. The `IQueryable` was lazy-evaluated after the DbContext was disposed.
-
-**Fix:** Changed repository methods to return `Task<List<T>>` with `.ToListAsync()` before context disposal. Updated all callers in `CalendarQuery.cs` and `CalendarHandler.cs`.
-
----
-
-### TeamAssignmentHandler ObjectDisposedException
-
-**Issue:** `GetMyTeamsAsync` query threw `ObjectDisposedException` at line 62.
-
-**Root Cause:** `TeamMemberRepository.GetByEntityAsync` and `GetByStaffAsync` returned `IQueryable<TeamMember>` with `await using var context`. The `IQueryable` was lazy-evaluated in `foreach` loop after context was disposed.
-
-**Fix:** Changed interface and implementation from `Task<IQueryable<TeamMember>>` to `Task<List<TeamMember>>` with `.ToListAsync()` before context disposal.
-
-**Files Modified:**
-- `CustomerManagement.Application\Interfaces\ITeamMemberRepository.cs` (lines 8-9)
-- `CustomerManagement.Infrastructure\Repositories\TeamMemberRepository.cs` (lines 26-39)
+| Quyết định | Lý do |
+|-----------|-------|
+| GraphQL (HotChocolate) thay vì REST | Single endpoint, client chủ động chọn field, dễ thêm field mới. |
+| TPH inheritance (Person) | Lead và Customer dùng chung bảng, chuyển đổi chỉ đổi Discriminator. |
+| Soft delete toàn bộ | Audit, restore dễ dàng. |
+| BCrypt cho password | Chuẩn industry, salt tự động. |
+| Refresh token rotation KHÔNG rotate | Đơn giản, nhưng cần theo dõi để tránh token bị đánh cắp sử dụng lâu. |
+| OTP lưu IMemoryCache | Nhanh nhưng mất khi restart và không share giữa nhiều instance. |
+| Auto OWNER khi tạo Deal | Giảm friction, mặc định người tạo chịu trách nhiệm. |
+| 2 cách tạo notification | Cách A (chỉ DB) và Cách B (DB + realtime) — chưa thống nhất. |
+| Calendar Reminder chỉ lưu DB | Không push realtime — cần bổ sung. |
+| `exportDealsReport` trả binary trong GraphQL | Có thể gây nặng response — nên upload S3/Blob. |
+| EPPlus NonCommercial | OK cho dev, cần license cho production. |
 
 ---
 
-### AutoMapper Missing TeamMember -> TeamMemberResponse Mapping
+## 11. Điểm cần cải thiện (Backlog)
 
-**Issue:** `UpdateTeamMemberAsync` and `TransferOwnershipAsync` threw `AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping`.
-
-**Root Cause:** `_mapper.Map<TeamMemberResponse>(updated)` was called but no mapping profile existed for `TeamMember -> TeamMemberResponse`.
-
-**Fix:** Created `TeamMemberMapper.cs` in `CustomerManagement.Infrastructure\Mapping\`.
-
-**Files Created:**
-- `CustomerManagement.Infrastructure\Mapping\TeamMemberMapper.cs`
-
----
-
-### AuditLogRepository ObjectDisposedException
-
-**Issue:** Multiple AuditLog queries threw `ObjectDisposedException` in `GetAuditLogsAsync`, `GetAuditLogsByStaffAsync`, `GetAuditLogsByActionAsync`, `GetEntityHistoryAsync`.
-
-**Root Cause:** `IAuditLogRepository` methods (`GetAllAsync`, `GetByEntityAsync`, `GetByStaffAsync`, `GetByActionAsync`, `GetByDateRangeAsync`, `GetEntityHistoryAsync`) all returned `Task<IQueryable<AuditLog>>` with `await using var context` pattern.
-
-**Fix:** Changed all 6 methods from `Task<IQueryable<AuditLog>>` to `Task<List<AuditLog>>` with `.ToListAsync()` before context disposal. Updated callers in `AuditLogQuery.cs` and `AuditLogHandler.cs` to use `List<AuditLog>` instead of `IQueryable<AuditLog>`.
-
-**Files Modified:**
-- `CustomerManagement.Application\Interfaces\IAuditLogRepository.cs`
-- `CustomerManagement.Infrastructure\Repositories\AuditLogRepository.cs`
-- `CustomerManagement.Api\Query\AuditLogQuery.cs`
-- `CustomerManagement.Application\UseCases\AuditLogHandler.cs`
+1. **Hoàn thiện role MANAGER**: mở rộng `StaffRole` enum, cập nhật validator + role-check logic.
+2. **Đồng nhất notification**: mọi nơi tạo notification nên dùng `NotificationMutation.CreateNotification` (có realtime) thay vì thao tác DB trực tiếp.
+3. **Audit log tự động**: thêm `AuditLogHandler.LogAsync` ở tất cả CRUD handler.
+4. **Auto OFFLINE staff**: bổ sung background job check `LastActiveAt > 15 phút` -> set OFFLINE.
+5. **OTP chuyển sang Redis**: cho phép horizontal scaling.
+6. **Refresh token rotation**: rotate refresh token mỗi lần refresh để tăng bảo mật.
+7. **Streaming Groq response**: dùng SSE/WebSocket để user thấy AI trả lời từng phần.
+8. **Mask sensitive data trước khi gửi AI**: ẩn email, phone trong prompt để bảo vệ PII.
+9. **Rate limit**: chống brute-force login + OTP spam.
+10. **Bật Elasticsearch**: hoàn thiện search customers/leads/deals.
+11. **StaffPerformance.TasksCompleted**: tính từ `tasks` table thay vì hardcode 0.
+12. **LeadConversion.ConversionBySources**: aggregate theo `Resource` của Lead.
+13. **Thêm `[Authorize(Roles=...)]` ở GraphQL**: chuẩn hoá phân quyền thay vì check trong code.
+14. **Export Excel upload lên storage**: trả URL thay vì binary trong GraphQL.
 
 ---
 
-### AuditStatisticsResponse Missing Fields
-
-**Issue:** `getAuditStatistics` query returned GraphQL error: "The field `totalActions` does not exist on the type `AuditStatisticsResponse`", etc.
-
-**Root Cause:** `AuditStatisticsResponse` DTO was missing fields that client query required: `totalActions`, `totalEntities`, `topActions`, `topEntities`.
-
-**Fix:** Added computed properties and new DTO classes (`TopActionItem`, `TopEntityItem`) to `AuditStatisticsResponse.cs`.
-
-**File Modified:**
-- `CustomerManagement.Application\DTOs\Response\AuditStatisticsResponse.cs`
-
----
-
-## 23. AI Chat Feature - Commented Out for Future Development (2026-05-16)
-
-### Overview
-AI Chat feature (Google Gemini integration) has been **commented out** but **NOT deleted** for future development. All code is preserved and can be re-enabled by uncommenting.
-
-### Files Commented Out
-
-**Application Layer:**
-- `CustomerManagement.Application\UseCases\ChatHandler.cs`
-- `CustomerManagement.Application\Interfaces\IGeminiService.cs`
-- `CustomerManagement.Application\Interfaces\IChatHistoryService.cs`
-- `CustomerManagement.Application\DTOs\Chat\ChatRequest.cs`
-- `CustomerManagement.Application\DTOs\Chat\ChatResponse.cs`
-- `CustomerManagement.Application\DTOs\Chat\GeminiRequest.cs`
-- `CustomerManagement.Application\DTOs\Chat\GeminiApiResponse.cs`
-- `CustomerManagement.Application\DTOs\Response\MessageHistoryItem.cs`
-
-**Infrastructure Layer:**
-- `CustomerManagement.Infrastructure\Services\GeminiService.cs`
-- `CustomerManagement.Infrastructure\Services\ChatHistoryService.cs`
-
-**API Layer:**
-- `CustomerManagement.Api\Query\ChatQuery.cs`
-- `CustomerManagement.Api\Mutation\ChatMutation.cs`
-
-**Program.cs Changes:**
-- ChatHandler registration: commented out
-- ChatQuery/ChatMutation GraphQL extensions: commented out
-- IGeminiService HttpClient registration: commented out
-- IChatHistoryService registration: commented out
-
-### Re-enabling AI Chat
-To re-enable AI Chat feature, uncomment the following in `Program.cs`:
-1. `builder.Services.AddHttpClient<IGeminiService, GeminiService>()`
-2. `builder.Services.AddScoped<IChatHistoryService, ChatHistoryService>()`
-3. `builder.Services.AddScoped<ChatHandler>()`
-4. `.AddTypeExtension<ChatQuery>()`
-5. `.AddTypeExtension<ChatMutation>()`
-
----
-
-## 24. Elasticsearch Feature - Commented Out for Future Development (2026-05-16)
-
-### Overview
-Elasticsearch search feature has been **commented out** but **NOT deleted** for future development. All code is preserved and can be re-enabled by uncommenting.
-
-### Files Commented Out
-
-**Application Layer:**
-- `CustomerManagement.Application\Interfaces\IElasticsearchService.cs`
-
-**Infrastructure Layer:**
-- `CustomerManagement.Infrastructure\Services\ElasticsearchService.cs`
-
-**API Layer (GraphQL Query Extensions):**
-- `CustomerManagement.Api\Query\StaffElasticSearchQuery.cs`
-- `CustomerManagement.Api\Query\CustomersElasticSearchQuery.cs`
-- `CustomerManagement.Api\Query\LeadsElasticSearchQuery.cs`
-- `CustomerManagement.Api\Query\ContactsElasticSearchQuery.cs`
-- `CustomerManagement.Api\Query\DealsElasticSearchQuery.cs`
-
-**Handler Files (Already commented out in constructors):**
-- `CustomerManagement.Application\UseCases\LeadHandler.cs`
-- `CustomerManagement.Application\UseCases\CustomerHandler.cs`
-- `CustomerManagement.Application\UseCases\ContactHandler.cs`
-- `CustomerManagement.Application\UseCases\DealHandler.cs`
-- `CustomerManagement.Application\UseCases\StaffHandler.cs`
-- `CustomerManagement.Application\UseCases\TaskHandler.cs`
-- `CustomerManagement.Application\UseCases\NoteHandler.cs`
-
-**Program.cs Changes:**
-- Elasticsearch service registration: commented out
-- Elasticsearch Query type extensions: commented out
-
-### Re-enabling Elasticsearch
-To re-enable Elasticsearch feature, uncomment the following in `Program.cs`:
-1. `builder.Configuration["Elasticsearch:Uri"]` line
-2. `builder.Services.AddScoped<IElasticsearchService, ElasticsearchService>()`
-3. All 5 `.AddTypeExtension<*ElasticSearchQuery>()` lines
-
-Then uncomment constructor parameters and service usage in handler files.
-
----
-
-*Document updated: 2026-05-16*
-*All Features Status: NHÓM 1-8 COMPLETED - Build passing, all migrations applied*
-*SignalR: 2 hubs (NotificationHub, NoteHub) with realtime services*
-*File Upload: REST API endpoints implemented (not GraphQL)*
-*Bug Fixes: NoteHandler constructor fixed, CalendarQuery null handling added, CalendarEventRepository disposed context fixed, TeamMemberRepository disposed context fixed, TeamMemberMapper created, AuditLogRepository disposed context fixed, StaffActivityLogRepository disposed context fixed, AuditStatisticsResponse fields added*
-*AI Chat & Elasticsearch: Commented out for future development (2026-05-16)*
-*Handler Constructors: All 5 main handlers constructors uncommented (2026-05-16)*
-*TaskInput: DueDate changed from DateTime? to string?, parse in mutation (2026-05-16)*
-*TaskPriority: Client must use enum names (LOW, MEDIUM) not numbers (0, 1) (2026-05-16)*
-
----
-
-## 25. Handler Constructor Fix - NullReferenceException (2026-05-16)
-
-### Overview
-
-All 5 main handler constructors were commented out when Elasticsearch code was commented, causing `_leadRepository`, `_staffRepository`, and other dependencies to be `null`. This resulted in `NullReferenceException` at line 32 when calling `CreateLeadAsync`.
-
-### Root Cause
-
-When Elasticsearch code was commented out in handlers (to disable Elasticsearch feature), the constructors that accepted `IElasticsearchService` were also commented. This left the private readonly fields (`_leadRepository`, `_staffRepository`, etc.) uninitialized.
-
-### Fix Applied
-
-Uncommented and adapted constructors for all 5 handlers:
-
-**StaffHandler.cs:**
-```csharp
-public StaffHandler(
-    IStaffRepository staffRepository,
-    IMapper mapper)
-{
-    _staffRepository = staffRepository;
-    _mapper = mapper;
-}
-```
-
-**LeadHandler.cs:**
-```csharp
-public LeadHandler(ILeadRepository leadRepository,
-                   IMapper mapper)
-{
-    _leadRepository = leadRepository;
-    _mapper = mapper;
-}
-```
-
-**DealHandler.cs:**
-```csharp
-public DealHandler(IDealRepository dealRepository,
-                   IStaffRepository staffRepository,
-                   ICustomerRepository customerRepository,
-                   IMapper mapper)
-{
-    _dealRepository = dealRepository;
-    _staffRepository = staffRepository;
-    _customerRepository = customerRepository;
-    _mapper = mapper;
-}
-```
-
-**CustomerHandler.cs:**
-```csharp
-public CustomerHandler(ICustomerRepository customerRepository,
-                        ILeadRepository leadRepository,
-                        IMapper mapper)
-{
-    _customerRepository = customerRepository;
-    _leadRepository = leadRepository;
-    _mapper = mapper;
-}
-```
-
-**ContactHandler.cs:**
-```csharp
-public ContactHandler(IContactRepository contactRepository,
-                      IStaffRepository staffRepository,
-                      ILeadRepository leadRepository,
-                      ICustomerRepository customerRepository,
-                      IMapper mapper)
-{
-    _contactRepository = contactRepository;
-    _staffRepository = staffRepository;
-    _leadRepository = leadRepository;
-    _customerRepository = customerRepository;
-    _mapper = mapper;
-}
-```
-
-### Files Modified
-- `CustomerManagement.Application\UseCases\StaffHandler.cs`
-- `CustomerManagement.Application\UseCases\LeadHandler.cs`
-- `CustomerManagement.Application\UseCases\DealHandler.cs`
-- `CustomerManagement.Application\UseCases\CustomerHandler.cs`
-- `CustomerManagement.Application\UseCases\ContactHandler.cs`
-
-### Build Status
-- **Build: SUCCESS** (0 errors, 15 warnings)
-- Warnings are pre-existing (CS8602 dereference null, CS1998 async without await)
-
----
-
-## 26. TaskInput DateTime Parsing Fix (2026-05-16)
-
-### Overview
-
-`updateTask` mutation threw `DateTime cannot parse the given literal of type StringValueNode` when `dueDate` field was provided in the input.
-
-### Root Cause
-
-`TaskInputType.cs` defined `DueDate` as `DateTime?` which Hot Chocolate cannot parse from GraphQL string literal `StringValueNode`.
-
-### Fix Applied
-
-Changed `DueDate` from `DateTime?` to `string?` in both `TaskInput` and `TaskUpdateInput`:
-
-```csharp
-// TaskInputType.cs - Before
-public DateTime? DueDate { get; set; }
-
-// TaskInputType.cs - After
-public string? DueDate { get; set; }
-```
-
-Parse string to DateTime in mutation handlers:
-
-```csharp
-// TaskMutation.cs
-DateTime? dueDate = null;
-if (!string.IsNullOrEmpty(input.DueDate) && DateTime.TryParse(input.DueDate, out var parsed))
-{
-    dueDate = parsed;
-}
-```
-
-### Files Modified
-- `CustomerManagement.Api\Input\Type\TaskInputType.cs`
-- `CustomerManagement.Api\Mutation\TaskMutation.cs`
-
----
-
-## 27. TaskPriority Enum Value Format (2026-05-16)
-
-### Issue
-
-Client sent `priority: "0"` (string number) but Hot Chocolate enum expects enum name like `LOW`, `MEDIUM`, `HIGH`, `URGENT`.
-
-### Root Cause
-
-GraphQL enum input requires exact enum member names, not integer values.
-
-### Valid Enum Values
-
-| TaskPriority | TaskItemStatus |
-|--------------|----------------|
-| LOW | PENDING |
-| MEDIUM | IN_PROGRESS |
-| HIGH | COMPLETED |
-| URGENT | CANCELLED |
-
-### Client-Side Fix Required
-
-```json
-// Incorrect - causes error
-{ "priority": "0", "status": "0" }
-
-// Correct
-{ "priority": "LOW", "status": "PENDING" }
+## 12. Cách chạy local
+
+```bash
+# 1. Cài PostgreSQL + Redis, set env vars (xem .env.example nếu có)
+# 2. Apply migrations
+dotnet ef database update --project CustomerManagement.Infrastructure
+
+# 3. Chạy API
+dotnet run --project CustomerManagement.Api
+
+# GraphQL endpoint: https://localhost:5114/graphql
+# Voyager: https://localhost:5114/voyager
+# SignalR notifications: /hubs/notifications
+# SignalR notes: /hubs/notes
 ```
 
 ---
 
-## 28. Team Assignment - Auto-Create OWNER on Deal/Lead Creation (2026-05-17)
-
-### Overview
-
-When a Deal is created, the creator was NOT automatically added to `team_members` table. This caused `isOwner()` to always return false for deals, and team members list was empty.
-
-### Root Cause
-
-`DealHandler.CreateDealAsync` and `LeadHandler.CreateLeadAsync` did NOT create a corresponding `TeamMember` record with role OWNER.
-
-### Fix Applied
-
-**DealHandler.cs - Added ITeamMemberRepository:**
-```csharp
-public DealHandler(IDealRepository dealRepository,
-                   IStaffRepository staffRepository,
-                   ICustomerRepository customerRepository,
-                   ITeamMemberRepository teamMemberRepository,
-                   IMapper mapper)
-{
-    _dealRepository = dealRepository;
-    _staffRepository = staffRepository;
-    _customerRepository = customerRepository;
-    _teamMemberRepository = teamMemberRepository;
-    _mapper = mapper;
-}
-```
-
-**In CreateDealAsync - Auto-add creator as OWNER:**
-```csharp
-var createdDeal = await _dealRepository.AddDealAsync(deal);
-
-// Auto-add creator as OWNER in team_members
-var teamMember = new TeamMember
-{
-    Id = Guid.NewGuid(),
-    EntityType = TeamEntityTypeConstant.EntityTypeDeal,
-    EntityId = createdDeal.IdDeal,
-    IdStaff = request.IdStaff,
-    Role = TeamRoleConstant.FromString(TeamRoleConstant.RoleOwner),
-    AssignedAt = DateTime.UtcNow,
-    AssignedBy = "system",
-    CanEdit = true,
-    CanDelete = true
-};
-await _teamMemberRepository.AddAsync(teamMember);
-```
-
-**LeadHandler.cs - Added ITeamMemberRepository (preparation for future):**
-```csharp
-public LeadHandler(ILeadRepository leadRepository,
-                   ITeamMemberRepository teamMemberRepository,
-                   IMapper mapper)
-{
-    _leadRepository = leadRepository;
-    _teamMemberRepository = teamMemberRepository;
-    _mapper = mapper;
-}
-```
-
-### Files Modified
-- `CustomerManagement.Application/UseCases/DealHandler.cs`
-- `CustomerManagement.Application/UseCases/LeadHandler.cs`
-
----
-
-## 29. Team Members Cleanup on Deal/Lead Delete (2026-05-17)
-
-### Overview
-
-When a Deal or Lead was soft-deleted, the corresponding `team_members` records were NOT cleaned up, causing orphaned records.
-
-### Fix Applied
-
-**1. Added `RemoveByEntityAsync` to ITeamMemberRepository:**
-```csharp
-Task<bool> RemoveByEntityAsync(string entityType, Guid entityId);
-```
-
-**2. Implemented in TeamMemberRepository.cs:**
-```csharp
-public async Task<bool> RemoveByEntityAsync(string entityType, Guid entityId)
-{
-    await using var context = _contextFactory.CreateDbContext();
-    var members = await context.TeamMembers
-        .Where(t => t.EntityType == entityType && t.EntityId == entityId)
-        .ToListAsync();
-
-    if (members.Count == 0)
-        return true;
-
-    context.TeamMembers.RemoveRange(members);
-    await context.SaveChangesAsync();
-    return true;
-}
-```
-
-**3. Updated DealHandler.DeleteDealAsync:**
-```csharp
-public async Task<string> DeleteDealAsync(Guid idDeal)
-{
-    var result = await _dealRepository.SoftDeleteDealAsync(idDeal);
-    if (!result)
-    {
-        throw new DealNotFoundException();
-    }
-
-    // Cleanup team_members when deal is deleted
-    await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeDeal, idDeal);
-
-    return "Xóa deal thành công!";
-}
-```
-
-**4. Updated LeadHandler.DeleteLeadAsync:**
-```csharp
-public async Task<string> DeleteLeadAsync(Guid idLead)
-{
-    var result = await _leadRepository.SoftDeleteLeadAsync(idLead);
-    if (!result)
-    {
-        throw new LeadNotFoundException();
-    }
-
-    // Cleanup team_members when lead is deleted
-    await _teamMemberRepository.RemoveByEntityAsync(TeamEntityTypeConstant.EntityTypeLead, idLead);
-
-    return "Xóa khách hàng tiềm năng thành công!";
-}
-```
-
-### Files Modified
-- `CustomerManagement.Application/Interfaces/ITeamMemberRepository.cs`
-- `CustomerManagement.Infrastructure/Repositories/TeamMemberRepository.cs`
-- `CustomerManagement.Application/UseCases/DealHandler.cs`
-- `CustomerManagement.Application/UseCases/LeadHandler.cs`
-
----
-
-## 30. Deal Permission - ADMIN vs STAFF (2026-05-17)
-
-### Overview
-
-Implemented role-based permission for Deal operations:
-- **ADMIN**: Can see ALL deals, can assign any staff/customer to deal
-- **STAFF**: Can only see their OWN deals, can only create deal for themselves
-
-### Changes in DealQuery.cs
-
-```csharp
-[UseFiltering]
-[UseSorting]
-public IQueryable<DealResponse> GetDeals([Service] IHttpContextAccessor httpContextAccessor)
-{
-    var currentUserId = GetCurrentUserId(httpContextAccessor);
-    var currentUserRole = GetCurrentUserRole(httpContextAccessor);
-
-    var deals = _dealRepository.GetListDeal();
-
-    // STAFF chỉ thấy deals của mình, ADMIN thấy tất cả
-    if (currentUserRole != "ADMIN")
-    {
-        deals = deals.Where(d => d.IdStaff == currentUserId);
-    }
-
-    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
-}
-
-public IQueryable<DealResponse> GetDealById(Guid idDeal, [Service] IHttpContextAccessor httpContextAccessor)
-{
-    var currentUserId = GetCurrentUserId(httpContextAccessor);
-    var currentUserRole = GetCurrentUserRole(httpContextAccessor);
-
-    var deals = _dealRepository.GetListDeal();
-
-    // STAFF chỉ thấy deal của mình
-    if (currentUserRole != "ADMIN")
-    {
-        deals = deals.Where(d => d.IdStaff == currentUserId && d.IdDeal == idDeal);
-    }
-    else
-    {
-        deals = deals.Where(d => d.IdDeal == idDeal);
-    }
-
-    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
-}
-```
-
-### Changes in DealMutation.cs
-
-```csharp
-public async Task<DealResponse> CreateDealAsync(DealCreationRequest dealCreationRequest)
-{
-    var currentUserId = GetCurrentUserId();
-    var currentUserRole = GetCurrentUserRole();
-
-    // STAFF chỉ được tạo deal cho bản thân
-    if (currentUserRole == "STAFF")
-    {
-        dealCreationRequest.IdStaff = currentUserId;
-    }
-    // ADMIN có thể gán bất kỳ staff nào (giữ nguyên request)
-
-    return await _dealHandler.CreateDealAsync(dealCreationRequest);
-}
-```
-
-### Permission Matrix
-
-| Action | ADMIN | STAFF |
-|--------|:-----:|:-----:|
-| View ALL deals | ✅ | ❌ |
-| View OWN deals only | ✅ | ✅ |
-| Create deal (assign any staff) | ✅ | ❌ |
-| Create deal (assign self only) | ✅ | ✅ |
-| Update any deal | ✅ | ✅ |
-| Delete any deal | ✅ | ✅ |
-
-### Files Modified
-- `CustomerManagement.Api/Query/DealQuery.cs`
-- `CustomerManagement.Api/Mutation/DealMutation.cs`
-
----
-
----
-
-## 31. JWT Claim Fix - "sub" vs ClaimTypes.NameIdentifier (2026-05-17)
-
-### Overview
-
-JWT tokens use `"sub"` claim for user ID, but code was using `ClaimTypes.NameIdentifier` which maps to a different URI. This caused `currentUserId` to always return `Guid.Empty`.
-
-### Root Cause
-
-`ClaimTypes.NameIdentifier` = `"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"` - different from `"sub"`.
-
-JWT middleware does NOT automatically map "sub" to `ClaimTypes.NameIdentifier` in ASP.NET Core.
-
-### Fix Applied
-
-Changed `GetCurrentUserId` to check both `"sub"` and `ClaimTypes.NameIdentifier`:
-
-```csharp
-// DealQuery.cs and DealMutation.cs
-private Guid GetCurrentUserId(...)
-{
-    var user = httpContextAccessor.HttpContext?.User;
-    var userIdClaim = user?.FindFirst("sub")?.Value
-        ?? user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    return Guid.TryParse(userIdClaim, out var id) ? id : Guid.Empty;
-}
-```
-
-### Files Modified
-- `CustomerManagement.Api/Query/DealQuery.cs`
-- `CustomerManagement.Api/Mutation/DealMutation.cs`
-- (Also updated TaskMutation.cs, CustomerMutation.cs, StaffPresenceMutation.cs)
-
----
-
-## 32. getMyDeals API for STAFF (2026-05-17)
-
-### Overview
-
-Created separate API for STAFF to view deals where they are OWNER or TEAM MEMBER.
-
-### Implementation
-
-**New query `getMyDeals`:**
-```csharp
-public async Task<IQueryable<DealResponse>> GetMyDeals([Service] IHttpContextAccessor httpContextAccessor)
-{
-    var currentUserId = GetCurrentUserId(httpContextAccessor);
-
-    // Get deals where user is OWNER and where user is TEAM MEMBER
-    var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
-    var dealIdsWhereUserIsMember = teamMemberships
-        .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
-        .Select(tm => tm.EntityId)
-        .ToList();
-
-    var deals = _dealRepository.GetListDeal()
-        .Where(d => d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal));
-
-    return deals.ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
-}
-```
-
-**Updated getDeals for ADMIN only:**
-- `getDeals` - ADMIN sees all deals, STAFF gets error "STAFF nên dùng getMyDeals"
-- `getMyDeals` - STAFF sees OWNER deals + TEAM MEMBER deals
-
-### Files Modified
-- `CustomerManagement.Api/Query/DealQuery.cs`
-
----
-
-## 33. GetDealById Fix - STAFF Team Member Access (2026-05-17)
-
-### Overview
-
-STAFF could not view details of deals where they were a TEAM MEMBER (only OWNER deals were accessible).
-
-### Fix Applied
-
-```csharp
-public async Task<IQueryable<DealResponse>> GetDealById(Guid idDeal, [Service] IHttpContextAccessor httpContextAccessor)
-{
-    var currentUserId = GetCurrentUserId(httpContextAccessor);
-    var currentUserRole = GetCurrentUserRole(httpContextAccessor);
-
-    if (currentUserRole == "ADMIN")
-    {
-        return _dealRepository.GetListDeal()
-            .Where(d => d.IdDeal == idDeal)
-            .ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
-    }
-
-    // STAFF: check if they are creator OR team member
-    var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
-    var dealIdsWhereUserIsMember = teamMemberships
-        .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
-        .Select(tm => tm.EntityId)
-        .ToList();
-
-    return _dealRepository.GetListDeal()
-        .Where(d => d.IdDeal == idDeal && (d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal)))
-        .ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
-}
-```
-
-### Files Modified
-- `CustomerManagement.Api/Query/DealQuery.cs`
-
----
-
-## 34. TaskHandler CreateTaskAsync Notification (2026-05-17)
-
-### Overview
-
-When ADMIN creates a task and assigns to a staff member, no notification was sent. Fixed by adding notification creation.
-
-### Fix Applied
-
-```csharp
-public async Task<TaskResponse> CreateTaskAsync(TaskCreationRequest request)
-{
-    // ... existing code ...
-
-    var createdTask = await _taskRepository.AddTaskAsync(task);
-    var response = _mapper.Map<TaskResponse>(createdTask);
-    response.StaffAssigned = _mapper.Map<StaffResponse>(staff);
-
-    // Create notification for assigned staff
-    var notification = new Notification
-    {
-        Title = "Bạn được giao công việc mới",
-        Message = $"Bạn được giao công việc: {createdTask.Title}",
-        Type = NotificationTypeConstant.NotificationTaskAssigned,
-        IdStaff = request.IdStaffAssigned,
-        RelatedEntityType = "Task",
-        RelatedEntityId = createdTask.IdTask
-    };
-    await _notificationRepository.AddNotificationAsync(notification);
-
-    return response;
-}
-```
-
-### Files Modified
-- `CustomerManagement.Application/UseCases/TaskHandler.cs`
-
----
-
-## 35. RefreshToken Bypass Authentication (2026-05-17)
-
-### Overview
-
-When access token expires, user cannot call `refreshToken` mutation because request is rejected at authentication middleware BEFORE GraphQL resolver runs.
-
-### Fix Applied
-
-Added `[AllowAnonymous]` attribute to `RefreshTokenAsync`:
-
-```csharp
-// AuthenticationMutation.cs
-[AllowAnonymous]
-public async Task<AuthenticationResponse> RefreshTokenAsync()
-{
-    return await _authenticationHandler.RefreshTokenHandleAsync();
-}
-```
-
-### Files Modified
-- `CustomerManagement.Api/Mutation/AuthenticationMutation.cs`
-
----
-
-*Document updated: 2026-05-17*
-*Build: SUCCESS*
-*Changes: JWT claim fix, getMyDeals API, GetDealById team member fix, TaskHandler notification, RefreshToken bypass*
+## 13. Glossary
+
+- **TPH (Table-per-Hierarchy)**: pattern EF Core gộp các class cùng hierarchy vào 1 bảng, phân biệt bằng cột Discriminator.
+- **OWNER**: nhân viên chịu trách nhiệm chính cho Lead/Deal, có quyền xoá + sửa + chuyển nhượng.
+- **MEMBER**: nhân viên hỗ trợ, có thể edit tuỳ `CanEdit`.
+- **VIEWER**: chỉ xem.
+- **CRMie**: tên trợ lý AI nội bộ.
+- **Reminder**: nhắc nhở trước khi sự kiện bắt đầu (phút).
+- **Mention**: gắn tag `@username` trong note để kéo staff khác vào cuộc.
+- **Pipeline Funnel**: phễu bán hàng OPEN -> NEGOTIATING -> WON/LOST.
