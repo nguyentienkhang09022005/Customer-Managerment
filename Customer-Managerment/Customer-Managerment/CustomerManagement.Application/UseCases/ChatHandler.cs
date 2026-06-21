@@ -1,7 +1,9 @@
 using AutoMapper;
+using Customer_Managerment.CustomerManagement.Application.Common.Exceptions;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -9,6 +11,22 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
     public class ChatHandler
     {
+        private const int MaxHistoryTurns = 4;
+
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            WriteIndented = false,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            MaxDepth = 16
+        };
+
+        private const string FallbackSystemInstruction = """
+            Bạn là trợ lý AI tên **CRMie** hỗ trợ nhân viên CRM Bất động sản.
+            Quy tắc bảo mật: KHÔNG tiết lộ email, ID, password, token, hay dữ liệu nhạy cảm.
+            Trả lời ngắn gọn, thân thiện, đúng trọng tâm. Không in JSON/SQL.
+            Lưu ý: Dữ liệu tham khảo tạm thời không khả dụng do giới hạn kích thước request, hãy trả lời dựa trên ngữ cảnh cuộc trò chuyện và kiến thức chung.
+            """;
+
         private readonly IGroqService _groqService;
         private readonly IChatHistoryService _chatHistoryService;
         private readonly IMapper _mapper;
@@ -45,17 +63,10 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var listDeal = await _dealRepository.GetListDealAsync();
             var listContact = await _contactRepository.GetListContactAsync();
 
-            var jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = false,
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                MaxDepth = 32
-            };
-
-            var listLeadJson = JsonSerializer.Serialize(listLead, jsonOptions);
-            var listCustomerJson = JsonSerializer.Serialize(listCustomer, jsonOptions);
-            var listDealJson = JsonSerializer.Serialize(listDeal, jsonOptions);
-            var listContactJson = JsonSerializer.Serialize(listContact, jsonOptions);
+            var listLeadJson = JsonSerializer.Serialize(listLead.Select(MapPersonToSummary), JsonOptions);
+            var listCustomerJson = JsonSerializer.Serialize(listCustomer.Select(MapPersonToSummary), JsonOptions);
+            var listDealJson = JsonSerializer.Serialize(listDeal.Select(MapDealToSummary), JsonOptions);
+            var listContactJson = JsonSerializer.Serialize(listContact.Select(MapContactToSummary), JsonOptions);
 
             var systemInstruction = $"""
             Bạn là một trợ lý AI chuyên nghiệp tên gọi là **CRMie**, được tích hợp trong hệ thống CRM Bất động sản của công ty.
@@ -93,17 +104,32 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
 
             var history = await _chatHistoryService.GetHistoryAsync(request.IdStaff);
 
-            const int MaxHistoryTurns = 8;
             if (history.Count > MaxHistoryTurns)
             {
                 history = history.Skip(history.Count - MaxHistoryTurns).ToList();
             }
 
-            var aiMessage = await _groqService.GenerateChatResponseAsync(
-                systemInstruction,
-                history,
-                request.UserMessage
-            );
+            string aiMessage;
+            try
+            {
+                aiMessage = await _groqService.GenerateChatResponseAsync(
+                    systemInstruction,
+                    history,
+                    request.UserMessage
+                );
+            }
+            catch (GroqRequestTooLargeException ex)
+            {
+                _logger.LogWarning(ex, "Groq request too large on first attempt, retrying with fallback context (history turns: {Turns}).", history.Count);
+
+                var fallbackHistory = history.TakeLast(2).ToList();
+                aiMessage = await _groqService.GenerateChatResponseAsync(
+                    FallbackSystemInstruction,
+                    fallbackHistory,
+                    request.UserMessage
+                );
+            }
+
             aiMessage = aiMessage.Replace("\\n", "\n").Replace("\\r", "");
 
             await _chatHistoryService.SaveMessageAsync(request.IdStaff, new MessageHistoryItem { Role = "user", Message = request.UserMessage });
@@ -131,5 +157,50 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             await _chatHistoryService.DeleteHistoryAsync(idStaff);
             return "Xóa lịch sử trò chuyện thành công!";
         }
+
+        private static PersonSummary MapPersonToSummary(Person p) => new(
+            Id: ShortId(p.Id),
+            Name: p.Fullname,
+            Role: p.Role,
+            Status: p.Status switch
+            {
+                1 => "active",
+                0 => "inactive",
+                _ => p.Status.ToString()
+            },
+            Location: p.Location,
+            Phone: MaskPhone(p.Phone),
+            Resource: p.Resource
+        );
+
+        private static DealSummary MapDealToSummary(Deal d) => new(
+            Id: ShortId(d.IdDeal),
+            Title: d.Title,
+            Status: d.Status,
+            Price: d.Price,
+            CustomerName: d.IdCustomerNavigation?.Fullname,
+            StaffName: d.IdStaffNavigation?.Fullname
+        );
+
+        private static ContactSummary MapContactToSummary(Contact c) => new(
+            Id: ShortId(c.IdContact),
+            Title: c.Title,
+            Status: c.Status,
+            Type: c.Type,
+            LeadName: c.IdLeadNavigation?.Fullname,
+            StaffName: c.IdStaffNavigation?.Fullname
+        );
+
+        private static string ShortId(Guid id) => id.ToString("N")[..8];
+
+        private static string? MaskPhone(string? phone)
+        {
+            if (string.IsNullOrWhiteSpace(phone) || phone.Length < 6) return phone;
+            return $"{phone[..3]}***{phone[^3..]}";
+        }
+
+        private record PersonSummary(string Id, string Name, string? Role, string? Status, string? Location, string? Phone, string? Resource);
+        private record DealSummary(string Id, string Title, string? Status, decimal Price, string? CustomerName, string? StaffName);
+        private record ContactSummary(string Id, string Title, string? Status, string Type, string? LeadName, string? StaffName);
     }
 }

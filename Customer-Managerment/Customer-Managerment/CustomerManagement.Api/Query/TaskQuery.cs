@@ -49,5 +49,16 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             var tasks = _taskRepository.GetTasksByStatusAsync(status).Result;
             return tasks.ProjectTo<TaskResponse>(_mapper.ConfigurationProvider);
         }
+
+        public async Task<PagedResponse<TaskResponse>> GetTasksPaged(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            var (items, totalCount) = await _taskRepository.GetTasksPagedAsync(page, pageSize);
+            var dtoItems = _mapper.Map<List<TaskResponse>>(items);
+            return new PagedResponse<TaskResponse> { Items = dtoItems, TotalCount = totalCount };
+        }
     }
 }

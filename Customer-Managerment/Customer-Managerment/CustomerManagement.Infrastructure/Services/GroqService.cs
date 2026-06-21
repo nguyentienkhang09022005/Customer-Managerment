@@ -1,4 +1,6 @@
+using System.Net;
 using System.Net.Http.Headers;
+using Customer_Managerment.CustomerManagement.Application.Common.Exceptions;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
@@ -72,6 +74,12 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.RequestEntityTooLarge)
+                {
+                    throw new GroqRequestTooLargeException((int)response.StatusCode, errorBody);
+                }
+
                 throw new Exception($"Groq API call failed: {response.StatusCode} - {errorBody}");
             }
 

@@ -122,5 +122,29 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
                 .ExecuteUpdateAsync(s => s.SetProperty(n => n.IsPinned, n => !n.IsPinned));
             return rows > 0;
         }
+
+        public async Task<(List<Notification> Items, int TotalCount)> GetNotificationsPagedByStaffAsync(Guid idStaff, int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            await using var context = _contextFactory.CreateDbContext();
+
+            var baseQuery = context.Notifications
+                .Where(n => n.IdStaff == idStaff);
+
+            var totalCount = await baseQuery.CountAsync();
+
+            var items = await baseQuery
+                .Include(n => n.IdStaffNavigation)
+                .OrderByDescending(n => n.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
     }
 }

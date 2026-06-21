@@ -125,5 +125,28 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
             await using var context = _contextFactory.CreateDbContext();
             return await context.Tasks.CountAsync(t => !t.IsDeleted);
         }
+
+        public async Task<(List<TaskEntity> Items, int TotalCount)> GetTasksPagedAsync(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            await using var context = _contextFactory.CreateDbContext();
+
+            var baseQuery = context.Tasks.Where(t => !t.IsDeleted);
+
+            var totalCount = await baseQuery.CountAsync();
+
+            var items = await baseQuery
+                .Include(t => t.IdStaffAssignedNavigation)
+                .OrderByDescending(t => t.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
     }
 }

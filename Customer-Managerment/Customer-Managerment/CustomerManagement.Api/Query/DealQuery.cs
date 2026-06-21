@@ -3,8 +3,10 @@ using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
+using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
@@ -86,6 +88,43 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             return _dealRepository.GetListDeal()
                 .Where(d => d.IdDeal == idDeal && (d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal)))
                 .ProjectTo<DealResponse>(_mapper.ConfigurationProvider);
+        }
+
+        public async Task<PagedResponse<DealResponse>> GetDealsPaged(int page, int pageSize, [Service] IHttpContextAccessor httpContextAccessor)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            var currentUserRole = GetCurrentUserRole(httpContextAccessor);
+            var currentUserId = GetCurrentUserId(httpContextAccessor);
+
+            List<Deal> items;
+            int totalCount;
+
+            if (currentUserRole == "ADMIN")
+            {
+                (items, totalCount) = await _dealRepository.GetListDealPagedAsync(page, pageSize);
+            }
+            else
+            {
+                var teamMemberships = await _teamMemberRepository.GetByStaffAsync(currentUserId);
+                var dealIdsWhereUserIsMember = teamMemberships
+                    .Where(tm => tm.EntityType == TeamEntityTypeConstant.EntityTypeDeal)
+                    .Select(tm => tm.EntityId)
+                    .ToList();
+
+                // STAFF: lấy trên bảng rồi filter in-memory rồi paginate
+                var allDeals = await _dealRepository.GetListDeal()
+                    .Where(d => d.IdStaff == currentUserId || dealIdsWhereUserIsMember.Contains(d.IdDeal))
+                    .OrderByDescending(d => d.CreatedAt)
+                    .ToListAsync();
+                totalCount = allDeals.Count;
+                items = allDeals.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
+
+            var dtoItems = _mapper.Map<List<DealResponse>>(items);
+            return new PagedResponse<DealResponse> { Items = dtoItems, TotalCount = totalCount };
         }
 
         private Guid GetCurrentUserId(IHttpContextAccessor httpContextAccessor)

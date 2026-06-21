@@ -54,5 +54,16 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         {
             return _notificationRepository.GetUnreadCountAsync(idStaff).Result;
         }
+
+        public async Task<PagedResponse<NotificationResponse>> GetNotificationsPaged(Guid idStaff, int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            var (items, totalCount) = await _notificationRepository.GetNotificationsPagedByStaffAsync(idStaff, page, pageSize);
+            var dtoItems = _mapper.Map<List<NotificationResponse>>(items);
+            return new PagedResponse<NotificationResponse> { Items = dtoItems, TotalCount = totalCount };
+        }
     }
 }

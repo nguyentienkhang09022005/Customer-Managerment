@@ -32,5 +32,16 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
             var customer = _customerRepository.GetCustomerById(idCustomer);
             return customer.ProjectTo<CustomerResponse>(_mapper.ConfigurationProvider);
         }
+
+        public async Task<PagedResponse<CustomerResponse>> GetCustomersPaged(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            var (items, totalCount) = await _customerRepository.GetListCustomerPagedAsync(page, pageSize);
+            var dtoItems = _mapper.Map<List<CustomerResponse>>(items);
+            return new PagedResponse<CustomerResponse> { Items = dtoItems, TotalCount = totalCount };
+        }
     }
 }

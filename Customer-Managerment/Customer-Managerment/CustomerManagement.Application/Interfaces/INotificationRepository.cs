@@ -15,5 +15,6 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<bool> MarkAllAsReadAsync(Guid idStaff);
         Task<bool> SoftDeleteNotificationAsync(Guid idNotification);
         Task<bool> PinNotificationAsync(Guid idNotification);
+        Task<(List<Notification> Items, int TotalCount)> GetNotificationsPagedByStaffAsync(Guid idStaff, int page, int pageSize);
     }
 }

@@ -13,5 +13,6 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<bool> SoftDeleteTaskAsync(Guid idTask);
         Task<bool> RestoreTaskAsync(Guid idTask);
         Task<int> GetTotalTasksAsync();
+        Task<(List<TaskEntity> Items, int TotalCount)> GetTasksPagedAsync(int page, int pageSize);
     }
 }

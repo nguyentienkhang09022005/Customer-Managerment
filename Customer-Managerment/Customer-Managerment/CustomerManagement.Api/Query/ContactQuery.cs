@@ -13,7 +13,7 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         private readonly IContactRepository _contactRepository;
         private readonly IMapper _mapper;
 
-        public ContactQuery(IContactRepository contactRepository, IMapper mapper) 
+        public ContactQuery(IContactRepository contactRepository, IMapper mapper)
         {
             _contactRepository = contactRepository;
             _mapper = mapper;
@@ -31,6 +31,17 @@ namespace Customer_Managerment.CustomerManagement.Api.Query
         {
             var contact = _contactRepository.GetContactById(idContact);
             return contact.ProjectTo<ContactResponse>(_mapper.ConfigurationProvider);
+        }
+
+        public async Task<PagedResponse<ContactResponse>> GetContactsPaged(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+            if (pageSize > 200) pageSize = 200;
+
+            var (items, totalCount) = await _contactRepository.GetListContactPagedAsync(page, pageSize);
+            var dtoItems = _mapper.Map<List<ContactResponse>>(items);
+            return new PagedResponse<ContactResponse> { Items = dtoItems, TotalCount = totalCount };
         }
     }
 }
