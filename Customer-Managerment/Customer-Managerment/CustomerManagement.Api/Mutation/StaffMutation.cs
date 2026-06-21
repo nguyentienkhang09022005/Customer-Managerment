@@ -5,12 +5,14 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
     [ExtendObjectType(OperationTypeNames.Mutation)]
+    [Authorize(Roles = "ADMIN")]
     public class StaffMutation
     {
         private readonly StaffHandler _staffHandler;

@@ -51,12 +51,14 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
             await using var context = contextFactory.CreateDbContext();
             var now = DateTime.UtcNow;
 
-            // Find events with reminders in the next 5-10 minutes
+            // Find events with reminders in the next 5-10 minutes, eager-load organizer and participants+staff in one query
             var reminderWindowStart = now.AddMinutes(5);
             var reminderWindowEnd = now.AddMinutes(10);
 
             var eventsWithReminders = await context.CalendarEvents
                 .Include(e => e.IdStaffNavigation)
+                .Include(e => e.Participants)
+                    .ThenInclude(p => p.IdStaffNavigation)
                 .Where(e => !e.IsDeleted
                     && e.Status == CalendarEventStatusConstant.FromString(CalendarEventStatusConstant.EventStatusScheduled)
                     && e.ReminderMinutes != null && e.ReminderMinutes > 0
@@ -76,21 +78,15 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Services
                 if (existingReminder)
                     continue;
 
-                // Get participants
-                var participants = await context.EventParticipants
-                    .Where(p => p.IdEvent == evt.IdEvent)
-                    .ToListAsync();
-
                 // Send notification to organizer
                 await SendReminderNotificationAsync(notificationRepo, evt, evt.IdStaffNavigation?.Fullname ?? "Unknown", "organizer");
 
-                // Send notification to participants
-                foreach (var participant in participants)
+                // Send notification to participants (already loaded above, no N+1)
+                foreach (var participant in evt.Participants)
                 {
-                    var staff = await context.Persons.FirstOrDefaultAsync(p => p.Id == participant.IdStaff);
-                    if (staff != null)
+                    if (participant.IdStaffNavigation != null)
                     {
-                        await SendReminderNotificationAsync(notificationRepo, evt, staff.Fullname, "participant");
+                        await SendReminderNotificationAsync(notificationRepo, evt, participant.IdStaffNavigation.Fullname, "participant");
                     }
                 }
 

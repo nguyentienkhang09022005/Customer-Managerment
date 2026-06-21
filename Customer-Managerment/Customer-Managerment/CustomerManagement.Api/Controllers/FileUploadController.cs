@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 
 namespace Customer_Managerment.CustomerManagement.Api.Controllers
 {
     [ApiController]
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     public class FileUploadController : ControllerBase
     {

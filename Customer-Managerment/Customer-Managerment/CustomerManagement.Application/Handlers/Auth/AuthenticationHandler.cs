@@ -40,15 +40,20 @@ namespace Customer_Managerment.CustomerManagement.Application.Handlers.Auth
 
         public async Task<AuthenticationResponse> LoginHandleAsync(AuthenticationRequest request)
         {
+            const string GenericFailure = "Tên đăng nhập hoặc mật khẩu không đúng!";
+
             var staff = await _staffRepository.GetStaffByUsernameAsync(request.Username);
             if (staff == null)
             {
-                throw new DomainException("Tên đăng nhập không đúng!", 409);
+                // Always run BCrypt against a dummy hash to mask timing side-channel that
+                // would otherwise reveal whether the username exists.
+                BCrypt.Net.BCrypt.Verify(request.Password ?? string.Empty, "$2a$11$abcdefghijklmnopqrstuv1234567890ABCDEFGHIJKLMNOPQRSTU");
+                throw new DomainException(GenericFailure, 401);
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, staff.PasswordHash))
+            if (!BCrypt.Net.BCrypt.Verify(request.Password ?? string.Empty, staff.PasswordHash))
             {
-                throw new DomainException("Mật khẩu không đúng!", 409);
+                throw new DomainException(GenericFailure, 401);
             }
 
             var accessToken = _tokenService.GenerateAccessToken(staff);
@@ -65,7 +70,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Handlers.Auth
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.None,
+                SameSite = SameSiteMode.Strict,
                 Path = "/",
                 MaxAge = TimeSpan.FromDays(Convert.ToDouble(_config["JwtSettings:RefreshTokenExpirationDays"] ?? "1"))
             });
@@ -98,7 +103,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Handlers.Auth
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.None,
+                SameSite = SameSiteMode.Strict,
                 Path = "/"
             });
 

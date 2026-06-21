@@ -6,20 +6,26 @@ using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SendGrid.Helpers.Errors.Model;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 {
     public class ContactRepository : IContactRepository
     {
+        private const int MaxUnboundedRecords = 1000;
+
         private readonly IDbContextFactory<CustomerManagementDbContext> _contextFactory;
         private readonly IMapper _mapper;
+        private readonly ILogger<ContactRepository> _logger;
 
         public ContactRepository(IDbContextFactory<CustomerManagementDbContext> contextFactory,
-                                 IMapper mapper)
+                                 IMapper mapper,
+                                 ILogger<ContactRepository> logger)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Contact> AddContactAsync(Contact contact)
@@ -63,11 +69,37 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<List<Contact>> GetListContactAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
+            var total = await context.Contacts.CountAsync();
+            if (total > MaxUnboundedRecords)
+            {
+                _logger.LogWarning("GetListContactAsync returned {Returned}/{Total} records (hard cap {Cap}). Use GetListContactPagedAsync for full data.",
+                    MaxUnboundedRecords, total, MaxUnboundedRecords);
+            }
             return await context.Contacts
                 .Include(c => c.IdLeadNavigation)
                 .Include(c => c.IdStaffNavigation)
                 .AsNoTracking()
+                .Take(MaxUnboundedRecords)
                 .ToListAsync();
+        }
+
+        public async Task<(List<Contact> Items, int TotalCount)> GetListContactPagedAsync(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 20;
+            if (pageSize > 200) pageSize = 200;
+
+            await using var context = _contextFactory.CreateDbContext();
+            var total = await context.Contacts.CountAsync();
+            var items = await context.Contacts
+                .Include(c => c.IdLeadNavigation)
+                .Include(c => c.IdStaffNavigation)
+                .AsNoTracking()
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (items, total);
         }
 
         public IQueryable<Contact> GetContactById(Guid idContact)
@@ -141,17 +173,12 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<bool> SoftDeleteContactAsync(Guid idContact)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var contact = await context.Contacts
-                .FirstOrDefaultAsync(c => c.IdContact == idContact);
-
-            if (contact == null)
-                return false;
-
-            contact.IsDeleted = true;
-            contact.DeletedAt = DateTime.UtcNow;
-
-            await context.SaveChangesAsync();
-            return true;
+            var rows = await context.Contacts
+                .Where(c => c.IdContact == idContact)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(c => c.IsDeleted, true)
+                    .SetProperty(c => c.DeletedAt, DateTime.UtcNow));
+            return rows > 0;
         }
     }
 }

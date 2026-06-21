@@ -3,10 +3,12 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
     [ExtendObjectType(OperationTypeNames.Mutation)]
+    [Authorize]
     public class CalendarMutation
     {
         private readonly CalendarHandler _calendarHandler;

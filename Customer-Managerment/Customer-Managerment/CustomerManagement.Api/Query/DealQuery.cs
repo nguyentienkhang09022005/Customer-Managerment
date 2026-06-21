@@ -3,12 +3,14 @@ using AutoMapper.QueryableExtensions;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
     [ExtendObjectType(OperationTypeNames.Query)]
+    [Authorize]
     public class DealQuery
     {
         private readonly IDealRepository _dealRepository;

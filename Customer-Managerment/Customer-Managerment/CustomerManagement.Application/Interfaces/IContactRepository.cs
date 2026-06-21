@@ -9,6 +9,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<Contact?> GetContactByIdAsync(Guid idContact);
         IQueryable<Contact> GetListContact();
         Task<List<Contact>> GetListContactAsync();
+        Task<(List<Contact> Items, int TotalCount)> GetListContactPagedAsync(int page, int pageSize);
         IQueryable<Contact> GetContactById(Guid idContact);
         Task<Contact?> UpdateContactAsync(Contact contact);
         Task<bool> CheckContactExistsAsync(Guid idContact);

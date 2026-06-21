@@ -9,6 +9,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<Deal?> GetDealByIdAsync(Guid idDeal);
         IQueryable<Deal> GetListDeal();
         Task<List<Deal>> GetListDealAsync();
+        Task<(List<Deal> Items, int TotalCount)> GetListDealPagedAsync(int page, int pageSize);
         IQueryable<Deal> GetDealById(Guid idDeal);
         Task<Deal?> UpdateDealAsync(Deal deal);
         Task<bool> CheckDealExistsAsync(Guid idDeal);

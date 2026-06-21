@@ -90,54 +90,37 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<bool> MarkAsReadAsync(Guid idNotification)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var notification = await context.Notifications.FirstOrDefaultAsync(n => n.IdNotification == idNotification);
-
-            if (notification == null)
-                return false;
-
-            notification.IsRead = true;
-            await context.SaveChangesAsync();
-            return true;
+            var rows = await context.Notifications
+                .Where(n => n.IdNotification == idNotification)
+                .ExecuteUpdateAsync(s => s.SetProperty(n => n.IsRead, true));
+            return rows > 0;
         }
 
         public async Task<bool> MarkAllAsReadAsync(Guid idStaff)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var notifications = await context.Notifications.Where(n => n.IdStaff == idStaff && !n.IsRead).ToListAsync();
-
-            foreach (var notification in notifications)
-            {
-                notification.IsRead = true;
-            }
-
-            await context.SaveChangesAsync();
-            return true;
+            var rows = await context.Notifications
+                .Where(n => n.IdStaff == idStaff && !n.IsRead)
+                .ExecuteUpdateAsync(s => s.SetProperty(n => n.IsRead, true));
+            return rows > 0;
         }
 
         public async Task<bool> SoftDeleteNotificationAsync(Guid idNotification)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var notification = await context.Notifications.FirstOrDefaultAsync(n => n.IdNotification == idNotification);
-
-            if (notification == null)
-                return false;
-
-            context.Notifications.Remove(notification);
-            await context.SaveChangesAsync();
-            return true;
+            var rows = await context.Notifications
+                .Where(n => n.IdNotification == idNotification)
+                .ExecuteDeleteAsync();
+            return rows > 0;
         }
 
         public async Task<bool> PinNotificationAsync(Guid idNotification)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var notification = await context.Notifications.FirstOrDefaultAsync(n => n.IdNotification == idNotification);
-
-            if (notification == null)
-                return false;
-
-            notification.IsPinned = !notification.IsPinned;
-            await context.SaveChangesAsync();
-            return true;
+            var rows = await context.Notifications
+                .Where(n => n.IdNotification == idNotification)
+                .ExecuteUpdateAsync(s => s.SetProperty(n => n.IsPinned, n => !n.IsPinned));
+            return rows > 0;
         }
     }
 }

@@ -3,10 +3,12 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Constant;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
     [ExtendObjectType(OperationTypeNames.Query)]
+    [Authorize]
     public class CalendarQuery
     {
         private readonly ICalendarEventRepository _calendarRepository;

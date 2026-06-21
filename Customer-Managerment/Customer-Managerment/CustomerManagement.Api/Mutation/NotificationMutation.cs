@@ -2,10 +2,12 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Api.Services;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
     [ExtendObjectType(OperationTypeNames.Mutation)]
+    [Authorize]
     public class NotificationMutation
     {
         private readonly NotificationHandler _notificationHandler;

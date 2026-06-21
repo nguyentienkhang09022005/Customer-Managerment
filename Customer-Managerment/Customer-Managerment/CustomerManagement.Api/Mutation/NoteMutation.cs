@@ -3,12 +3,14 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
 using Customer_Managerment.CustomerManagement.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace Customer_Managerment.CustomerManagement.Api.Mutation
 {
     [ExtendObjectType(OperationTypeNames.Mutation)]
+    [Authorize]
     public class NoteMutation
     {
         private readonly NoteHandler _noteHandler;

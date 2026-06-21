@@ -1,10 +1,12 @@
 using AutoMapper;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
     [ExtendObjectType(OperationTypeNames.Query)]
+    [Authorize(Roles = "ADMIN")]
     public class ReportQuery
     {
         private readonly ReportHandler _reportHandler;

@@ -8,6 +8,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<Person?> GetCustomerByIdAsync(Guid idCustomer);
         IQueryable<Person> GetListCustomer();
         Task<List<Person>> GetListCustomerAsync();
+        Task<(List<Person> Items, int TotalCount)> GetListCustomerPagedAsync(int page, int pageSize);
         IQueryable<Person> GetCustomerById(Guid idCustomer);
         Task<Person?> UpdateCustomerAsync(Person customer);
         Task<bool> CheckCustomerExistsAsync(Guid idCustomer);

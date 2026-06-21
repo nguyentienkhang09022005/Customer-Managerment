@@ -4,19 +4,26 @@ using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SendGrid.Helpers.Errors.Model;
 
 namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
+        private const int MaxUnboundedRecords = 1000;
+
         private readonly IDbContextFactory<CustomerManagementDbContext> _contextFactory;
         private readonly IMapper _mapper;
+        private readonly ILogger<CustomerRepository> _logger;
 
-        public CustomerRepository(IDbContextFactory<CustomerManagementDbContext> contextFactory, IMapper mapper)
+        public CustomerRepository(IDbContextFactory<CustomerManagementDbContext> contextFactory,
+                                  IMapper mapper,
+                                  ILogger<CustomerRepository> logger)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Person> AddCustomerAsync(Person customer)
@@ -57,10 +64,35 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<List<Person>> GetListCustomerAsync()
         {
             await using var context = _contextFactory.CreateDbContext();
+            var total = await context.Persons.CountAsync(p => p.Discriminator == PersonType.Customer);
+            if (total > MaxUnboundedRecords)
+            {
+                _logger.LogWarning("GetListCustomerAsync returned {Returned}/{Total} records (hard cap {Cap}). Use GetListCustomerPagedAsync for full data.",
+                    MaxUnboundedRecords, total, MaxUnboundedRecords);
+            }
             return await context.Persons
                 .Where(p => p.Discriminator == PersonType.Customer)
                 .AsNoTracking()
+                .Take(MaxUnboundedRecords)
                 .ToListAsync();
+        }
+
+        public async Task<(List<Person> Items, int TotalCount)> GetListCustomerPagedAsync(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 20;
+            if (pageSize > 200) pageSize = 200;
+
+            await using var context = _contextFactory.CreateDbContext();
+            var query = context.Persons.Where(p => p.Discriminator == PersonType.Customer);
+            var total = await query.CountAsync();
+            var items = await query
+                .AsNoTracking()
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (items, total);
         }
 
         public IQueryable<Person> GetCustomerById(Guid idCustomer)
@@ -114,34 +146,24 @@ namespace Customer_Managerment.CustomerManagement.Infrastructure.Repositories
         public async Task<bool> SoftDeleteCustomerAsync(Guid idCustomer)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var customer = await context.Persons
-                .FirstOrDefaultAsync(p => p.Id == idCustomer && p.Discriminator == PersonType.Customer);
-
-            if (customer == null)
-                return false;
-
-            customer.IsDeleted = true;
-            customer.DeletedAt = DateTime.UtcNow;
-
-            await context.SaveChangesAsync();
-            return true;
+            var rows = await context.Persons
+                .Where(p => p.Id == idCustomer && p.Discriminator == PersonType.Customer)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.IsDeleted, true)
+                    .SetProperty(p => p.DeletedAt, DateTime.UtcNow));
+            return rows > 0;
         }
 
         public async Task<bool> RestoreCustomerAsync(Guid idCustomer)
         {
             await using var context = _contextFactory.CreateDbContext();
-            var customer = await context.Persons
+            var rows = await context.Persons
                 .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(p => p.Id == idCustomer && p.Discriminator == PersonType.Customer);
-
-            if (customer == null || !customer.IsDeleted)
-                return false;
-
-            customer.IsDeleted = false;
-            customer.DeletedAt = null;
-
-            await context.SaveChangesAsync();
-            return true;
+                .Where(p => p.Id == idCustomer && p.Discriminator == PersonType.Customer && p.IsDeleted)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.IsDeleted, false)
+                    .SetProperty(p => p.DeletedAt, (DateTime?)null));
+            return rows > 0;
         }
     }
 }

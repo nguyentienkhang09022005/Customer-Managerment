@@ -15,10 +15,12 @@ using Customer_Managerment.CustomerManagement.Infrastructure.Services;
 using HotChocolate.AspNetCore.Voyager;
 using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,21 +28,73 @@ ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 DotNetEnv.Env.Load();
 
-builder.Configuration["ConnectionStrings:PostgreSQLConnection"] = Environment.GetEnvironmentVariable("CONNECTIONSTRINGS__PostgreSQLConnection");
-builder.Configuration["JwtSettings:SecretKey"] = Environment.GetEnvironmentVariable("APPSETTINGS__SECRETKEY");
-builder.Configuration["JwtSettings:Issuer"] = Environment.GetEnvironmentVariable("APPSETTINGS__ISSUER");
-builder.Configuration["JwtSettings:Audience"] = Environment.GetEnvironmentVariable("APPSETTINGS__AUDIENCE");
-builder.Configuration["JwtSettings:AccessTokenExpirationMinutes"] = Environment.GetEnvironmentVariable("APPSETTINGS__ACCESSTOKENEXP");
-builder.Configuration["JwtSettings:RefreshTokenExpirationDays"] = Environment.GetEnvironmentVariable("APPSETTINGS__REFRESHTOKENEXP");
-builder.Configuration["RedisSettings:Host"] = Environment.GetEnvironmentVariable("REDISSETTINGS__HOST");
-builder.Configuration["RedisSettings:Port"] = Environment.GetEnvironmentVariable("REDISSETTINGS__PORT");
-builder.Configuration["RedisSettings:Password"] = Environment.GetEnvironmentVariable("REDISSETTINGS__PASSWORD");
-builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("SENDER_APIKEY");
-builder.Configuration["SendGrid:Email"] = Environment.GetEnvironmentVariable("SENDER_EMAIL");
-builder.Configuration["SendGrid:Name"] = Environment.GetEnvironmentVariable("SENDER_NAME");
-// builder.Configuration["Elasticsearch:Uri"] = Environment.GetEnvironmentVariable("ES__URL");
-builder.Configuration["GroqSettings:ApiKey"] = Environment.GetEnvironmentVariable("GROQ__APIKEY");
-builder.Configuration["GroqSettings:BaseUrl"] = Environment.GetEnvironmentVariable("GROQ__APIURL");
+void SetConfigIfEnvNotEmpty(string configKey, string envVarName)
+{
+    var value = Environment.GetEnvironmentVariable(envVarName);
+    if (!string.IsNullOrEmpty(value))
+    {
+        builder.Configuration[configKey] = value;
+    }
+}
+
+SetConfigIfEnvNotEmpty("ConnectionStrings:PostgreSQLConnection", "CONNECTIONSTRINGS__PostgreSQLConnection");
+SetConfigIfEnvNotEmpty("JwtSettings:SecretKey", "APPSETTINGS__SECRETKEY");
+SetConfigIfEnvNotEmpty("JwtSettings:Issuer", "APPSETTINGS__ISSUER");
+SetConfigIfEnvNotEmpty("JwtSettings:Audience", "APPSETTINGS__AUDIENCE");
+SetConfigIfEnvNotEmpty("JwtSettings:AccessTokenExpirationMinutes", "APPSETTINGS__ACCESSTOKENEXP");
+SetConfigIfEnvNotEmpty("JwtSettings:RefreshTokenExpirationDays", "APPSETTINGS__REFRESHTOKENEXP");
+SetConfigIfEnvNotEmpty("RedisSettings:Host", "REDISSETTINGS__HOST");
+SetConfigIfEnvNotEmpty("RedisSettings:Port", "REDISSETTINGS__PORT");
+SetConfigIfEnvNotEmpty("RedisSettings:Password", "REDISSETTINGS__PASSWORD");
+SetConfigIfEnvNotEmpty("SendGrid:ApiKey", "SENDER_APIKEY");
+SetConfigIfEnvNotEmpty("SendGrid:Email", "SENDER_EMAIL");
+SetConfigIfEnvNotEmpty("SendGrid:Name", "SENDER_NAME");
+SetConfigIfEnvNotEmpty("Elasticsearch:Uri", "ES__URL");
+SetConfigIfEnvNotEmpty("GroqSettings:ApiKey", "GROQ__APIKEY");
+SetConfigIfEnvNotEmpty("GroqSettings:BaseUrl", "GROQ__APIURL");
+
+// Fail-fast on missing/invalid production secrets. Catches empty placeholders from appsettings.json
+// when env vars are misconfigured. Local dev with secrets supplied via .env or user-secrets passes through.
+ValidateCriticalConfiguration(builder.Configuration);
+
+static void ValidateCriticalConfiguration(IConfiguration config)
+{
+    var errors = new List<string>();
+
+    var pgConn = config.GetConnectionString("PostgreSQLConnection");
+    if (string.IsNullOrWhiteSpace(pgConn))
+    {
+        errors.Add("ConnectionStrings:PostgreSQLConnection is empty.");
+    }
+    else
+    {
+        var placeholders = new[] { "REPLACE_ME", "YOUR_PASSWORD", "CHANGEME", "PLACEHOLDER", "<password>", "{password}" };
+        var lower = pgConn.ToLowerInvariant();
+        if (placeholders.Any(p => lower.Contains(p.ToLowerInvariant())))
+            errors.Add("ConnectionStrings:PostgreSQLConnection contains placeholder text (e.g. REPLACE_ME, CHANGEME).");
+    }
+
+    var jwtSecret = config["JwtSettings:SecretKey"];
+    if (string.IsNullOrWhiteSpace(jwtSecret))
+        errors.Add("JwtSettings:SecretKey is empty.");
+    else if (Encoding.UTF8.GetByteCount(jwtSecret) < 32)
+        errors.Add($"JwtSettings:SecretKey is too short ({Encoding.UTF8.GetByteCount(jwtSecret)} bytes). HS256 requires >= 32 bytes. Generate with: openssl rand -hex 32");
+
+    var issuer = config["JwtSettings:Issuer"];
+    if (string.IsNullOrWhiteSpace(issuer)) errors.Add("JwtSettings:Issuer is empty.");
+
+    var audience = config["JwtSettings:Audience"];
+    if (string.IsNullOrWhiteSpace(audience)) errors.Add("JwtSettings:Audience is empty.");
+
+    var groqKey = config["GroqSettings:ApiKey"];
+    if (string.IsNullOrWhiteSpace(groqKey)) errors.Add("GroqSettings:ApiKey is empty (chatbot will fail at runtime).");
+
+    if (errors.Count > 0)
+    {
+        var msg = "CRITICAL configuration errors detected. Refusing to start:\n  - " + string.Join("\n  - ", errors);
+        throw new InvalidOperationException(msg);
+    }
+}
 
 
 // DbContext Registration
@@ -48,6 +102,18 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddPooledDbContextFactory<CustomerManagementDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"))
 );
+
+
+// Health Checks (DB + Redis). Returns 200 OK with per-check status; used by Docker HEALTHCHECK and uptime monitors.
+var pgConn = builder.Configuration.GetConnectionString("PostgreSQLConnection");
+var redisHost = builder.Configuration["RedisSettings:Host"];
+var redisPort = builder.Configuration["RedisSettings:Port"];
+var redisPassword = builder.Configuration["RedisSettings:Password"];
+var redisConn = $"{redisHost}:{redisPort},password={redisPassword},ssl=true,abortConnect=false";
+
+builder.Services.AddHealthChecks()
+    .AddNpgSql(pgConn!, name: "postgres", tags: new[] { "db", "ready" })
+    .AddRedis(redisConn, name: "redis", tags: new[] { "cache", "ready" });
 
 
 // Add services to the container.
@@ -144,6 +210,8 @@ builder.Services
     .AddType<QuantityStatisticsResponseType>()
     .AddType<DashboardResponseType>()
     .AddType<RevenueChartResponseType>()
+    .AllowIntrospection(builder.Environment.IsDevelopment())
+    .AddMaxExecutionDepthRule(8)
     .AddQueryType(d => d.Name("Query"))
         .AddTypeExtension<ChatQuery>()
         .AddTypeExtension<StaffQuery>()
@@ -189,14 +257,18 @@ builder.Services
     .AddSorting()
     .AddProjections();
 
+var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:4200" };
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://collaborative-model.vercel.app")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // Allow send Cookie
+        policy.WithOrigins(corsOrigins)
+              .WithHeaders("Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With", "Apollo-Require-Preflight")
+              .WithMethods("GET", "POST", "OPTIONS")
+              .AllowCredentials()
+              .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
@@ -211,7 +283,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false;
+    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -228,14 +300,66 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// Rate Limiting — protects auth endpoints from brute force and OTP guessing
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("login-attempts", httpContext =>
+    {
+        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: ip,
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+            });
+    });
+
+    options.AddPolicy("otp-attempts", httpContext =>
+    {
+        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: ip,
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 3,
+                Window = TimeSpan.FromMinutes(5),
+                QueueLimit = 0
+            });
+    });
+
+    options.AddPolicy("graphql-default", httpContext =>
+    {
+        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: ip,
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 60,
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0
+            });
+    });
+});
+
 
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 
+app.UseRateLimiter();
+
 // Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseVoyager("/graphql", "/voyager");
+}
 
 app.UseHttpsRedirection();
 
@@ -243,20 +367,43 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Endpoint GraphQL
-app.MapGraphQL("/graphql");
+app.MapGraphQL("/graphql").WithOptions(new HotChocolate.AspNetCore.GraphQLServerOptions
+{
+    EnableSchemaRequests = builder.Environment.IsDevelopment(),
+    EnableGetRequests = builder.Environment.IsDevelopment()
+});
 
 // SignalR Hubs
 app.MapHub<NotificationHub>("/hubs/notifications");
 app.MapHub<NoteHub>("/hubs/notes");
 
-// Voyager UI
-app.UseVoyager(
-    "/graphql",
-    "/voyager"
-);
-
-
 app.MapControllers();
+
+// Health endpoints (no auth). Liveness = process alive; Readiness = DB+Redis reachable.
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = _ => false
+});
+app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready"),
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var payload = new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                description = e.Value.Description,
+                durationMs = e.Value.Duration.TotalMilliseconds
+            })
+        };
+        await System.Text.Json.JsonSerializer.SerializeAsync(context.Response.Body, payload);
+    }
+});
 
 app.Run();
 

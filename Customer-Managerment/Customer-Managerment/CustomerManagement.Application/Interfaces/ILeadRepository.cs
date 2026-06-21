@@ -8,6 +8,7 @@ namespace Customer_Managerment.CustomerManagement.Application.Interfaces
         Task<Person?> GetLeadByIdAsync(Guid idLead);
         IQueryable<Person> GetListLead();
         Task<List<Person>> GetListLeadAsync();
+        Task<(List<Person> Items, int TotalCount)> GetListLeadPagedAsync(int page, int pageSize);
         IQueryable<Person> GetLeadById(Guid idLead);
         Task<Person?> UpdateLeadAsync(Person lead);
         Task<bool> CheckLeadExistsAsync(Guid idLead);

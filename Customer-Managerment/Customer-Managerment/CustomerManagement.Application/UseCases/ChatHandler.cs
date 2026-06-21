@@ -3,6 +3,7 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Requests;
 using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Customer_Managerment.CustomerManagement.Application.UseCases
 {
@@ -44,7 +45,12 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             var listDeal = await _dealRepository.GetListDealAsync();
             var listContact = await _contactRepository.GetListContactAsync();
 
-            var jsonOptions = new JsonSerializerOptions { WriteIndented = false };
+            var jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = false,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                MaxDepth = 32
+            };
 
             var listLeadJson = JsonSerializer.Serialize(listLead, jsonOptions);
             var listCustomerJson = JsonSerializer.Serialize(listCustomer, jsonOptions);
@@ -65,7 +71,7 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             - Giải thích rõ ràng, ngắn gọn, thân thiện và chuyên nghiệp.
             - Thêm emoji phù hợp nếu cần để giao tiếp tự nhiên.
             - Nếu dữ liệu bị thiếu, trả lời nhẹ nhàng, không đoán dữ liệu.
-            - Trả lời chi ý rõ ràng, không lan man và không trả lời trên 1 dòng.
+            - Trả lời đúng trọng tâm câu hỏi, không lan man và không lặp lại cùng một nội dung.
 
             **Ví dụ câu hỏi hợp lệ:**
             - "Tóm tắt thông tin của Lead 'Nguyễn Văn A'?"
@@ -86,6 +92,12 @@ namespace Customer_Managerment.CustomerManagement.Application.UseCases
             """;
 
             var history = await _chatHistoryService.GetHistoryAsync(request.IdStaff);
+
+            const int MaxHistoryTurns = 8;
+            if (history.Count > MaxHistoryTurns)
+            {
+                history = history.Skip(history.Count - MaxHistoryTurns).ToList();
+            }
 
             var aiMessage = await _groqService.GenerateChatResponseAsync(
                 systemInstruction,

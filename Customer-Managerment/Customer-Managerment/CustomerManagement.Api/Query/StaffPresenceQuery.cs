@@ -3,10 +3,12 @@ using Customer_Managerment.CustomerManagement.Application.DTOs.Response;
 using Customer_Managerment.CustomerManagement.Application.Interfaces;
 using Customer_Managerment.CustomerManagement.Domain.Entities;
 using Customer_Managerment.CustomerManagement.Application.UseCases;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Customer_Managerment.CustomerManagement.Api.Query
 {
     [ExtendObjectType(OperationTypeNames.Query)]
+    [Authorize]
     public class StaffPresenceQuery
     {
         private readonly IStaffRepository _staffRepository;
